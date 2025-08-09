@@ -1,52 +1,78 @@
-// src/components/HeaderIcons.tsx
-
-import React from "react";
-import { ShoppingCart, BookOpen, LayoutDashboard } from "lucide-react";
-import "../index.css";
+import React, { useState } from 'react'
+import { Search, Book, ShoppingCart, Settings } from 'lucide-react'
+import LoginModal from './LoginModal'
 
 interface HeaderProps {
-  onOpenAdminModal: () => void;
+  searchQuery: string
+  onSearchChange: (query: string) => void
 }
 
-const HeaderIcons: React.FC<HeaderProps> = ({ onOpenAdminModal }) => {
-  const goToRules = () => {
-    window.location.href = "https://maracuja-rp.vercel.app/";
-  };
-
-  const goToStore = () => {
-    window.location.href = "https://maracuja-rp.vercel.app/?store";
-  };
+const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
   return (
-    <div className="header space-x-3">
-      {/* Icona Carrello */}
-      <button
-        onClick={goToStore}
-        className="p-2 rounded-xl text-orange-200 hover:text-white hover:bg-orange-500/40 transition-all duration-200 hover:scale-110"
-        title="Store"
-      >
-        <ShoppingCart className="h-5 w-5" />
-      </button>
+    <>
+      <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-6">
+            <h1 className="text-2xl font-bold text-gray-900">News Manager</h1>
+          </div>
+          
+          <div className="flex items-center space-x-6">
+            {/* Search Bar */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Cerca articoli..."
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              />
+            </div>
+            
+            {/* Navigation Icons */}
+            <div className="flex items-center space-x-4">
+              <a
+                href="https://maracuja-rp.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                title="Vai al libro"
+              >
+                <Book className="h-6 w-6" />
+              </a>
+              
+              <a
+                href="https://maracuja-rp.vercel.app/?store"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                title="Vai al store"
+              >
+                <ShoppingCart className="h-6 w-6" />
+              </a>
+              
+              <button
+                onClick={() => setIsLoginModalOpen(true)}
+                className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                title="Impostazioni"
+              >
+                <Settings className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      {/* Icona Regole */}
-      <button
-        onClick={goToRules}
-        className="p-2 rounded-xl text-orange-200 hover:text-white hover:bg-orange-500/40 transition-all duration-200 hover:scale-110"
-        title="Regole"
-      >
-        <BookOpen className="h-5 w-5" />
-      </button>
+      <LoginModal 
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
+    </>
+  )
+}
 
-      {/* Icona Admin */}
-      <button
-        onClick={onOpenAdminModal}
-        className="p-2 rounded-xl text-orange-200 hover:text-white hover:bg-orange-500/40 transition-all duration-200 hover:scale-110"
-        title="Admin"
-      >
-        <LayoutDashboard className="h-5 w-5" />
-      </button>
-    </div>
-  );
-};
-
-export default HeaderIcons;
+export default Header

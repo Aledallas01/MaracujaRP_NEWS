@@ -1,19 +1,19 @@
-// src/components/admin/RuleModal.tsx
+// src/components/admin/NewsModal.tsx
 
 import React, { useState, useEffect } from "react";
 import { X, Save } from "lucide-react";
-import { Rule, RuleSection } from "../../types";
+import { News, NewsSection } from "../../types";
 
-interface RuleModalProps {
-  rule?: Rule | null;
-  sections: RuleSection[];
+interface NewsModalProps {
+  news?: News | null;
+  sections: NewsSection[];
   defaultSectionId: string;
-  onSave: (rule: Omit<Rule, "id">) => void;
+  onSave: (news: Omit<News, "id">) => void;
   onClose: () => void;
 }
 
-const RuleModal: React.FC<RuleModalProps> = ({
-  rule,
+const NewsModal: React.FC<NewsModalProps> = ({
+  news,
   sections,
   defaultSectionId,
   onSave,
@@ -27,11 +27,12 @@ const RuleModal: React.FC<RuleModalProps> = ({
   );
 
   useEffect(() => {
-    if (rule) {
-      setTitle(rule.title);
-      setContent(rule.content);
+    if (news) {
+      setTitle(news.title);
+      setContent(news.content);
+      setSectionId((news as any).sectionId || defaultSectionId); // se hai il campo sectionId in News, altrimenti default
     }
-  }, [rule]);
+  }, [news, defaultSectionId]);
 
   const validateForm = () => {
     const newErrors: { title?: string; content?: string } = {};
@@ -62,6 +63,7 @@ const RuleModal: React.FC<RuleModalProps> = ({
     onSave({
       title: title.trim(),
       content: content.trim(),
+      sectionId,
       orderIndex: 0,
     });
   };
@@ -71,7 +73,7 @@ const RuleModal: React.FC<RuleModalProps> = ({
       <div className="bg-gradient-to-br from-teal-800/90 to-emerald-800/90 backdrop-blur-sm rounded-xl border border-teal-400/30 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-teal-400/30">
           <h2 className="text-xl font-bold text-white">
-            {rule ? "Modifica Regola" : "Nuova Regola"}
+            {news ? "Modifica Articolo" : "Nuovo Articolo"}
           </h2>
           <button
             onClick={onClose}
@@ -82,14 +84,14 @@ const RuleModal: React.FC<RuleModalProps> = ({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Section Selection (only for new rules) */}
-          {!rule && (
+          {/* Section Selection (only for new news) */}
+          {!news && (
             <div>
               <label
                 htmlFor="section"
                 className="block text-sm font-medium text-teal-200 mb-2"
               >
-                Sezione
+                Sezione Articolo
               </label>
               <select
                 id="section"
@@ -122,7 +124,7 @@ const RuleModal: React.FC<RuleModalProps> = ({
               className={`w-full px-3 py-2 bg-teal-700/50 border rounded-lg text-white placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent ${
                 errors.title ? "border-red-400" : "border-teal-400/30"
               }`}
-              placeholder="Inserisci il titolo della regola"
+              placeholder="Inserisci il titolo dell'articolo"
             />
             {errors.title && (
               <p className="mt-1 text-sm text-red-300">{errors.title}</p>
@@ -145,7 +147,7 @@ const RuleModal: React.FC<RuleModalProps> = ({
               className={`w-full px-3 py-2 bg-teal-700/50 border rounded-lg text-white placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none ${
                 errors.content ? "border-red-400" : "border-teal-400/30"
               }`}
-              placeholder="Descrivi la regola in dettaglio..."
+              placeholder="Descrivi l'articolo in dettaglio..."
             />
             {errors.content && (
               <p className="mt-1 text-sm text-red-300">{errors.content}</p>
@@ -169,7 +171,7 @@ const RuleModal: React.FC<RuleModalProps> = ({
               className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg"
             >
               <Save className="h-4 w-4" />
-              <span>{rule ? "Salva Modifiche" : "Crea Regola"}</span>
+              <span>{news ? "Salva Modifiche" : "Crea Articolo"}</span>
             </button>
           </div>
         </form>
@@ -178,4 +180,4 @@ const RuleModal: React.FC<RuleModalProps> = ({
   );
 };
 
-export default RuleModal;
+export default NewsModal;

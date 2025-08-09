@@ -1,39 +1,39 @@
 // src/components/admin/AdminStats.tsx
 
 import React from "react";
-import { RuleSection } from "../../types";
-import { FileText, Users, Palmtree, AlertTriangle, Clock } from "lucide-react";
+import { NewsSection } from "../../types";
+import { FileText, Users, PalmTree, AlertTriangle, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { it } from "date-fns/locale";
 
 interface AdminStatsProps {
-  sections: RuleSection[];
+  sections: NewsSection[];
 }
 
 const AdminStats: React.FC<AdminStatsProps> = ({ sections }) => {
-  const totalRules = sections.reduce(
-    (total, section) => total + section.rules.length,
+  const totalNews = sections.reduce(
+    (total, section) => total + section.rules.length, // qui rules rappresentano le news, immagino tu abbia rinominato
     0
   );
 
   const sectionStats = sections.map((section) => ({
     ...section,
-    ruleCount: section.rules.length,
-    percentage: (section.rules.length / totalRules) * 100,
+    newsCount: section.rules.length,
+    percentage: totalNews ? (section.rules.length / totalNews) * 100 : 0,
   }));
 
   const iconMap = {
-    Shield: Palmtree,
+    Shield: PalmTree,
     Users,
-    Heart: Palmtree,
+    Heart: PalmTree,
     AlertTriangle,
   };
 
-  // Funzione per trovare l'ultima data di modifica tra tutte le regole
+  // Funzione per trovare l'ultima data di modifica tra tutte le news
   const getLastUpdatedDate = () => {
     const allDates = sections
       .flatMap((section) =>
-        section.rules.map((rule) => rule.updatedAt && new Date(rule.updatedAt))
+        section.rules.map((news) => news.updatedAt && new Date(news.updatedAt))
       )
       .filter((date): date is Date => date instanceof Date);
 
@@ -48,17 +48,17 @@ const AdminStats: React.FC<AdminStatsProps> = ({ sections }) => {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
-        <p className="text-teal-200">Panoramica generale del regolamento.</p>
+        <p className="text-teal-200">Panoramica generale delle news.</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Totale regole */}
+        {/* Totale news */}
         <div className="bg-gradient-to-r from-teal-800/50 to-emerald-800/50 backdrop-blur-sm rounded-xl border border-teal-400/30 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-teal-200 text-sm font-medium">Regole Totali</p>
-              <p className="text-2xl font-bold text-white">{totalRules}</p>
+              <p className="text-teal-200 text-sm font-medium">News Totali</p>
+              <p className="text-2xl font-bold text-white">{totalNews}</p>
             </div>
             <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-3 rounded-lg shadow-lg">
               <FileText className="h-6 w-6 text-white" />
@@ -76,12 +76,12 @@ const AdminStats: React.FC<AdminStatsProps> = ({ sections }) => {
               <p className="text-2xl font-bold text-white">{sections.length}</p>
             </div>
             <div className="bg-gradient-to-r from-green-500 to-teal-500 p-3 rounded-lg shadow-lg">
-              <Palmtree className="h-6 w-6 text-white" />
+              <PalmTree className="h-6 w-6 text-white" />
             </div>
           </div>
         </div>
 
-        {/* Media regole */}
+        {/* Media news per sezione */}
         <div className="bg-gradient-to-r from-teal-800/50 to-emerald-800/50 backdrop-blur-sm rounded-xl border border-teal-400/30 p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -90,7 +90,7 @@ const AdminStats: React.FC<AdminStatsProps> = ({ sections }) => {
               </p>
               <p className="text-2xl font-bold text-white">
                 {sections.length > 0
-                  ? Math.round(totalRules / sections.length)
+                  ? Math.round(totalNews / sections.length)
                   : 0}
               </p>
             </div>
@@ -126,12 +126,12 @@ const AdminStats: React.FC<AdminStatsProps> = ({ sections }) => {
       {/* Distribuzione */}
       <div className="bg-gradient-to-r from-teal-800/50 to-emerald-800/50 backdrop-blur-sm rounded-xl border border-teal-400/30 p-6">
         <h3 className="text-lg font-semibold text-white mb-4">
-          Distribuzione Regole per Sezione
+          Distribuzione News per Sezione
         </h3>
         <div className="space-y-4">
           {sectionStats.map((section) => {
             const IconComponent =
-              iconMap[section.icon as keyof typeof iconMap] || Palmtree;
+              iconMap[section.icon as keyof typeof iconMap] || PalmTree;
 
             return (
               <div key={section.id} className="flex items-center space-x-4">
@@ -144,7 +144,7 @@ const AdminStats: React.FC<AdminStatsProps> = ({ sections }) => {
                       {section.title}
                     </span>
                     <span className="text-teal-200 text-sm">
-                      {section.ruleCount} regole
+                      {section.newsCount} news
                     </span>
                   </div>
                   <div className="w-full bg-teal-700/50 rounded-full h-2">

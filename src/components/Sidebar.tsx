@@ -7,10 +7,10 @@ import {
   Heart,
   AlertTriangle,
   X,
-  Palmtree,
+  PalmTree,
   Info,
   Scale,
-  Contact,
+  Phone, // lucide ha Phone, non Contact, correggo in iconMap
   Factory,
   Rocket,
   Mic,
@@ -30,10 +30,10 @@ const iconMap = {
   Users,
   Heart,
   AlertTriangle,
-  Palmtree,
+  PalmTree,
   Info,
   Scale,
-  Contact,
+  Phone,
   Factory,
   Rocket,
   Mic,
@@ -75,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Mobile header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-teal-400/30 md:hidden bg-gradient-to-r from-orange-500/20 to-amber-500/20">
           <div className="flex items-center space-x-3">
-            <Palmtree className="h-5 w-5 sm:h-6 sm:w-6 text-orange-300" />
+            <PalmTree className="h-5 w-5 sm:h-6 sm:w-6 text-orange-300" />
             <h2 className="text-base sm:text-lg font-bold text-orange-200">
               Sezioni
             </h2>
@@ -125,7 +125,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           <br />
 
           {sections.map((section) => {
-            const IconComponent = iconMap[section.icon as keyof typeof iconMap];
+            const IconComponent =
+              iconMap[section.icon as keyof typeof iconMap] || PalmTree;
             const isActive = activeSection === section.id;
 
             return (

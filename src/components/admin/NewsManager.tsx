@@ -1,83 +1,78 @@
-// src/components/admin/RulesManager.tsx
+// src/components/admin/NewsManager.tsx
 
 import React, { useState } from "react";
-import { RuleSection, Rule } from "../../types";
+import { NewsSection, News } from "../../types";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
-import RuleModal from "./RuleModal";
+import NewsModal from "./NewsModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
-interface RulesManagerProps {
-  sections: RuleSection[];
+interface NewsManagerProps {
+  sections: NewsSection[];
   selectedSection: string;
-  onAddRule: (sectionId: string, rule: Omit<Rule, "id">) => void;
-  onUpdateRule: (
+  onAddNews: (sectionId: string, news: Omit<News, "id">) => void;
+  onUpdateNews: (
     sectionId: string,
-    ruleId: string,
-    rule: Partial<Rule>
+    newsId: string,
+    news: Partial<News>
   ) => void;
-  onDeleteRule: (ruleId: string) => void;
-  onMoveRule: (
-    fromSectionId: string,
-    toSectionId: string,
-    ruleId: string
-  ) => void;
+  onDeleteNews: (newsId: string) => void;
 }
 
-const RulesManager: React.FC<RulesManagerProps> = ({
+const NewsManager: React.FC<NewsManagerProps> = ({
   sections,
   selectedSection,
-  onAddRule,
-  onUpdateRule,
-  onDeleteRule,
+  onAddNews,
+  onUpdateNews,
+  onDeleteNews,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [showRuleModal, setShowRuleModal] = useState(false);
+  const [showNewsModal, setShowNewsModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [editingRule, setEditingRule] = useState<Rule | null>(null);
-  const [deletingRule, setDeletingRule] = useState<{
+  const [editingNews, setEditingNews] = useState<News | null>(null);
+  const [deletingNews, setDeletingNews] = useState<{
     sectionId: string;
-    rule: Rule;
+    news: News;
   } | null>(null);
 
   const currentSection = sections.find((s) => s.id === selectedSection);
 
-  const filteredRules =
-    currentSection?.rules.filter(
-      (rule) =>
-        rule.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        rule.content.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredNews =
+    currentSection?.news.filter(
+      (news) =>
+        news.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        news.content.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
-  const handleAddRule = () => {
-    setEditingRule(null);
-    setShowRuleModal(true);
+  const handleAddNews = () => {
+    setEditingNews(null);
+    setShowNewsModal(true);
   };
 
-  const handleEditRule = (rule: Rule) => {
-    setEditingRule(rule);
-    setShowRuleModal(true);
+  const handleEditNews = (news: News) => {
+    setEditingNews(news);
+    setShowNewsModal(true);
   };
 
-  const handleDeleteRule = (rule: Rule) => {
-    setDeletingRule({ sectionId: selectedSection, rule });
+  const handleDeleteNews = (news: News) => {
+    setDeletingNews({ sectionId: selectedSection, news });
     setShowDeleteModal(true);
   };
 
-  const handleSaveRule = (ruleData: Omit<Rule, "id">) => {
-    if (editingRule) {
-      onUpdateRule(selectedSection, editingRule.id, ruleData);
+  const handleSaveNews = (newsData: Omit<News, "id">) => {
+    if (editingNews) {
+      onUpdateNews(selectedSection, editingNews.id, newsData);
     } else {
-      onAddRule(selectedSection, ruleData);
+      onAddNews(selectedSection, newsData);
     }
-    setShowRuleModal(false);
-    setEditingRule(null);
+    setShowNewsModal(false);
+    setEditingNews(null);
   };
 
   const confirmDelete = () => {
-    if (deletingRule) {
-      onDeleteRule(deletingRule.rule.id);
+    if (deletingNews) {
+      onDeleteNews(deletingNews.news.id);
       setShowDeleteModal(false);
-      setDeletingRule(null);
+      setDeletingNews(null);
     }
   };
 
@@ -100,15 +95,15 @@ const RulesManager: React.FC<RulesManagerProps> = ({
             {currentSection.title}
           </h2>
           <p className="text-teal-200">
-            {currentSection.rules.length} regole in questa sezione
+            {currentSection.news.length} articoli in questa sezione
           </p>
         </div>
         <button
-          onClick={handleAddRule}
+          onClick={handleAddNews}
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg"
         >
           <Plus className="h-5 w-5" />
-          <span>Aggiungi Regola</span>
+          <span>Aggiungi Articolo</span>
         </button>
       </div>
 
@@ -122,37 +117,37 @@ const RulesManager: React.FC<RulesManagerProps> = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="block w-full pl-10 pr-3 py-2 border border-teal-400/30 rounded-lg bg-teal-800/50 text-white placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
-          placeholder="Cerca regole..."
+          placeholder="Cerca articoli..."
         />
       </div>
 
-      {/* Rules List */}
+      {/* News List */}
       <div className="space-y-4">
-        {filteredRules.length === 0 ? (
+        {filteredNews.length === 0 ? (
           <div className="text-center py-12 bg-gradient-to-r from-teal-800/50 to-emerald-800/50 backdrop-blur-sm rounded-xl border border-teal-400/30">
             <h3 className="text-lg font-semibold text-teal-200 mb-2">
               {searchTerm
-                ? "Nessuna regola trovata"
-                : "Nessuna regola in questa sezione"}
+                ? "Nessun articolo trovato"
+                : "Nessun articolo in questa sezione"}
             </h3>
             <p className="text-teal-300 mb-4">
               {searchTerm
                 ? "Prova a modificare i termini di ricerca"
-                : "Inizia aggiungendo la prima regola"}
+                : "Inizia aggiungendo il primo articolo"}
             </p>
             {!searchTerm && (
               <button
-                onClick={handleAddRule}
+                onClick={handleAddNews}
                 className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg"
               >
-                Aggiungi Prima Regola
+                Aggiungi Primo Articolo
               </button>
             )}
           </div>
         ) : (
-          filteredRules.map((rule, index) => (
+          filteredNews.map((news, index) => (
             <div
-              key={rule.id}
+              key={news.id}
               className="bg-gradient-to-r from-teal-800/50 to-emerald-800/50 backdrop-blur-sm rounded-xl border border-teal-400/30 p-6 hover:border-orange-400/50 transition-all"
             >
               <div className="flex items-start justify-between">
@@ -164,45 +159,45 @@ const RulesManager: React.FC<RulesManagerProps> = ({
                       </span>
                     </div>
                     <h3 className="text-lg font-semibold text-white">
-                      {rule.title}
+                      {news.title}
                     </h3>
                   </div>
                   <p className="text-teal-100 leading-relaxed mb-4">
-                    {rule.content}
+                    {news.content}
                   </p>
 
-                  {(rule.createdAt || rule.updatedAt) && (
+                  {(news.createdAt || news.updatedAt) && (
                     <div className="flex items-center space-x-4 text-xs text-teal-300">
-                      {rule.createdAt && (
+                      {news.createdAt && (
                         <span>
                           Creata:{" "}
-                          {new Date(rule.createdAt).toLocaleDateString("it-IT")}
+                          {new Date(news.createdAt).toLocaleDateString("it-IT")}
                         </span>
                       )}
-                      {rule.updatedAt && (
+                      {news.updatedAt && (
                         <span>
                           Modificata:{" "}
-                          {new Date(rule.updatedAt).toLocaleDateString("it-IT")}
+                          {new Date(news.updatedAt).toLocaleDateString("it-IT")}
                         </span>
                       )}
-                      {rule.createdBy && <span>da {rule.createdBy}</span>}
+                      {news.createdBy && <span>da {news.createdBy}</span>}
                     </div>
                   )}
                 </div>
 
                 <div className="flex items-center space-x-2 ml-4">
                   <button
-                    onClick={() => handleEditRule(rule)}
+                    onClick={() => handleEditNews(news)}
                     className="p-2 text-teal-300 hover:text-blue-300 hover:bg-teal-700/50 rounded-lg transition-colors"
-                    title="Modifica regola"
+                    title="Modifica articolo"
                   >
                     <Pencil className="h-4 w-4" />
                   </button>
 
                   <button
-                    onClick={() => handleDeleteRule(rule)}
+                    onClick={() => handleDeleteNews(news)}
                     className="p-2 text-teal-300 hover:text-red-300 hover:bg-teal-700/50 rounded-lg transition-colors"
-                    title="Elimina regola"
+                    title="Elimina articolo"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -214,26 +209,26 @@ const RulesManager: React.FC<RulesManagerProps> = ({
       </div>
 
       {/* Modals */}
-      {showRuleModal && (
-        <RuleModal
-          rule={editingRule}
+      {showNewsModal && (
+        <NewsModal
+          news={editingNews}
           sections={sections}
           defaultSectionId={selectedSection}
-          onSave={handleSaveRule}
+          onSave={handleSaveNews}
           onClose={() => {
-            setShowRuleModal(false);
-            setEditingRule(null);
+            setShowNewsModal(false);
+            setEditingNews(null);
           }}
         />
       )}
 
-      {showDeleteModal && deletingRule && (
+      {showDeleteModal && deletingNews && (
         <DeleteConfirmModal
-          title={deletingRule.rule.title}
+          title={deletingNews.news.title}
           onConfirm={confirmDelete}
           onClose={() => {
             setShowDeleteModal(false);
-            setDeletingRule(null);
+            setDeletingNews(null);
           }}
         />
       )}
@@ -241,4 +236,4 @@ const RulesManager: React.FC<RulesManagerProps> = ({
   );
 };
 
-export default RulesManager;
+export default NewsManager;

@@ -1,18 +1,16 @@
-// src/components/admin/SectionsManager.tsx
-
 import React, { useEffect, useState } from "react";
-import { RuleSection } from "../../types";
+import { NewsSection } from "../../types"; // tipo aggiornato
 import { sectionsAPI } from "../../lib/api";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import SectionModal from "./SectionModal";
 import { Pencil, Trash2, Plus } from "lucide-react";
 
 const SectionsManager: React.FC = () => {
-  const [sections, setSections] = useState<RuleSection[]>([]);
+  const [sections, setSections] = useState<NewsSection[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [selectedSection, setSelectedSection] = useState<RuleSection | null>(
+  const [selectedSection, setSelectedSection] = useState<NewsSection | null>(
     null
   );
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,7 +23,7 @@ const SectionsManager: React.FC = () => {
       const data = await sectionsAPI.getSections();
       setSections(data);
     } catch (err) {
-      setError("Errore caricamento sezioni");
+      setError("Errore caricamento sezioni news");
       console.error(err);
     } finally {
       setLoading(false);
@@ -36,7 +34,7 @@ const SectionsManager: React.FC = () => {
     fetchSections();
   }, []);
 
-  const openEditModal = (section: RuleSection) => {
+  const openEditModal = (section: NewsSection) => {
     setSelectedSection(section);
     setModalOpen(true);
   };
@@ -46,7 +44,7 @@ const SectionsManager: React.FC = () => {
     setModalOpen(true);
   };
 
-  const openDeleteModal = (section: RuleSection) => {
+  const openDeleteModal = (section: NewsSection) => {
     setSelectedSection(section);
     setDeleteModalOpen(true);
   };
@@ -85,7 +83,7 @@ const SectionsManager: React.FC = () => {
       setModalOpen(false);
       fetchSections();
     } catch (err) {
-      alert("Errore salvataggio sezione");
+      alert("Errore salvataggio sezione news");
       console.error(err);
     }
   };
@@ -95,15 +93,19 @@ const SectionsManager: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Gestione Sezioni</h2>
-          <p className="text-teal-200">{sections.length} sezioni disponibili</p>
+          <h2 className="text-2xl font-bold text-white">
+            Gestione Sezioni News
+          </h2>
+          <p className="text-teal-200">
+            {sections.length} sezioni news disponibili
+          </p>
         </div>
         <button
           onClick={openCreateModal}
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg"
         >
           <Plus className="h-5 w-5" />
-          <span>Aggiungi Sezione</span>
+          <span>Aggiungi Sezione News</span>
         </button>
       </div>
 

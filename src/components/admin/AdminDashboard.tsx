@@ -1,174 +1,147 @@
 // src/components/admin/AdminDashboard.tsx
 
-import React, { useState } from "react";
-import { RuleSection, AdminUser, Rule } from "../../types";
-import AdminHeader from "./AdminHeader";
-import AdminSidebar from "./AdminSidebar";
-import RulesManager from "./RulesManager";
-import SectionsManager from "./SectionsManager";
-import AdminStats from "./AdminStats";
-import BackupManager from "./BackupManager";
-import AdminSettings from "./AdminSettings";
-import StoreSettings from "./StoreSettings";
-import DiscountsManager from "./DiscountsManager";
-import { rulesAPI } from "../../lib/api";
+import React, { useState, useEffect } from "react";
+import { News, NewsSection, AdminUser } from "../../types";
 
 interface AdminDashboardProps {
-  sections: RuleSection[];
-  setSections: React.Dispatch<React.SetStateAction<RuleSection[]>>;
   currentAdmin: AdminUser;
   onLogout: () => void;
-  onRefresh: () => void;
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({
-  sections,
-  setSections,
   currentAdmin,
   onLogout,
-  onRefresh,
 }) => {
-  const [activeView, setActiveView] = useState<
-    | "stats"
-    | "rules"
-    | "sections"
-    | "backup"
-    | "store"
-    | "settings"
-    | "discounts"
-  >("stats");
-  const [selectedSection, setSelectedSection] = useState<string>(
-    sections.length > 0 ? sections[0].id : ""
-  );
+  const [news, setNews] = useState<News[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const addRule = async (sectionId: string, rule: Omit<Rule, "id">) => {
+  // Carica le news dal client (anon key)
+  const fetchNews = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      await rulesAPI.createRule({
-        sectionId,
-        title: rule.title,
-        content: rule.content,
-        orderIndex: rule.orderIndex || 0,
+      const res = await fetch("/api/news");
+      if (!res.ok) throw new Error("Errore nel caricamento delle news");
+      const data: News[] = await res.json();
+      setNews(data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  // POST o PUT o DELETE verso /api/news (serverless API con Service Role Key)
+  const modifyNews = async (
+    method: "POST" | "PUT" | "DELETE",
+    body: any
+  ): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/news", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
-
-      // Refresh data from server
-      onRefresh();
-    } catch (error) {
-      console.error("Error creating rule:", error);
-      alert("Errore nella creazione della regola");
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Errore API");
+      }
+      await fetchNews();
+      return true;
+    } catch (e: any) {
+      alert(e.message);
+      return false;
     }
   };
 
-  const updateRule = async (
-    sectionId: string,
-    ruleId: string,
-    updatedRule: Partial<Rule>
-  ) => {
-    try {
-      await rulesAPI.updateRule(ruleId, {
-        title: updatedRule.title!,
-        content: updatedRule.content!,
-        orderIndex: updatedRule.orderIndex,
-        sectionId,
-      });
+  const handleAddNews = async () => {
+    const title = prompt("Titolo nuova news");
+    if (!title) return;
+    const content = prompt("Contenuto della news");
+    if (!content) return;
+    const sectionId = prompt("ID sezione (es. 'default')");
+    if (!sectionId) return;
 
-      // Refresh data from server
-      onRefresh();
-    } catch (error) {
-      console.error("Error updating rule:", error);
-      alert("Errore nell'aggiornamento della regola");
-    }
+    await modifyNews("POST", { sectionId, title, content, orderIndex: 0 });
   };
 
-  const deleteRule = async (ruleId: string) => {
-    try {
-      await rulesAPI.deleteRule(ruleId);
+  const handleUpdateNews = async (item: News) => {
+    const title = prompt("Modifica titolo", item.title);
+    if (!title) return;
+    const content = prompt("Modifica contenuto", item.content);
+    if (!content) return;
 
-      // Refresh data from server
-      onRefresh();
-    } catch (error) {
-      console.error("Error deleting rule:", error);
-      alert("Errore nell'eliminazione della regola");
-    }
+    await modifyNews("PUT", {
+      id: item.id,
+      title,
+      content,
+      orderIndex: item.orderIndex,
+      sectionId: undefined,
+    });
   };
 
-  const moveRule = async (
-    fromSectionId: string,
-    toSectionId: string,
-    ruleId: string
-  ) => {
-    const rule = sections
-      .find((s) => s.id === fromSectionId)
-      ?.rules.find((r) => r.id === ruleId);
-    if (!rule) return;
-
-    try {
-      await rulesAPI.updateRule(ruleId, {
-        title: rule.title,
-        content: rule.content,
-        orderIndex: rule.orderIndex,
-        sectionId: toSectionId,
-      });
-
-      // Refresh data from server
-      onRefresh();
-    } catch (error) {
-      console.error("Error moving rule:", error);
-      alert("Errore nello spostamento della regola");
-    }
-  };
-
-  const renderContent = () => {
-    switch (activeView) {
-      case "stats":
-        return <AdminStats sections={sections} />;
-      case "rules":
-        return (
-          <RulesManager
-            sections={sections}
-            selectedSection={selectedSection}
-            onAddRule={addRule}
-            onUpdateRule={updateRule}
-            onDeleteRule={deleteRule}
-            onMoveRule={moveRule}
-          />
-        );
-      case "sections":
-        return <SectionsManager />;
-      default:
-      case "backup":
-        return (
-          <BackupManager
-            sections={sections}
-            onRestoreSections={setSections}
-            refreshSections={onRefresh}
-          />
-        );
-      case "store":
-        return <StoreSettings />;
-      case "discounts":
-        return <DiscountsManager />;
-      case "settings":
-        return <AdminSettings />;
-    }
+  const handleDeleteNews = async (id: string) => {
+    if (!confirm("Sei sicuro di eliminare questa news?")) return;
+    await modifyNews("DELETE", { id });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900">
-      <AdminHeader currentAdmin={currentAdmin} onLogout={onLogout} />
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Admin Dashboard - News</h1>
+        <button
+          onClick={onLogout}
+          className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition"
+        >
+          Logout
+        </button>
+      </header>
 
-      <div className="flex">
-        <AdminSidebar
-          activeView={activeView}
-          setActiveView={setActiveView}
-          sections={sections}
-          selectedSection={selectedSection}
-          setSelectedSection={setSelectedSection}
-        />
+      <button
+        onClick={handleAddNews}
+        className="mb-6 bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition"
+      >
+        Aggiungi Nuova News
+      </button>
 
-        <main className="flex-1 ml-64 p-8 pt-24">
-          <div className="max-w-7xl mx-auto">{renderContent()}</div>
-        </main>
-      </div>
+      {loading && <p>Caricamento...</p>}
+      {error && <p className="text-red-500">Errore: {error}</p>}
+
+      <ul className="space-y-4">
+        {news.map((item) => (
+          <li
+            key={item.id}
+            className="p-4 bg-gray-800 rounded flex justify-between items-center"
+          >
+            <div>
+              <h2 className="font-semibold text-lg">{item.title}</h2>
+              <p className="text-sm text-gray-300">{item.content}</p>
+              <p className="text-xs text-gray-500">
+                Ordine: {item.orderIndex} - ID Sezione: {item.createdBy ?? "-"}
+              </p>
+            </div>
+            <div className="space-x-2">
+              <button
+                onClick={() => handleUpdateNews(item)}
+                className="bg-yellow-500 px-3 py-1 rounded hover:bg-yellow-600 transition"
+              >
+                Modifica
+              </button>
+              <button
+                onClick={() => handleDeleteNews(item.id)}
+                className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition"
+              >
+                Elimina
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -1,60 +1,19 @@
 // src/components/admin/AdminSidebar.tsx
 
 import React from "react";
-import {
-  BarChart3,
-  FileText,
-  Shield,
-  Users,
-  Heart,
-  AlertTriangle,
-  Database,
-  Info,
-  Scale,
-  Contact,
-  Factory,
-  Rocket,
-  Settings,
-  Mic,
-  Tag,
-} from "lucide-react";
-import { RuleSection } from "../../types";
+import { BarChart3, FileText, Database, Settings } from "lucide-react";
+import { NewsSection } from "../../types";
 
 interface AdminSidebarProps {
-  activeView:
-    | "stats"
-    | "rules"
-    | "sections"
-    | "backup"
-    | "store"
-    | "settings"
-    | "discounts";
-  setActiveView: (
-    view:
-      | "stats"
-      | "rules"
-      | "sections"
-      | "backup"
-      | "store"
-      | "settings"
-      | "discounts"
-  ) => void;
-  sections: RuleSection[];
+  activeView: "stats" | "news" | "sections";
+  setActiveView: (view: "stats" | "news" | "sections") => void;
+  sections: NewsSection[];
   selectedSection: string;
   setSelectedSection: (section: string) => void;
 }
 
 const iconMap = {
-  Shield,
-  Users,
-  Heart,
-  AlertTriangle,
-  Info,
-  Scale,
-  Contact,
-  Factory,
-  Rocket,
-  Mic,
+  FileText: FileText,
 };
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({
@@ -72,40 +31,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       description: "Panoramica",
     },
     {
-      id: "rules",
-      label: "Regole",
+      id: "news",
+      label: "News",
       icon: FileText,
-      description: "Gestione regole",
+      description: "Gestione news",
     },
     {
       id: "sections",
       label: "Sezioni",
       icon: FileText,
       description: "Gestione sezioni",
-    },
-    {
-      id: "backup",
-      label: "Backup",
-      icon: Database,
-      description: "Salvataggio dati",
-    },
-    {
-      id: "store",
-      label: "Store",
-      icon: Users,
-      description: "Gestione utenti",
-    },
-    {
-      id: "discounts",
-      label: "Sconti",
-      icon: Tag,
-      description: "Gestione sconti",
-    },
-    {
-      id: "settings",
-      label: "Impostazioni",
-      icon: Settings,
-      description: "Gestione testi",
     },
   ];
 
@@ -114,29 +49,28 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <nav
         className="p-4 sm:p-6 space-y-3 overflow-y-auto mt-16 sm:mt-20 md:mt-0 h-[calc(100vh-6rem)]"
         style={{
-          scrollbarWidth: "thin", // Firefox
-          scrollbarColor: "#3c7ce2b6 transparent", // Firefox: blue thumb
+          scrollbarWidth: "thin",
+          scrollbarColor: "#3c7ce2b6 transparent",
         }}
       >
-        <style>
-          {`
-              nav::-webkit-scrollbar {
-                width: 6px;
-              }
-              nav::-webkit-scrollbar-track {
-                background: transparent;
-              }
-              nav::-webkit-scrollbar-thumb {
-                background-color: #3b83f69694; /* Tailwind blue-500 */
-                border-radius: 9999px;
-                border: 2px solid transparent;
-                background-clip: content-box;
-              }
-              nav::-webkit-scrollbar-thumb:hover {
-                background-color: #3f81ecff; /* Tailwind blue-600 */
-              }
-            `}
-        </style>
+        <style>{`
+          nav::-webkit-scrollbar {
+            width: 6px;
+          }
+          nav::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          nav::-webkit-scrollbar-thumb {
+            background-color: #3b83f69694;
+            border-radius: 9999px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+          }
+          nav::-webkit-scrollbar-thumb:hover {
+            background-color: #3f81ecff;
+          }
+        `}</style>
+
         {/* Main Navigation */}
         <div>
           <div className="text-xs font-bold text-orange-300 uppercase tracking-wider mb-4 flex items-center space-x-2">
@@ -205,17 +139,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           </div>
         </div>
 
-        {/* Sezioni (da mostrare solo quando "rules" è attivo) */}
-        {activeView === "rules" && (
+        {/* Sections list: only visible if activeView === "news" */}
+        {activeView === "news" && (
           <div>
             <div className="text-xs font-bold text-orange-300 uppercase tracking-wider mb-4 flex items-center space-x-2">
               <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
-              <span>Sezioni Regole</span>
+              <span>Sezioni News</span>
             </div>
             <div className="space-y-2">
               {sections.map((section) => {
-                const IconComponent =
-                  iconMap[section.icon as keyof typeof iconMap];
+                const IconComponent = iconMap["FileText"];
                 const isActive = selectedSection === section.id;
 
                 return (
@@ -255,13 +188,13 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         )}
 
         {/* Quick Stats */}
-        <div className="bg-gradient-to-r from-teal-700/40 to-emerald-700/40 rounded-xl p-4 border border-teal-400/30">
+        <div className="bg-gradient-to-r from-teal-700/40 to-emerald-700/40 rounded-xl p-4 border border-teal-400/30 mt-8">
           <h4 className="text-orange-200 font-semibold mb-3 text-sm">
             Statistiche Rapide
           </h4>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-teal-200 text-xs">Regole Totali</span>
+              <span className="text-teal-200 text-xs">News Totali</span>
               <span className="text-white font-bold text-sm">
                 {sections.reduce(
                   (total, section) => total + section.rules.length,

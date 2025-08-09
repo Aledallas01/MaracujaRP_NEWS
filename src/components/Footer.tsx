@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Palmtree, MessageCircle, Music, MessageSquare } from "lucide-react";
-import { InfoAPI } from "../lib/api";
 
 const discordLink = import.meta.env.VITE_LINK_DISCORD;
 const telegramLink =
@@ -12,24 +11,7 @@ const tiktokLink = import.meta.env.VITE_LINK_TIKTOK;
 const versione = import.meta.env.VITE_VERSION_NEWS;
 
 const Footer: React.FC = () => {
-  const [name, setName] = useState("MaracujaRP");
-  const [footer_message, setFooterMessage] = useState(
-    "Una comunità roleplay dedicata al divertimento e al rispetto reciproco. Unisciti a noi per vivere avventure indimenticabili! 🌴"
-  );
-
   useEffect(() => {
-    const fetchInfo = async () => {
-      try {
-        const data = await InfoAPI.getInfo();
-        if (data.length > 0) {
-          setName(data[0].name);
-          setFooterMessage(data[0].footer_message);
-        }
-      } catch (err) {
-        console.error("Errore nel caricamento delle info per il footer:", err);
-      }
-    };
-
     fetchInfo();
   }, []);
 
@@ -44,11 +26,11 @@ const Footer: React.FC = () => {
                 <Palmtree className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
               <span className="ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-orange-300 to-amber-300 bg-clip-text text-transparent">
-                {name}
+                MaracujaRP
               </span>
             </div>
             <p className="text-teal-200 mb-3 sm:mb-4 text-sm sm:text-base px-2 md:px-0">
-              {footer_message}
+              Footer Message
             </p>
           </div>
 
@@ -101,7 +83,7 @@ const Footer: React.FC = () => {
               © 2025 Maracuja Roleplay. Tutti i diritti riservati.
             </p>
             <p className="text-teal-300 text-xs sm:text-sm text-center sm:text-right">
-              Versione: {versione}
+              Versione: 0.0.1
             </p>
           </div>
         </div>

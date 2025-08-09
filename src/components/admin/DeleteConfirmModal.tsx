@@ -9,6 +9,10 @@ interface DeleteConfirmModalProps {
   onClose: () => void;
 }
 
+/**
+ * Modal per confermare l'eliminazione di un elemento.
+ * Mostra un messaggio di warning e due pulsanti: Annulla ed Elimina.
+ */
 const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   title,
   onConfirm,
@@ -29,6 +33,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           <button
             onClick={onClose}
             className="p-2 rounded-lg text-teal-200 hover:text-white hover:bg-teal-700/50 transition-colors"
+            aria-label="Chiudi modale conferma eliminazione"
           >
             <X className="h-5 w-5" />
           </button>
@@ -41,8 +46,9 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           </div>
           <div className="bg-red-500/20 border border-red-400/30 rounded-lg p-3 mb-6">
             <p className="text-red-300 text-sm flex items-center">
-              <AlertTriangle className="h-4 w-4 mr-1" /> Questa azione non può
-              essere annullata. <AlertTriangle className="h-4 w-4 ml-1" />
+              <AlertTriangle className="h-4 w-4 mr-1" />
+              Questa azione non può essere annullata.
+              <AlertTriangle className="h-4 w-4 ml-1" />
             </p>
           </div>
 

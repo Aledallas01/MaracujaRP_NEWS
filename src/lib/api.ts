@@ -1,7 +1,7 @@
 // src/lib/api.ts
 
 import { createClient } from "@supabase/supabase-js";
-import { NewsSection, News, Info } from "../types";
+import { NewsSection, News } from "../types";
 import { v4 as uuidv4 } from "uuid";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;

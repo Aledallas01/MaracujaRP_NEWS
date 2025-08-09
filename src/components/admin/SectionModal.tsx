@@ -1,10 +1,10 @@
 // src/components/admin/SectionModal.tsx
 
 import React, { useState, useEffect } from "react";
-import { RuleSection } from "../../types";
+import { NewsSection } from "../../types";
 
 interface SectionModalProps {
-  section: RuleSection | null;
+  section: NewsSection | null;
   onClose: () => void;
   onSave: (
     id: string | null,
@@ -48,7 +48,7 @@ const SectionModal: React.FC<SectionModalProps> = ({
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-gradient-to-br from-teal-800/90 to-emerald-800/90 rounded-xl border border-teal-400/30 p-6 max-w-md w-full text-white">
         <h2 className="text-2xl font-semibold mb-4">
-          {section ? "Modifica Sezione" : "Nuova Sezione"}
+          {section ? "Modifica Sezione News" : "Nuova Sezione News"}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

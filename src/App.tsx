@@ -94,7 +94,7 @@ function App() {
       const admin: AdminUser = {
         id: "1",
         username: "Developer",
-        role: "super_admin",
+        role: "Developer",
         lastLogin: new Date(),
       };
       setCurrentAdmin(admin);

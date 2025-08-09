@@ -23,7 +23,7 @@ Il file `.env` è essenziale per configurare le variabili di ambiente del proget
    VITE_LINK_DISCORD=
    VITE_LINK_TIKTOK=
 
-   VITE_VERSION_REGOLAMENTO=0.0.0
+   VITE_VERSION_NEWS=0.0.0
    ```
 
 3. **Personalizza i valori** in base alla tua configurazione locale.
@@ -47,7 +47,7 @@ Per collegare il database al progetto, segui questi passaggi:
 Le variabili di ambiente configurate nel file `.env` vengono utilizzate dal progetto per:
 
 - **Connessione al database Supabase**: `VITE_SUPABASE_ANON_KEY`, `VITE_SUPABASE_URL`.
-- **Configurazione dell'applicazione**: `VITE_USERNAME`, `VITE_PASSWORD`, `VITE_VERSION_REGOLAMENTO`.
+- **Configurazione dell'applicazione**: `VITE_USERNAME`, `VITE_PASSWORD`, `VITE_VERSION_NEWS`.
 - **Link utili**: `VITE_LINK_SUPPORTO_DISCORD`, `VITE_LINK_YOUTUBE`, `VITE_LINK_DISCORD`, `VITE_LINK_TIKTOK`.
 
 Assicurati che tutte le variabili siano correttamente impostate per evitare malfunzionamenti.

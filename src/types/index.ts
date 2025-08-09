@@ -1,6 +1,6 @@
 // src/types/index.ts
 
-export interface Rule {
+export interface News {
   id: string;
   title: string;
   content: string;
@@ -10,7 +10,7 @@ export interface Rule {
   createdBy?: string;
 }
 
-export interface RuleSection {
+export interface NewsSection {
   id: string;
   title: string;
   description?: string;

@@ -9,7 +9,7 @@ const telegramLink =
   import.meta.env.VITE_LINK_TELEGRAM ||
   import.meta.env.VITE_LINK_SUPPORTO_DISCORD;
 const tiktokLink = import.meta.env.VITE_LINK_TIKTOK;
-const versione = import.meta.env.VITE_VERSION_REGOLAMENTO;
+const versione = import.meta.env.VITE_VERSION_NEWS;
 
 const Footer: React.FC = () => {
   const [name, setName] = useState("MaracujaRP");

@@ -4,463 +4,49 @@
 @tailwind components;
 @tailwind utilities;
 
-/* =============================================================================
+/* 
+
+======================================================================================
+   MaracujaRP - CSS Variables
+   This file contains the CSS variables used throughout the MaracujaRP design system.
+   It defines colors, fonts, and other design tokens that can be reused in styles.
+======================================================================================
    DESIGN SYSTEM - MaracujaRP
-   ============================================================================= */
+====================================================================================== */
 
 :root {
-  /* === COLORS === */
-  --primary: 217 91% 60%;
-  /* Blue - Primary brand */
-  --primary-foreground: 222.2 84% 4.9%;
+  /* =========  BACKGROUND ========= */
+  --background: #282828;
+  --sidebar-background: #222222;
+  --card-background: #303030;
 
-  --secondary: 184 100% 50%;
-  /* Cyan - New background color */
-  --secondary-foreground: 210 40% 98%;
 
-  --accent: 29 100% 50%;
-  /* Orange - New accent color */
-  --accent-foreground: 222.2 84% 4.9%;
-
-  --muted: 210 40% 10%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-
-  --background: 184 85% 8%;
-  /* Dark cyan background */
-  --foreground: 210 40% 98%;
-
-  --card: 184 50% 12%;
-  --card-foreground: 210 40% 98%;
-
-  --border: 184 50% 25%;
-  --input: 184 50% 15%;
-
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-
-  --warning: 43 100% 50%;
-  --success: 142 76% 36%;
-
-  /* === GRADIENTS === */
-  --gradient-primary: linear-gradient(135deg, hsl(184 100% 25%), hsl(184 85% 8%));
-  --gradient-accent: linear-gradient(135deg, hsl(29 100% 50%), hsl(35 100% 51%));
-  --gradient-card: linear-gradient(135deg, hsl(184 50% 12%) 0%, hsl(184 40% 10%) 100%);
-  --gradient-header: linear-gradient(90deg, hsl(29 100% 50% / 0.3), hsl(35 100% 51% / 0.3));
-
-  /* === SHADOWS === */
-  --shadow-card: 0 10px 30px -10px hsl(184 100% 5% / 0.5);
-  --shadow-accent: 0 10px 30px -10px hsl(29 100% 50% / 0.3);
-  --shadow-header: 0 4px 20px -5px hsl(29 100% 50% / 0.2);
-
-  /* === TRANSITIONS === */
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-fast: all 0.15s ease-in-out;
-
-  /* === TYPOGRAPHY === */
-  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-
-  /* === SPACING === */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
-
-  /* === BORDERS === */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2rem;
-
-  /* === LAYOUT === */
-  --sidebar-width: 16rem;
-  --header-height: 4rem;
-  --content-max-width: 64rem;
+  /* =========     TEXT    ========= */
+  --default-text: #ffffff;
 }
 
-/* =============================================================================
-   BASE STYLES
-   ============================================================================= */
 
-* {
-  border-color: hsl(var(--border));
-}
+/* =========  BASE STYLES ========= */
 
 body {
-  background: var(--gradient-primary);
+  background: var(--background);
   color: hsl(var(--foreground));
   font-family: var(--font-body);
   line-height: 1.6;
   min-height: 100vh;
 }
 
-/* =============================================================================
-   COMPONENTS
-   ============================================================================= */
 
-/* Header */
+/* =========  COMPONENTS  ========= */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  background: var(--gradient-header);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid hsl(var(--accent) / 0.4);
-  box-shadow: var(--shadow-header);
-  transition: var(--transition-smooth);
-  height: var(--header-height);
-}
-
-.header.hidden {
-  transform: translateY(-100%);
-}
-
-.header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0.25rem;
-  background: var(--gradient-accent);
-}
-
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: var(--header-height);
-  left: 0;
-  width: var(--sidebar-width);
-  height: calc(100vh - var(--header-height));
-  background: hsl(var(--card));
-  border-right: 1px solid hsl(var(--border));
-  transform: translateX(-100%);
-  transition: var(--transition-smooth);
-  z-index: 40;
-}
-
-.sidebar.open {
-  transform: translateX(0);
-}
-
-@media (min-width: 768px) {
-  .sidebar {
-    transform: translateX(0);
-  }
-}
-
-/* Main Content */
-.main-content {
-  flex: 1;
-  padding: var(--spacing-lg);
-  padding-top: calc(var(--header-height) + var(--spacing-lg));
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-}
-
-@media (min-width: 768px) {
-  .main-content {
-    margin-left: var(--sidebar-width);
-  }
-}
-
-/* Cards */
-.card {
-  background: var(--gradient-card);
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-card);
-  padding: var(--spacing-xl);
-  transition: var(--transition-smooth);
-}
-
-.card:hover {
-  transform: translateY(-0.125rem);
-  box-shadow: var(--shadow-accent);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid hsl(var(--border));
-}
-
-.card-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  background: var(--gradient-accent);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: var(--shadow-accent);
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  font-weight: 500;
-  transition: var(--transition-fast);
-  cursor: pointer;
-  border: none;
-  font-family: var(--font-body);
-}
-
-.btn-primary {
-  background: var(--gradient-accent);
-  color: white;
-  box-shadow: var(--shadow-accent);
-}
-
-.btn-primary:hover {
-  transform: translateY(-0.0625rem);
-  filter: brightness(1.1);
-}
-
-.btn-secondary {
-  background: hsl(var(--secondary) / 0.2);
-  color: hsl(var(--secondary-foreground));
-  border: 1px solid hsl(var(--secondary) / 0.4);
-}
-
-.btn-secondary:hover {
-  background: hsl(var(--secondary) / 0.3);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: hsl(var(--foreground));
-}
-
-.btn-ghost:hover {
-  background: hsl(var(--muted));
-}
-
-/* Form Elements */
-.input {
-  width: 100%;
-  padding: var(--spacing-md);
-  background: hsl(var(--input));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius-md);
-  color: hsl(var(--foreground));
-  transition: var(--transition-fast);
-}
-
-.input:focus {
-  outline: none;
-  border-color: hsl(var(--accent));
-  box-shadow: 0 0 0 2px hsl(var(--accent) / 0.2);
-}
-
-.input::placeholder {
-  color: hsl(var(--muted-foreground));
-}
-
-/* Search */
-.search-container {
-  position: relative;
-  flex: 1;
-  max-width: 32rem;
-}
-
-.search-input {
-  width: 100%;
-  padding: var(--spacing-md);
-  padding-left: 3rem;
-  background: hsl(var(--input));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius-xl);
-  color: hsl(var(--foreground));
-  transition: var(--transition-fast);
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: hsl(var(--accent));
-  background: hsl(var(--card));
-}
-
-.search-icon {
-  position: absolute;
-  left: var(--spacing-md);
-  top: 50%;
-  transform: translateY(-50%);
-  color: hsl(var(--muted-foreground));
-  transition: var(--transition-fast);
-}
-
-.search-input:focus+.search-icon {
-  color: hsl(var(--accent));
-}
-
-/* Loading */
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-.spinner {
-  width: 4rem;
-  height: 4rem;
-  border: 0.125rem solid hsl(var(--border));
-  border-top: 0.125rem solid hsl(var(--accent));
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Error States */
-.error-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: var(--spacing-lg);
-}
-
-.error-card {
-  background: hsl(var(--destructive) / 0.1);
-  border: 1px solid hsl(var(--destructive) / 0.3);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-xl);
-  text-align: center;
-  max-width: 28rem;
-}
-
-/* Responsive Utilities */
-@media (max-width: 767px) {
-  .mobile-hidden {
-    display: none;
-  }
-
-  .mobile-menu {
-    display: block;
-  }
-
-  .card {
-    padding: var(--spacing-lg);
-  }
-
-  .main-content {
-    padding: var(--spacing-md);
-    padding-top: calc(var(--header-height) + var(--spacing-md));
-  }
-}
-
-@media (min-width: 768px) {
-  .mobile-menu {
-    display: none;
-  }
-}
-
-/* =============================================================================
-   ANIMATIONS
-   ============================================================================= */
-
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.slide-in-right {
-  animation: slideInRight 0.3s ease-out;
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-.slide-in-left {
-  animation: slideInLeft 0.3s ease-out;
-}
-
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-.pulse-accent {
-  animation: pulseAccent 2s infinite;
-}
-
-@keyframes pulseAccent {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* =============================================================================
-   UTILITY CLASSES
-   ============================================================================= */
-
-.text-gradient-accent {
-  background: var(--gradient-accent);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.backdrop-blur {
-  backdrop-filter: blur(20px);
-}
-
-.glass-effect {
-  background: hsl(var(--card) / 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid hsl(var(--border) / 0.5);
+  transition: transform 0.3s ease-in-out;
+  background: var(--background);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 165, 0, 0.4);
+  box-shadow: rgba(255, 165, 0, 0.2) 0px 4px 6px -1px, rgba(255, 165, 0, 0.2) 0px 2px 4px -1px;
 }

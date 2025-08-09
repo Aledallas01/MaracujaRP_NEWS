@@ -25,7 +25,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
   const getRoleBadge = (role: string) => {
     const roleConfig = {
-      super_admin: { label: "Super Admin", color: "from-red-500 to-pink-500" },
+      developer: { label: "Developer", color: "from-red-500 to-pink-500" },
       admin: { label: "Admin", color: "from-orange-500 to-amber-500" },
       moderator: { label: "Moderator", color: "from-green-500 to-teal-500" },
     };

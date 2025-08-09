@@ -1,15 +1,15 @@
 // src/components/MainContent.tsx
 
 import React from "react";
-import { RuleSection } from "../types";
-import RuleCard from "./RuleCard";
+import { NewsSection } from "../types";
+import RuleCard from "./RuleCard"; // suppongo tu abbia ancora RuleCard che funziona anche per news
 import Store from "./Store";
 import { Search, Palmtree, Waves } from "lucide-react";
 
 const discordLink = import.meta.env.VITE_LINK_SUPPORTO_DISCORD;
 
 interface MainContentProps {
-  sections: RuleSection[];
+  sections: NewsSection[];
   activeSection: string;
   searchTerm: string;
 }
@@ -24,7 +24,7 @@ const MainContent: React.FC<MainContentProps> = ({
   );
 
   // 🔍 Nessun risultato con ricerca attiva
-  if (searchTerm && sections.every((section) => section.rules.length === 0)) {
+  if (searchTerm && sections.every((section) => section.news.length === 0)) {
     return (
       <main className="flex-1 md:ml-64 p-4 sm:p-6 pt-20 sm:pt-24">
         <div className="max-w-4xl mx-auto">
@@ -58,7 +58,7 @@ const MainContent: React.FC<MainContentProps> = ({
             </h2>
             <p className="text-teal-200 text-sm sm:text-base lg:text-lg">
               {sections.reduce(
-                (total, section) => total + section.rules.length,
+                (total, section) => total + section.news.length,
                 0
               )}{" "}
               regole trovate
@@ -68,7 +68,7 @@ const MainContent: React.FC<MainContentProps> = ({
           <div className="space-y-10">
             {sections.map(
               (section) =>
-                section.rules.length > 0 && (
+                section.news.length > 0 && (
                   <div key={section.id} className="space-y-6">
                     <div className="flex items-center space-x-3 pb-4 border-b border-orange-400/30">
                       <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg flex items-center justify-center shadow-lg">
@@ -79,12 +79,12 @@ const MainContent: React.FC<MainContentProps> = ({
                       </h3>
                       <div className="bg-orange-500/20 px-3 py-1 rounded-full border border-orange-400/30">
                         <span className="text-orange-200 text-sm font-medium">
-                          {section.rules.length} regole
+                          {section.news.length} regole
                         </span>
                       </div>
                     </div>
                     <div className="grid gap-6">
-                      {section.rules.map((rule, index) => (
+                      {section.news.map((rule, index) => (
                         <RuleCard
                           key={rule.id}
                           rule={rule}
@@ -136,7 +136,7 @@ const MainContent: React.FC<MainContentProps> = ({
               </h2>
               <div className="flex flex-col sm:flex-row items-center sm:space-x-3 space-y-1 sm:space-y-0 justify-center sm:justify-start">
                 <p className="text-teal-200 text-sm sm:text-base lg:text-lg">
-                  {currentSection.rules.length} regole
+                  {currentSection.news.length} regole
                 </p>
                 <div className="hidden sm:block w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
                 <span className="text-amber-300 text-xs sm:text-sm">
@@ -149,7 +149,7 @@ const MainContent: React.FC<MainContentProps> = ({
 
         {/* Lista regole */}
         <div className="grid gap-4 sm:gap-6 lg:gap-8">
-          {currentSection.rules.map((rule, index) => (
+          {currentSection.news.map((rule, index) => (
             <RuleCard
               key={rule.id}
               rule={rule}
@@ -160,7 +160,7 @@ const MainContent: React.FC<MainContentProps> = ({
         </div>
 
         {/* Nessuna regola */}
-        {currentSection.rules.length === 0 && (
+        {currentSection.news.length === 0 && (
           <div className="text-center py-12 sm:py-16">
             <h3 className="text-xl sm:text-2xl font-bold text-orange-200">
               Nessuna regola trovata
@@ -169,7 +169,7 @@ const MainContent: React.FC<MainContentProps> = ({
         )}
 
         {/* Supporto */}
-        {currentSection.rules.length > 0 && (
+        {currentSection.news.length > 0 && (
           <div className="mt-8 sm:mt-12 lg:mt-16 p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-orange-500/20 via-amber-500/20 to-yellow-500/20 rounded-2xl sm:rounded-3xl border border-orange-400/40 backdrop-blur-sm shadow-xl">
             <div className="text-center mb-4 sm:mb-6">
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-2 mb-3 sm:mb-4">

@@ -7,8 +7,9 @@ import MainContent from "./components/MainContent";
 import Footer from "./components/Footer";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import LoginModal from "./components/admin/LoginModal";
-import { RuleSection, AdminUser } from "./types";
-import { sectionsAPI, InfoAPI } from "./lib/api";
+import { NewsSection, AdminUser } from "./types";
+import InfoAPI from "./lib/api"; // import default InfoAPI
+import { sectionsAPI } from "./lib/api"; // named export
 
 function App() {
   const [activeSection, setActiveSection] = useState<string>("");
@@ -17,7 +18,7 @@ function App() {
   const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(null);
-  const [sections, setSections] = useState<RuleSection[]>([]);
+  const [sections, setSections] = useState<NewsSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,20 +82,20 @@ function App() {
   const filteredSections = sections
     .map((section) => ({
       ...section,
-      rules: section.rules.filter(
-        (rule) =>
-          rule.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          rule.content.toLowerCase().includes(searchTerm.toLowerCase())
+      news: section.news.filter(
+        (newsItem) =>
+          newsItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          newsItem.content.toLowerCase().includes(searchTerm.toLowerCase())
       ),
     }))
-    .filter((section) => section.rules.length > 0 || searchTerm === "");
+    .filter((section) => section.news.length > 0 || searchTerm === "");
 
   const handleLogin = (username: string, password: string): boolean => {
     if (username === "Developer" && password === "Developer123") {
       const admin: AdminUser = {
         id: "1",
         username: "Developer",
-        role: "Developer",
+        role: "Developer", // assicurati che il tipo AdminUser lo permetta
         lastLogin: new Date(),
       };
       setCurrentAdmin(admin);

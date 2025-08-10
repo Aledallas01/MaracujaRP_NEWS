@@ -1,107 +1,125 @@
-import React, { useState, useEffect } from 'react'
-import { Plus, Edit2, Trash2, Save, X, Eye, EyeOff } from 'lucide-react'
-import { supabase, User } from '../../lib/supabase'
+import React, { useState, useEffect } from "react";
+import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
+import { supabase, User } from "../../lib/supabase";
+
+interface Permissions {
+  createSections: boolean;
+  editSections: boolean;
+  deleteSections: boolean;
+  createNews: boolean;
+  editNews: boolean;
+  deleteNews: boolean;
+  manageUsers: boolean;
+}
+
+const defaultPermissions: Permissions = {
+  createSections: false,
+  editSections: false,
+  deleteSections: false,
+  createNews: false,
+  editNews: false,
+  deleteNews: false,
+  manageUsers: false,
+};
 
 const UsersManagement: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [showForm, setShowForm] = useState(false)
-  const [showPasswords, setShowPasswords] = useState<{[key: string]: boolean}>({})
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  })
+    username: "",
+    password: "",
+    permissions: defaultPermissions,
+  });
 
   useEffect(() => {
-    loadUsers()
-  }, [])
+    loadUsers();
+  }, []);
 
   const loadUsers = async () => {
+    setLoading(true);
     try {
-      const { data } = await supabase
-        .from('users')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (data) setUsers(data)
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      if (data) setUsers(data);
     } catch (error) {
-      console.error('Errore caricamento utenti:', error)
+      console.error("Errore caricamento utenti:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
     try {
       const userData = {
-        ...formData,
-        updated_at: new Date().toISOString()
-      }
-
+        username: formData.username,
+        password: formData.password,
+        permissions: formData.permissions,
+        updated_at: new Date().toISOString(),
+      };
       if (editingId) {
-        await supabase
-          .from('users')
-          .update(userData)
-          .eq('id', editingId)
+        await supabase.from("users").update(userData).eq("id", editingId);
       } else {
-        await supabase
-          .from('users')
-          .insert([userData])
+        await supabase.from("users").insert([userData]);
       }
-
-      await loadUsers()
-      resetForm()
+      await loadUsers();
+      resetForm();
     } catch (error) {
-      console.error('Errore salvataggio utente:', error)
+      console.error("Errore salvataggio utente:", error);
     }
-  }
+  };
 
   const handleEdit = (user: User) => {
     setFormData({
       username: user.username,
-      password: user.password
-    })
-    setEditingId(user.id)
-    setShowForm(true)
-  }
+      password: user.password,
+      permissions: user.permissions || defaultPermissions,
+    });
+    setEditingId(user.id);
+    setShowForm(true);
+  };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Sei sicuro di voler eliminare questo utente?')) return
-    
+    if (!confirm("Sei sicuro di voler eliminare questo utente?")) return;
     try {
-      await supabase
-        .from('users')
-        .delete()
-        .eq('id', id)
-      
-      await loadUsers()
+      await supabase.from("users").delete().eq("id", id);
+      await loadUsers();
     } catch (error) {
-      console.error('Errore eliminazione utente:', error)
+      console.error("Errore eliminazione utente:", error);
     }
-  }
-
-  const togglePasswordVisibility = (userId: string) => {
-    setShowPasswords(prev => ({
-      ...prev,
-      [userId]: !prev[userId]
-    }))
-  }
+  };
 
   const resetForm = () => {
-    setFormData({ username: '', password: '' })
-    setEditingId(null)
-    setShowForm(false)
-  }
+    setFormData({
+      username: "",
+      password: "",
+      permissions: defaultPermissions,
+    });
+    setEditingId(null);
+    setShowForm(false);
+  };
+
+  const togglePermission = (perm: keyof Permissions) => {
+    setFormData((prev) => ({
+      ...prev,
+      permissions: {
+        ...prev.permissions,
+        [perm]: !prev.permissions[perm],
+      },
+    }));
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -120,12 +138,15 @@ const UsersManagement: React.FC = () => {
       {/* Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-auto">
             <div className="flex items-center justify-between p-6 border-b">
               <h3 className="text-lg font-semibold">
-                {editingId ? 'Modifica Utente' : 'Nuovo Utente'}
+                {editingId ? "Modifica Utente" : "Nuovo Utente"}
               </h3>
-              <button onClick={resetForm} className="text-gray-400 hover:text-gray-600">
+              <button
+                onClick={resetForm}
+                className="text-gray-400 hover:text-gray-600"
+              >
                 <X className="h-6 w-6" />
               </button>
             </div>
@@ -138,7 +159,12 @@ const UsersManagement: React.FC = () => {
                 <input
                   type="text"
                   value={formData.username}
-                  onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      username: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 />
@@ -151,11 +177,37 @@ const UsersManagement: React.FC = () => {
                 <input
                   type="password"
                   value={formData.password}
-                  onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  required
+                  required={!editingId} // password richiesta solo alla creazione
                 />
               </div>
+
+              <fieldset className="border rounded p-4">
+                <legend className="text-sm font-medium text-gray-700 mb-2">
+                  Permessi
+                </legend>
+                {Object.keys(defaultPermissions).map((perm) => (
+                  <label
+                    key={perm}
+                    className="flex items-center gap-2 mb-2 text-gray-700 text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.permissions[perm as keyof Permissions]}
+                      onChange={() =>
+                        togglePermission(perm as keyof Permissions)
+                      }
+                    />
+                    {perm}
+                  </label>
+                ))}
+              </fieldset>
 
               <div className="flex justify-end gap-3 pt-4">
                 <button
@@ -179,7 +231,7 @@ const UsersManagement: React.FC = () => {
       )}
 
       {/* Tabella Utenti */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow overflow-hidden max-h-[70vh] overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -187,7 +239,7 @@ const UsersManagement: React.FC = () => {
                 Username
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Password
+                Permessi
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Data Creazione
@@ -201,20 +253,17 @@ const UsersManagement: React.FC = () => {
             {users.map((user) => (
               <tr key={user.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{user.username}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500 font-mono">
-                      {showPasswords[user.id] ? user.password : '••••••••'}
-                    </span>
-                    <button
-                      onClick={() => togglePasswordVisibility(user.id)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      {showPasswords[user.id] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
+                  <div className="text-sm font-medium text-gray-900">
+                    {user.username}
                   </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600 max-w-[400px]">
+                  {user.permissions
+                    ? Object.entries(user.permissions)
+                        .filter(([, val]) => val)
+                        .map(([key]) => key)
+                        .join(", ")
+                    : "Nessun permesso"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {new Date(user.created_at).toLocaleDateString()}
@@ -245,7 +294,7 @@ const UsersManagement: React.FC = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UsersManagement
+export default UsersManagement;

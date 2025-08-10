@@ -41,10 +41,21 @@ const createSupabaseClient = () => {
 
 export const supabase = createSupabaseClient();
 
+export interface Permissions {
+  createSections: boolean;
+  editSections: boolean;
+  deleteSections: boolean;
+  createNews: boolean;
+  editNews: boolean;
+  deleteNews: boolean;
+  manageUsers: boolean;
+}
+
 export interface User {
   id: string;
   username: string;
   password: string;
+  permissions: Permissions; // <-- Aggiunto qui
   created_at: string;
   updated_at: string;
 }

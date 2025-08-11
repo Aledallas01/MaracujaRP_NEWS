@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
 import { supabase, Section, User, Permissions } from "../../lib/supabase";
-
-const defaultPermissions: Permissions = {
-  createSections: false,
-  editSections: false,
-  deleteSections: false,
-  createNews: false,
-  editNews: false,
-  deleteNews: false,
-  manageUsers: false,
-};
+import { useAuth } from "../../contexts/AuthContext";
 
 const SectionsManagement: React.FC = () => {
+  const { currentUser } = useAuth();
+
+  const permissions = currentUser?.permissions ?? {
+    createSections: false,
+    editSections: false,
+    deleteSections: false,
+    createNews: false,
+    editNews: false,
+    deleteNews: false,
+    manageUsers: false,
+  };
+
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -24,8 +27,7 @@ const SectionsManagement: React.FC = () => {
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [permissions, setPermissions] =
-    useState<Permissions>(defaultPermissions);
+  const [permissions, setPermissions] = useState<Permissions>(permissions);
 
   // Carica utente e permessi + sezioni al mount
   useEffect(() => {

@@ -88,6 +88,7 @@ const NewsManagement: React.FC = () => {
     }
   };
 
+  // Salvataggio / modifica news
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -96,6 +97,7 @@ const NewsManagement: React.FC = () => {
       return;
     }
     if (!editingId && !permissions.createNews) {
+      2;
       alert("Non hai i permessi per creare news.");
       return;
     }
@@ -117,9 +119,11 @@ const NewsManagement: React.FC = () => {
       resetForm();
     } catch (error) {
       console.error("Errore salvataggio:", error);
+      alert("Errore durante il salvataggio.");
     }
   };
 
+  // Avvia modifica
   const handleEdit = (item: News) => {
     if (!permissions.editNews) {
       alert("Non hai i permessi per modificare le news.");
@@ -136,6 +140,7 @@ const NewsManagement: React.FC = () => {
     setShowForm(true);
   };
 
+  // Elimina news
   const handleDelete = async (id: string) => {
     if (!permissions.deleteNews) {
       alert("Non hai i permessi per eliminare le news.");
@@ -149,6 +154,7 @@ const NewsManagement: React.FC = () => {
       await loadData();
     } catch (error) {
       console.error("Errore eliminazione:", error);
+      alert("Errore durante l'eliminazione.");
     }
   };
 

@@ -67,37 +67,72 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  // Login da tabella users
+  // Funzione per recuperare i permessi dalla tabella permission dato userId
+  const fetchPermissions = async (userId: string): Promise<Permissions> => {
+    const { data, error } = await supabase
+      .from("permission")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+
+    if (error || !data) {
+      console.warn("Permessi non trovati o errore:", error?.message);
+      return defaultPermissions;
+    }
+
+    // Torna solo i campi dei permessi (senza id e user_id)
+    const {
+      createSections,
+      editSections,
+      deleteSections,
+      createNews,
+      editNews,
+      deleteNews,
+      manageUsers,
+    } = data;
+
+    return {
+      createSections,
+      editSections,
+      deleteSections,
+      createNews,
+      editNews,
+      deleteNews,
+      manageUsers,
+    };
+  };
+
+  // Login da tabella users + permessi da permission
   const login = async (
     username: string,
     password: string
   ): Promise<boolean> => {
-    const { data, error } = await supabase
+    const { data: userData, error } = await supabase
       .from("users")
       .select("*")
       .eq("username", username)
-      .eq("password", password) // ⚠️ In produzione usare hash e verifica lato server
+      .eq("password", password) // ⚠️ Usa hash in produzione
       .single();
 
-    if (error) {
-      console.error("Errore login:", error.message);
+    if (error || !userData) {
+      console.error("Errore login:", error?.message);
       return false;
     }
 
-    if (data) {
-      const user: CurrentUser = {
-        id: data.id,
-        email: data.email || null,
-        username: data.username,
-        permissions: data.permissions || defaultPermissions,
-      };
-      setCurrentUser(user);
-      setIsAuthenticated(true);
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      return true;
-    }
+    // Prendi permessi dalla tabella permission
+    const permissions = await fetchPermissions(userData.id);
 
-    return false;
+    const user: CurrentUser = {
+      id: userData.id,
+      email: null, // Non hai email nella tabella users, se la aggiungi mettila qui
+      username: userData.username,
+      permissions,
+    };
+
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    return true;
   };
 
   // Logout

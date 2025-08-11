@@ -42,6 +42,8 @@ const createSupabaseClient = () => {
 export const supabase = createSupabaseClient();
 
 export interface Permissions {
+  id: string;
+  user_id: string;
   createSections: boolean;
   editSections: boolean;
   deleteSections: boolean;

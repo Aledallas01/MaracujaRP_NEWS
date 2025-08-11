@@ -21,17 +21,6 @@ interface User {
   permissions: Permissions;
 }
 
-// Default permessi vuoti (all false)
-const defaultPermissions: Permissions = {
-  createSections: false,
-  editSections: false,
-  deleteSections: false,
-  createNews: false,
-  editNews: false,
-  deleteNews: false,
-  manageUsers: false,
-};
-
 // Etichette per checkbox permessi
 const permLabels: Record<keyof Permissions, string> = {
   createSections: "Crea Sezioni",
@@ -46,6 +35,16 @@ const permLabels: Record<keyof Permissions, string> = {
 const UsersManagement: React.FC = () => {
   const { currentUser, permissions } = useAuth();
 
+  const permissions = currentUser?.permissions ?? {
+    createSections: false,
+    editSections: false,
+    deleteSections: false,
+    createNews: false,
+    editNews: false,
+    deleteNews: false,
+    manageUsers: false,
+  };
+
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -57,7 +56,7 @@ const UsersManagement: React.FC = () => {
   }>({
     username: "",
     password: "",
-    permissions: defaultPermissions,
+    permissions: permissions,
   });
 
   // Blocca accesso se non ha permessi manageUsers

@@ -16,20 +16,19 @@ const SectionsManagement: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [permissions, setPermissions] = useState<Permissions | null>(null);
 
+  // Al mount: carica utente e sezioni
   useEffect(() => {
     fetchCurrentUser();
     loadSections();
   }, []);
 
+  // Recupera utente loggato e permessi
   const fetchCurrentUser = async () => {
-    // Qui recuperiamo l'utente loggato dalla sessione Supabase
     const {
       data: { session },
     } = await supabase.auth.getSession();
-
     if (!session?.user) return;
 
-    // Recupera dalla tabella "users" il record dell'utente
     const { data: userData, error } = await supabase
       .from("users")
       .select("*")
@@ -38,35 +37,36 @@ const SectionsManagement: React.FC = () => {
 
     if (!error && userData) {
       setCurrentUser(userData as User);
-      setPermissions(userData.permissions);
+      setPermissions(userData.permissions || {});
     }
   };
 
+  // Carica sezioni
   const loadSections = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("sections")
         .select("*")
         .order("order_index", { ascending: true });
 
-      if (data) setSections(data);
-    } catch (error) {
-      console.error("Errore caricamento sezioni:", error);
+      if (error) throw error;
+      setSections(data || []);
+    } catch (err) {
+      console.error("Errore caricamento sezioni:", err);
     } finally {
       setLoading(false);
     }
   };
 
+  // Salvataggio o modifica sezione
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (editingId && !permissions?.editSections) {
-      alert("Non hai i permessi per modificare le sezioni.");
-      return;
+      return alert("Non hai i permessi per modificare le sezioni.");
     }
     if (!editingId && !permissions?.createSections) {
-      alert("Non hai i permessi per creare nuove sezioni.");
-      return;
+      return alert("Non hai i permessi per creare nuove sezioni.");
     }
 
     try {
@@ -85,17 +85,16 @@ const SectionsManagement: React.FC = () => {
 
       await loadSections();
       resetForm();
-    } catch (error) {
-      console.error("Errore salvataggio sezione:", error);
+    } catch (err) {
+      console.error("Errore salvataggio sezione:", err);
     }
   };
 
+  // Inizio modifica
   const handleEdit = (section: Section) => {
     if (!permissions?.editSections) {
-      alert("Non hai i permessi per modificare le sezioni.");
-      return;
+      return alert("Non hai i permessi per modificare le sezioni.");
     }
-
     setFormData({
       title: section.title,
       description: section.description,
@@ -105,38 +104,39 @@ const SectionsManagement: React.FC = () => {
     setShowForm(true);
   };
 
+  // Elimina sezione
   const handleDelete = async (id: string) => {
     if (!permissions?.deleteSections) {
-      alert("Non hai i permessi per eliminare le sezioni.");
-      return;
+      return alert("Non hai i permessi per eliminare le sezioni.");
     }
-
     if (!confirm("Sei sicuro di voler eliminare questa sezione?")) return;
 
     try {
       await supabase.from("sections").delete().eq("id", id);
       await loadSections();
-    } catch (error) {
-      console.error("Errore eliminazione sezione:", error);
+    } catch (err) {
+      console.error("Errore eliminazione sezione:", err);
     }
   };
 
+  // Reset form
   const resetForm = () => {
     setFormData({ title: "", description: "", icon: "" });
     setEditingId(null);
     setShowForm(false);
   };
 
+  // Loader
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 bg-gray-900">
+      <div className="flex items-center justify-center h-64 bg-[#30334E]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-gray-900 min-h-full text-gray-200">
+    <div className="p-6 bg-[#30334E] min-h-full text-gray-200">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-100">Gestione Sezioni</h2>
         {permissions?.createSections && (
@@ -150,7 +150,7 @@ const SectionsManagement: React.FC = () => {
         )}
       </div>
 
-      {/* Modal Form */}
+      {/* Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 text-gray-200">
@@ -173,7 +173,7 @@ const SectionsManagement: React.FC = () => {
                   type="text"
                   value={formData.title}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, title: e.target.value }))
+                    setFormData({ ...formData, title: e.target.value })
                   }
                   className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:ring-2 focus:ring-blue-400"
                   required
@@ -187,10 +187,7 @@ const SectionsManagement: React.FC = () => {
                 <textarea
                   value={formData.description}
                   onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
+                    setFormData({ ...formData, description: e.target.value })
                   }
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:ring-2 focus:ring-blue-400"
@@ -199,13 +196,13 @@ const SectionsManagement: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Icon (nome Lucide)
+                  Icon (Lucide)
                 </label>
                 <input
                   type="text"
                   value={formData.icon}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, icon: e.target.value }))
+                    setFormData({ ...formData, icon: e.target.value })
                   }
                   placeholder="es: newspaper, calendar, megaphone"
                   className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:ring-2 focus:ring-blue-400"
@@ -258,25 +255,19 @@ const SectionsManagement: React.FC = () => {
           <tbody className="divide-y divide-gray-700">
             {sections.map((section) => (
               <tr key={section.id} className="hover:bg-gray-700">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-100">
-                    {section.title}
-                  </div>
+                <td className="px-6 py-4">{section.title}</td>
+                <td className="px-6 py-4 text-gray-400">
+                  {section.description}
                 </td>
                 <td className="px-6 py-4">
-                  <div className="text-sm text-gray-400">
-                    {section.description}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <code className="text-sm bg-gray-700 px-2 py-1 rounded text-gray-300">
+                  <code className="text-sm bg-gray-700 px-2 py-1 rounded">
                     {section.icon}
                   </code>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                <td className="px-6 py-4 text-gray-400">
                   {section.created_by}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td className="px-6 py-4 text-right">
                   {permissions?.editSections && (
                     <button
                       onClick={() => handleEdit(section)}
@@ -298,7 +289,6 @@ const SectionsManagement: React.FC = () => {
             ))}
           </tbody>
         </table>
-
         {sections.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             Nessuna sezione trovata

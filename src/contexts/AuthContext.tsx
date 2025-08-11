@@ -26,7 +26,7 @@ interface CurrentUser {
 
 interface AuthContextType {
   currentUser: CurrentUser | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -58,64 +58,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Al mount verifica se c'è sessione attiva
+  // Al mount controlla se c'è un utente salvato in localStorage
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      }
-    });
-
-    // Listener per cambiamenti auth (login/logout)
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session?.user) {
-          fetchProfile(session.user.id);
-        } else {
-          setCurrentUser(null);
-          setIsAuthenticated(false);
-          localStorage.removeItem("currentUser");
-        }
-      }
-    );
-
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
+    const savedUser = localStorage.getItem("currentUser");
+    if (savedUser) {
+      setCurrentUser(JSON.parse(savedUser));
+      setIsAuthenticated(true);
+    }
   }, []);
 
-  // Carica profilo dal db e aggiorna stato
-  const fetchProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", userId)
-      .single();
-
-    if (error) {
-      console.error("Errore fetch profilo:", error.message);
-      setCurrentUser(null);
-      setIsAuthenticated(false);
-      localStorage.removeItem("currentUser");
-      return;
-    }
-
-    if (data) {
-      const email = supabase.auth.getUser().data?.user?.email || null;
-
-      setCurrentUser({
-        id: data.id,
-        email,
-        username: data.username,
-        password: data.password || "",
-        permissions: data.permissions || defaultPermissions,
-      });
-      setIsAuthenticated(true);
-      localStorage.setItem("currentUser", JSON.stringify(data));
-    }
-  };
-
-  // Funzione login con email e password
+  // Login da tabella users
   const login = async (
     username: string,
     password: string
@@ -124,7 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .from("users")
       .select("*")
       .eq("username", username)
-      .eq("password", password)
+      .eq("password", password) // ⚠️ In produzione usare hash e verifica lato server
       .single();
 
     if (error) {
@@ -133,14 +85,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     if (data) {
-      setCurrentUser({
+      const user: CurrentUser = {
         id: data.id,
         email: data.email || null,
         username: data.username,
         permissions: data.permissions || defaultPermissions,
-      });
+      };
+      setCurrentUser(user);
       setIsAuthenticated(true);
-      localStorage.setItem("currentUser", JSON.stringify(data));
+      localStorage.setItem("currentUser", JSON.stringify(user));
       return true;
     }
 
@@ -148,8 +101,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   // Logout
-  const logout = async () => {
-    await supabase.auth.signOut();
+  const logout = () => {
     setCurrentUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem("currentUser");

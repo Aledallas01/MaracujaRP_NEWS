@@ -13,6 +13,15 @@ interface Permissions {
   manageUsers: boolean;
 }
 
+interface User {
+  id: string;
+  username: string;
+  created_at: string;
+  updated_at?: string;
+  permissions: Permissions;
+}
+
+// Default permessi vuoti (all false)
 const defaultPermissions: Permissions = {
   createSections: false,
   editSections: false,
@@ -23,14 +32,7 @@ const defaultPermissions: Permissions = {
   manageUsers: false,
 };
 
-interface User {
-  id: string;
-  username: string;
-  created_at: string;
-  updated_at?: string;
-  permissions: Permissions;
-}
-
+// Etichette per checkbox permessi
 const permLabels: Record<keyof Permissions, string> = {
   createSections: "Crea Sezioni",
   editSections: "Modifica Sezioni",
@@ -123,6 +125,16 @@ const UsersManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Controlli permessi lato frontend
+    if (editingId && !permissions.editUsers) {
+      alert("Non hai i permessi per modificare utenti.");
+      return;
+    }
+    if (!editingId && !permissions.manageUsers) {
+      alert("Non hai i permessi per creare utenti.");
+      return;
+    }
+
     // Dati base utente
     const userData: Partial<User> = {
       username: formData.username,
@@ -135,7 +147,8 @@ const UsersManagement: React.FC = () => {
         alert("La password è obbligatoria per creare un nuovo utente.");
         return;
       }
-      (userData as any).password = formData.password; // ⚠️ in produzione usa hash e back-end!
+      // ⚠️ Attenzione: password va hashata nel backend, qui demo
+      (userData as any).password = formData.password;
     }
 
     try {
@@ -185,6 +198,11 @@ const UsersManagement: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
+    if (!permissions.deleteUsers) {
+      alert("Non hai i permessi per eliminare utenti.");
+      return;
+    }
+
     if (!confirm("Sei sicuro di voler eliminare questo utente?")) return;
 
     try {
@@ -229,29 +247,31 @@ const UsersManagement: React.FC = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-[#30334E] min-h-full text-gray-200">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Gestione Utenti</h2>
-        <button
-          onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="h-4 w-4" />
-          Nuovo Utente
-        </button>
+        <h2 className="text-2xl font-bold text-gray-100">Gestione Utenti</h2>
+        {permissions.manageUsers && (
+          <button
+            onClick={() => setShowForm(true)}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            Nuovo Utente
+          </button>
+        )}
       </div>
 
       {/* Form */}
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-auto">
-            <div className="flex items-center justify-between p-6 border-b">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-auto text-gray-200">
+            <div className="flex items-center justify-between p-6 border-b border-gray-700">
               <h3 className="text-lg font-semibold">
                 {editingId ? "Modifica Utente" : "Nuovo Utente"}
               </h3>
               <button
                 onClick={resetForm}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-200"
                 aria-label="Chiudi"
               >
                 <X className="h-6 w-6" />
@@ -262,7 +282,7 @@ const UsersManagement: React.FC = () => {
               <div>
                 <label
                   htmlFor="username"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium mb-2"
                 >
                   Username
                 </label>
@@ -276,7 +296,7 @@ const UsersManagement: React.FC = () => {
                       username: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 focus:ring-2 focus:ring-blue-400"
                   required
                 />
               </div>
@@ -284,11 +304,11 @@ const UsersManagement: React.FC = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium mb-2"
                 >
                   Password{" "}
                   {editingId && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-400">
                       (lascia vuoto per non cambiare)
                     </span>
                   )}
@@ -303,19 +323,17 @@ const UsersManagement: React.FC = () => {
                       password: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 focus:ring-2 focus:ring-blue-400"
                   required={!editingId}
                 />
               </div>
 
               <fieldset className="border rounded p-4">
-                <legend className="text-sm font-medium text-gray-700 mb-2">
-                  Permessi
-                </legend>
+                <legend className="text-sm font-medium mb-2">Permessi</legend>
                 {Object.keys(defaultPermissions).map((perm) => (
                   <label
                     key={perm}
-                    className="flex items-center gap-2 mb-2 text-gray-700 text-sm"
+                    className="flex items-center gap-2 mb-2 text-sm"
                   >
                     <input
                       type="checkbox"
@@ -333,13 +351,13 @@ const UsersManagement: React.FC = () => {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
                 >
                   Annulla
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   <Save className="h-4 w-4" />
                   Salva
@@ -351,33 +369,33 @@ const UsersManagement: React.FC = () => {
       )}
 
       {/* Tabella Utenti */}
-      <div className="bg-white rounded-lg shadow overflow-hidden max-h-[70vh] overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="bg-gray-800 rounded-lg shadow overflow-hidden max-h-[70vh] overflow-y-auto">
+        <table className="min-w-full divide-y divide-gray-700">
+          <thead className="bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Username
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Permessi
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Data Creazione
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Azioni
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-700">
             {users.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
+              <tr key={user.id} className="hover:bg-gray-700">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-gray-100">
                     {user.username}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600 max-w-[400px]">
+                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 max-w-[400px]">
                   {user.permissions
                     ? Object.entries(user.permissions)
                         .filter(([, val]) => val)
@@ -385,22 +403,26 @@ const UsersManagement: React.FC = () => {
                         .join(", ")
                     : "Nessun permesso"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {new Date(user.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button
-                    onClick={() => handleEdit(user)}
-                    className="text-blue-600 hover:text-blue-900 mr-3"
-                  >
-                    <Edit2 className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(user.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  {permissions.editUsers && (
+                    <button
+                      onClick={() => handleEdit(user)}
+                      className="text-blue-400 hover:text-blue-600 mr-3"
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </button>
+                  )}
+                  {permissions.deleteUsers && (
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -408,7 +430,7 @@ const UsersManagement: React.FC = () => {
         </table>
 
         {users.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-400">
             Nessun utente trovato
           </div>
         )}

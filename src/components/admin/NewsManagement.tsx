@@ -97,7 +97,6 @@ const NewsManagement: React.FC = () => {
       return;
     }
     if (!editingId && !permissions.createNews) {
-      2;
       alert("Non hai i permessi per creare news.");
       return;
     }

@@ -14,34 +14,43 @@ const SectionsManagement: React.FC = () => {
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [permissions, setPermissions] = useState<Permissions | null>(null);
+  const [permissions, setPermissions] = useState<Permissions>({
+    createSections: false,
+    editSections: false,
+    deleteSections: false,
+    createNews: false,
+    editNews: false,
+    deleteNews: false,
+    manageUsers: false,
+  });
 
-  // Al mount: carica utente e sezioni
+  // Carica utente e sezioni al mount
   useEffect(() => {
     fetchCurrentUser();
     loadSections();
   }, []);
 
-  // Recupera utente loggato e permessi
+  // Prende utente loggato e permessi
   const fetchCurrentUser = async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
+
     if (!session?.user) return;
 
     const { data: userData, error } = await supabase
       .from("users")
-      .select("*")
+      .select("*, permission:permission(*)")
       .eq("id", session.user.id)
       .single();
 
     if (!error && userData) {
       setCurrentUser(userData as User);
-      setPermissions(userData.permissions || {});
+      setPermissions(userData.permission || permissions);
     }
   };
 
-  // Carica sezioni
+  // Carica tutte le sezioni
   const loadSections = async () => {
     try {
       const { data, error } = await supabase
@@ -62,11 +71,13 @@ const SectionsManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (editingId && !permissions?.editSections) {
-      return alert("Non hai i permessi per modificare le sezioni.");
+    if (editingId && !permissions.editSections) {
+      alert("Non hai i permessi per modificare le sezioni.");
+      return;
     }
-    if (!editingId && !permissions?.createSections) {
-      return alert("Non hai i permessi per creare nuove sezioni.");
+    if (!editingId && !permissions.createSections) {
+      alert("Non hai i permessi per creare nuove sezioni.");
+      return;
     }
 
     try {
@@ -90,10 +101,11 @@ const SectionsManagement: React.FC = () => {
     }
   };
 
-  // Inizio modifica
+  // Avvia modifica sezione
   const handleEdit = (section: Section) => {
-    if (!permissions?.editSections) {
-      return alert("Non hai i permessi per modificare le sezioni.");
+    if (!permissions.editSections) {
+      alert("Non hai i permessi per modificare le sezioni.");
+      return;
     }
     setFormData({
       title: section.title,
@@ -106,8 +118,9 @@ const SectionsManagement: React.FC = () => {
 
   // Elimina sezione
   const handleDelete = async (id: string) => {
-    if (!permissions?.deleteSections) {
-      return alert("Non hai i permessi per eliminare le sezioni.");
+    if (!permissions.deleteSections) {
+      alert("Non hai i permessi per eliminare le sezioni.");
+      return;
     }
     if (!confirm("Sei sicuro di voler eliminare questa sezione?")) return;
 
@@ -126,7 +139,6 @@ const SectionsManagement: React.FC = () => {
     setShowForm(false);
   };
 
-  // Loader
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64 bg-[#30334E]">
@@ -139,7 +151,7 @@ const SectionsManagement: React.FC = () => {
     <div className="p-6 bg-[#30334E] min-h-full text-gray-200">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-100">Gestione Sezioni</h2>
-        {permissions?.createSections && (
+        {permissions.createSections && (
           <button
             onClick={() => setShowForm(true)}
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -150,7 +162,7 @@ const SectionsManagement: React.FC = () => {
         )}
       </div>
 
-      {/* Modal */}
+      {/* Modal Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 text-gray-200">
@@ -230,7 +242,7 @@ const SectionsManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Tabella */}
+      {/* Tabella sezioni */}
       <div className="bg-gray-800 rounded-lg shadow overflow-hidden mt-6">
         <table className="min-w-full divide-y divide-gray-700">
           <thead className="bg-gray-700">
@@ -268,7 +280,7 @@ const SectionsManagement: React.FC = () => {
                   {section.created_by}
                 </td>
                 <td className="px-6 py-4 text-right">
-                  {permissions?.editSections && (
+                  {permissions.editSections && (
                     <button
                       onClick={() => handleEdit(section)}
                       className="text-blue-400 hover:text-blue-600 mr-3"
@@ -276,7 +288,7 @@ const SectionsManagement: React.FC = () => {
                       <Edit2 className="h-4 w-4" />
                     </button>
                   )}
-                  {permissions?.deleteSections && (
+                  {permissions.deleteSections && (
                     <button
                       onClick={() => handleDelete(section.id)}
                       className="text-red-500 hover:text-red-700"
@@ -289,6 +301,7 @@ const SectionsManagement: React.FC = () => {
             ))}
           </tbody>
         </table>
+
         {sections.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             Nessuna sezione trovata

@@ -26,8 +26,7 @@ const defaultPermissions: Permissions = {
 interface User {
   id: string;
   username: string;
-  // la password non dovrebbe essere esposta, ma qui la gestiamo solo per inserimento/modifica
-  password?: string;
+  password?: string; // solo per creazione/modifica, mai esposto
   permissions: Permissions;
   created_at: string;
   updated_at?: string;
@@ -44,19 +43,23 @@ const permLabels: Record<keyof Permissions, string> = {
 };
 
 const UsersManagement: React.FC = () => {
-  const { currentUser, permissions } = useAuth();
+  const { permissions } = useAuth();
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    username: string;
+    password: string;
+    permissions: Permissions;
+  }>({
     username: "",
     password: "",
     permissions: defaultPermissions,
   });
 
-  // blocco accesso se non ha permessi manageUsers
+  // Blocca accesso se non ha permessi manageUsers
   if (!permissions?.manageUsers) {
     return (
       <div className="p-6 text-red-600 font-semibold">
@@ -75,11 +78,18 @@ const UsersManagement: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from("users")
-        .select("*")
+        .select("id, username, permissions, created_at, updated_at")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      if (data) setUsers(data);
+      if (data) {
+        // Assicuriamoci che permissions siano oggetti coerenti
+        const usersParsed = data.map((u) => ({
+          ...u,
+          permissions: u.permissions || defaultPermissions,
+        }));
+        setUsers(usersParsed);
+      }
     } catch (error) {
       console.error("Errore caricamento utenti:", error);
     } finally {
@@ -90,13 +100,17 @@ const UsersManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!formData.username.trim()) {
+      alert("Username è obbligatorio");
+      return;
+    }
+
     const userData: Partial<User> = {
-      username: formData.username,
+      username: formData.username.trim(),
       permissions: formData.permissions,
       updated_at: new Date().toISOString(),
     };
 
-    // se in creazione, password obbligatoria
     if (!editingId) {
       if (!formData.password.trim()) {
         alert("La password è obbligatoria per creare un nuovo utente.");
@@ -104,7 +118,6 @@ const UsersManagement: React.FC = () => {
       }
       userData.password = formData.password;
     } else {
-      // in modifica, password solo se cambiata
       if (formData.password.trim()) {
         userData.password = formData.password;
       }
@@ -127,7 +140,7 @@ const UsersManagement: React.FC = () => {
   const handleEdit = (user: User) => {
     setFormData({
       username: user.username,
-      password: "", // vuoto in modifica per sicurezza
+      password: "",
       permissions: user.permissions || defaultPermissions,
     });
     setEditingId(user.id);
@@ -186,7 +199,6 @@ const UsersManagement: React.FC = () => {
         </button>
       </div>
 
-      {/* Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-auto">
@@ -286,7 +298,6 @@ const UsersManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Tabella Utenti */}
       <div className="bg-white rounded-lg shadow overflow-hidden max-h-[70vh] overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

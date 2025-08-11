@@ -4,7 +4,22 @@ import { supabase, News, Section, User } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 
 const NewsManagement: React.FC = () => {
-  const [news, setNews] = useState<(News & { author?: User })[]>([]);
+  const { currentUser } = useAuth();
+
+  // Prendo i permessi o uso default false per ognuno
+  const permissions = currentUser?.permissions ?? {
+    createSections: false,
+    editSections: false,
+    deleteSections: false,
+    createNews: false,
+    editNews: false,
+    deleteNews: false,
+    manageUsers: false,
+  };
+
+  const [news, setNews] = useState<
+    (News & { author?: User; section?: Section })[]
+  >([]);
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -16,8 +31,6 @@ const NewsManagement: React.FC = () => {
     image: "",
   });
 
-  const { currentUser, permissions } = useAuth();
-
   useEffect(() => {
     loadData();
   }, []);
@@ -27,7 +40,7 @@ const NewsManagement: React.FC = () => {
       const [newsResult, sectionsResult] = await Promise.all([
         supabase
           .from("news")
-          .select(`*, author:users(username)`)
+          .select(`*, author:users(username), section:sections(title)`)
           .order("created_at", { ascending: false }),
         supabase
           .from("sections")
@@ -47,11 +60,11 @@ const NewsManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (editingId && !permissions?.editNews) {
+    if (editingId && !permissions.editNews) {
       alert("Non hai i permessi per modificare le news.");
       return;
     }
-    if (!editingId && !permissions?.createNews) {
+    if (!editingId && !permissions.createNews) {
       alert("Non hai i permessi per creare news.");
       return;
     }
@@ -77,7 +90,7 @@ const NewsManagement: React.FC = () => {
   };
 
   const handleEdit = (item: News) => {
-    if (!permissions?.editNews) {
+    if (!permissions.editNews) {
       alert("Non hai i permessi per modificare le news.");
       return;
     }
@@ -93,7 +106,7 @@ const NewsManagement: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!permissions?.deleteNews) {
+    if (!permissions.deleteNews) {
       alert("Non hai i permessi per eliminare le news.");
       return;
     }
@@ -126,7 +139,7 @@ const NewsManagement: React.FC = () => {
     <div className="p-6 bg-gray-900 min-h-full text-gray-200">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-100">Gestione News</h2>
-        {permissions?.createNews && (
+        {permissions.createNews && (
           <button
             onClick={() => setShowForm(true)}
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -286,10 +299,12 @@ const NewsManagement: React.FC = () => {
                   {item.author?.username || "Sconosciuto"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                  {new Date(item.created_at).toLocaleDateString()}
+                  {item.created_at
+                    ? new Date(item.created_at).toLocaleDateString()
+                    : "-"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  {permissions?.editNews && (
+                  {permissions.editNews && (
                     <button
                       onClick={() => handleEdit(item)}
                       className="text-blue-400 hover:text-blue-600 mr-3"
@@ -297,7 +312,7 @@ const NewsManagement: React.FC = () => {
                       <Edit2 className="h-4 w-4" />
                     </button>
                   )}
-                  {permissions?.deleteNews && (
+                  {permissions.deleteNews && (
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="text-red-500 hover:text-red-700"

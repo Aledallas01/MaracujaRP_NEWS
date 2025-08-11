@@ -62,7 +62,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <div className="mb-4">
                 <p className="text-gray-400">Connesso come:</p>
                 <p className="text-lg font-semibold text-gray-100">
-                  {currentUser}
+                  {typeof currentUser === "string"
+                    ? currentUser
+                    : currentUser?.username || "Utente"}
                 </p>
               </div>
               <button

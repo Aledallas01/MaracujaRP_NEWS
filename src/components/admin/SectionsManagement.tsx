@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
 import { supabase, Section, User, Permissions } from "../../lib/supabase";
 
+const defaultPermissions: Permissions = {
+  createSections: false,
+  editSections: false,
+  deleteSections: false,
+  createNews: false,
+  editNews: false,
+  deleteNews: false,
+  manageUsers: false,
+};
+
 const SectionsManagement: React.FC = () => {
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,44 +24,55 @@ const SectionsManagement: React.FC = () => {
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [permissions, setPermissions] = useState<Permissions>({
-    createSections: false,
-    editSections: false,
-    deleteSections: false,
-    createNews: false,
-    editNews: false,
-    deleteNews: false,
-    manageUsers: false,
-  });
+  const [permissions, setPermissions] =
+    useState<Permissions>(defaultPermissions);
 
-  // Carica utente e sezioni al mount
+  // Carica utente e permessi + sezioni al mount
   useEffect(() => {
-    fetchCurrentUser();
+    fetchCurrentUserAndPermissions();
     loadSections();
   }, []);
 
-  // Prende utente loggato e permessi
-  const fetchCurrentUser = async () => {
+  // Fetch utente e permessi dalla tabella permission
+  const fetchCurrentUserAndPermissions = async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
 
     if (!session?.user) return;
 
-    const { data: userData, error } = await supabase
+    // Prendo dati utente base
+    const { data: userData, error: userError } = await supabase
       .from("users")
-      .select("*, permission:permission(*)")
+      .select("id, username")
       .eq("id", session.user.id)
       .single();
 
-    if (!error && userData) {
-      setCurrentUser(userData as User);
-      setPermissions(userData.permission || permissions);
+    if (userError || !userData) {
+      console.error("Errore caricamento utente:", userError);
+      return;
     }
+    setCurrentUser(userData);
+
+    // Prendo permessi da permission
+    const { data: permData, error: permError } = await supabase
+      .from("permission")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .single();
+
+    if (permError || !permData) {
+      console.error("Errore caricamento permessi:", permError);
+      setPermissions(defaultPermissions);
+      return;
+    }
+
+    setPermissions(permData as Permissions);
   };
 
-  // Carica tutte le sezioni
+  // Carica sezioni
   const loadSections = async () => {
+    setLoading(true);
     try {
       const { data, error } = await supabase
         .from("sections")
@@ -67,7 +88,7 @@ const SectionsManagement: React.FC = () => {
     }
   };
 
-  // Salvataggio o modifica sezione
+  // Salvataggio / modifica sezione
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -84,7 +105,9 @@ const SectionsManagement: React.FC = () => {
       const sectionData = {
         ...formData,
         created_by: currentUser?.username || "Sconosciuto",
-        order_index: sections.length,
+        order_index: editingId
+          ? sections.findIndex((s) => s.id === editingId) // mantieni ordine attuale in modifica
+          : sections.length, // nuova sezione in fondo
         updated_at: new Date().toISOString(),
       };
 
@@ -98,10 +121,11 @@ const SectionsManagement: React.FC = () => {
       resetForm();
     } catch (err) {
       console.error("Errore salvataggio sezione:", err);
+      alert("Errore durante il salvataggio.");
     }
   };
 
-  // Avvia modifica sezione
+  // Avvia modifica
   const handleEdit = (section: Section) => {
     if (!permissions.editSections) {
       alert("Non hai i permessi per modificare le sezioni.");
@@ -129,6 +153,7 @@ const SectionsManagement: React.FC = () => {
       await loadSections();
     } catch (err) {
       console.error("Errore eliminazione sezione:", err);
+      alert("Errore durante l'eliminazione.");
     }
   };
 

@@ -25,8 +25,6 @@ const SectionsManagement: React.FC = () => {
     description: "",
     icon: "",
   });
-
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [permissions, setPermissions] = useState<Permissions>(permissions);
 
   // Carica utente e permessi + sezioni al mount
@@ -54,7 +52,6 @@ const SectionsManagement: React.FC = () => {
       console.error("Errore caricamento utente:", userError);
       return;
     }
-    setCurrentUser(userData);
 
     // Prendo permessi da permission
     const { data: permData, error: permError } = await supabase
@@ -65,7 +62,7 @@ const SectionsManagement: React.FC = () => {
 
     if (permError || !permData) {
       console.error("Errore caricamento permessi:", permError);
-      setPermissions(defaultPermissions);
+      setPermissions(permissions);
       return;
     }
 

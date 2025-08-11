@@ -61,15 +61,6 @@ const UsersManagement: React.FC = () => {
     permissions: emptyPermissions,
   });
 
-  // Blocca accesso se non ha permessi manageUsers
-  if (!permissions.manageUsers) {
-    return (
-      <div className="p-6 text-red-600 font-semibold">
-        Non hai i permessi per gestire gli utenti.
-      </div>
-    );
-  }
-
   useEffect(() => {
     loadUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps

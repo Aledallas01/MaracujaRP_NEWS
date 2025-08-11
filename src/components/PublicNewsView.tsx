@@ -21,6 +21,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
   }, []);
 
   const loadData = async () => {
+    setLoading(true);
     try {
       const [newsResult, sectionsResult] = await Promise.all([
         supabase

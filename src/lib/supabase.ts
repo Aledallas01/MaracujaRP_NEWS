@@ -3,13 +3,13 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 
-// Create a placeholder client if environment variables are not set
+// Crea un client Supabase oppure un mock se le env non sono configurate
 const createSupabaseClient = () => {
   if (!supabaseUrl || !supabaseAnonKey) {
     console.warn(
       "Supabase environment variables not configured. Please set up Supabase connection."
     );
-    // Return a mock client that won't cause errors
+    // Mock client per evitare errori a runtime
     const mockQuery = {
       data: [],
       error: null,
@@ -55,7 +55,7 @@ export interface User {
   id: string;
   username: string;
   password: string;
-  permissions: Permissions; // <-- Aggiunto qui
+  permissions: Permissions;
   created_at: string;
   updated_at: string;
 }

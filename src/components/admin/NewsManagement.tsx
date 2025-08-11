@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
-import { supabase, News, Section } from "../../lib/supabase";
+import { supabase, News, Section, User } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 
 const NewsManagement: React.FC = () => {
-  const [news, setNews] = useState<News[]>([]);
+  const [news, setNews] = useState<(News & { author?: User })[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -27,7 +27,7 @@ const NewsManagement: React.FC = () => {
       const [newsResult, sectionsResult] = await Promise.all([
         supabase
           .from("news")
-          .select(`*, section:sections(*)`)
+          .select(`*, author:users(username)`)
           .order("created_at", { ascending: false }),
         supabase
           .from("sections")
@@ -47,15 +47,19 @@ const NewsManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!permissions?.createNews && !permissions?.editNews) {
-      alert("Non hai i permessi per eseguire questa operazione.");
+    if (editingId && !permissions?.editNews) {
+      alert("Non hai i permessi per modificare le news.");
+      return;
+    }
+    if (!editingId && !permissions?.createNews) {
+      alert("Non hai i permessi per creare news.");
       return;
     }
 
     try {
       const newsData = {
         ...formData,
-        created_by: currentUser!,
+        created_by: currentUser!.id,
         updated_at: new Date().toISOString(),
       };
 
@@ -98,7 +102,6 @@ const NewsManagement: React.FC = () => {
 
     try {
       await supabase.from("news").delete().eq("id", id);
-
       await loadData();
     } catch (error) {
       console.error("Errore eliminazione:", error);
@@ -280,7 +283,7 @@ const NewsManagement: React.FC = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                  {item.created_by}
+                  {item.author?.username || "Sconosciuto"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {new Date(item.created_at).toLocaleDateString()}

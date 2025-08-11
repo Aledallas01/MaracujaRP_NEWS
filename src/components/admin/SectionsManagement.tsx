@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
-import { supabase, Section } from "../../lib/supabase";
-import { useAuth } from "../../contexts/AuthContext";
+import { supabase, Section, User, Permissions } from "../../lib/supabase";
 
 const SectionsManagement: React.FC = () => {
   const [sections, setSections] = useState<Section[]>([]);
@@ -14,11 +13,34 @@ const SectionsManagement: React.FC = () => {
     icon: "",
   });
 
-  const { currentUser, permissions } = useAuth();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [permissions, setPermissions] = useState<Permissions | null>(null);
 
   useEffect(() => {
+    fetchCurrentUser();
     loadSections();
   }, []);
+
+  const fetchCurrentUser = async () => {
+    // Qui recuperiamo l'utente loggato dalla sessione Supabase
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session?.user) return;
+
+    // Recupera dalla tabella "users" il record dell'utente
+    const { data: userData, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", session.user.id)
+      .single();
+
+    if (!error && userData) {
+      setCurrentUser(userData as User);
+      setPermissions(userData.permissions);
+    }
+  };
 
   const loadSections = async () => {
     try {
@@ -50,7 +72,7 @@ const SectionsManagement: React.FC = () => {
     try {
       const sectionData = {
         ...formData,
-        created_by: currentUser!,
+        created_by: currentUser?.username || "Sconosciuto",
         order_index: sections.length,
         updated_at: new Date().toISOString(),
       };
@@ -128,7 +150,7 @@ const SectionsManagement: React.FC = () => {
         )}
       </div>
 
-      {/* Form */}
+      {/* Modal Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 text-gray-200">
@@ -145,8 +167,6 @@ const SectionsManagement: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {/* ... input fields ... */}
-              {/* same as before, unchanged */}
               <div>
                 <label className="block text-sm font-medium mb-2">Titolo</label>
                 <input
@@ -213,7 +233,7 @@ const SectionsManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Tabella Sezioni */}
+      {/* Tabella */}
       <div className="bg-gray-800 rounded-lg shadow overflow-hidden mt-6">
         <table className="min-w-full divide-y divide-gray-700">
           <thead className="bg-gray-700">

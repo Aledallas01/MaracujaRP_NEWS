@@ -16,9 +16,16 @@ const AppContent: React.FC = () => {
 
   const renderContent = () => {
     if (!isAuthenticated) {
-      return <PublicNewsView searchQuery={searchQuery} />;
+      // Quando NON autenticato, mostra la vista pubblica con ricerca abilitata
+      return (
+        <PublicNewsView
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery} // necessario per aggiornare la ricerca
+        />
+      );
     }
 
+    // Vista per utenti autenticati in base a currentView
     switch (currentView) {
       case "news":
         return <NewsManagement />;
@@ -27,7 +34,12 @@ const AppContent: React.FC = () => {
       case "users":
         return <UsersManagement />;
       default:
-        return <PublicNewsView searchQuery={searchQuery} />;
+        return (
+          <PublicNewsView
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+        );
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
-import { supabase, User } from "../../lib/supabase";
+import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface Permissions {
   createSections: boolean;
@@ -22,7 +23,29 @@ const defaultPermissions: Permissions = {
   manageUsers: false,
 };
 
+interface User {
+  id: string;
+  username: string;
+  // la password non dovrebbe essere esposta, ma qui la gestiamo solo per inserimento/modifica
+  password?: string;
+  permissions: Permissions;
+  created_at: string;
+  updated_at?: string;
+}
+
+const permLabels: Record<keyof Permissions, string> = {
+  createSections: "Crea Sezioni",
+  editSections: "Modifica Sezioni",
+  deleteSections: "Elimina Sezioni",
+  createNews: "Crea News",
+  editNews: "Modifica News",
+  deleteNews: "Elimina News",
+  manageUsers: "Gestione Utenti",
+};
+
 const UsersManagement: React.FC = () => {
+  const { currentUser, permissions } = useAuth();
+
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -33,8 +56,18 @@ const UsersManagement: React.FC = () => {
     permissions: defaultPermissions,
   });
 
+  // blocco accesso se non ha permessi manageUsers
+  if (!permissions?.manageUsers) {
+    return (
+      <div className="p-6 text-red-600 font-semibold">
+        Non hai i permessi per gestire gli utenti.
+      </div>
+    );
+  }
+
   useEffect(() => {
     loadUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadUsers = async () => {
@@ -44,6 +77,7 @@ const UsersManagement: React.FC = () => {
         .from("users")
         .select("*")
         .order("created_at", { ascending: false });
+
       if (error) throw error;
       if (data) setUsers(data);
     } catch (error) {
@@ -55,13 +89,28 @@ const UsersManagement: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const userData: Partial<User> = {
+      username: formData.username,
+      permissions: formData.permissions,
+      updated_at: new Date().toISOString(),
+    };
+
+    // se in creazione, password obbligatoria
+    if (!editingId) {
+      if (!formData.password.trim()) {
+        alert("La password è obbligatoria per creare un nuovo utente.");
+        return;
+      }
+      userData.password = formData.password;
+    } else {
+      // in modifica, password solo se cambiata
+      if (formData.password.trim()) {
+        userData.password = formData.password;
+      }
+    }
+
     try {
-      const userData = {
-        username: formData.username,
-        password: formData.password,
-        permissions: formData.permissions,
-        updated_at: new Date().toISOString(),
-      };
       if (editingId) {
         await supabase.from("users").update(userData).eq("id", editingId);
       } else {
@@ -71,13 +120,14 @@ const UsersManagement: React.FC = () => {
       resetForm();
     } catch (error) {
       console.error("Errore salvataggio utente:", error);
+      alert("Errore nel salvataggio. Controlla la console.");
     }
   };
 
   const handleEdit = (user: User) => {
     setFormData({
       username: user.username,
-      password: user.password,
+      password: "", // vuoto in modifica per sicurezza
       permissions: user.permissions || defaultPermissions,
     });
     setEditingId(user.id);
@@ -91,6 +141,7 @@ const UsersManagement: React.FC = () => {
       await loadUsers();
     } catch (error) {
       console.error("Errore eliminazione utente:", error);
+      alert("Errore durante l'eliminazione.");
     }
   };
 
@@ -172,7 +223,12 @@ const UsersManagement: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  Password{" "}
+                  {editingId && (
+                    <span className="text-xs text-gray-500">
+                      (lascia vuoto per non cambiare)
+                    </span>
+                  )}
                 </label>
                 <input
                   type="password"
@@ -184,7 +240,7 @@ const UsersManagement: React.FC = () => {
                     }))
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  required={!editingId} // password richiesta solo alla creazione
+                  required={!editingId}
                 />
               </div>
 
@@ -204,7 +260,7 @@ const UsersManagement: React.FC = () => {
                         togglePermission(perm as keyof Permissions)
                       }
                     />
-                    {perm}
+                    {permLabels[perm as keyof Permissions]}
                   </label>
                 ))}
               </fieldset>
@@ -261,7 +317,7 @@ const UsersManagement: React.FC = () => {
                   {user.permissions
                     ? Object.entries(user.permissions)
                         .filter(([, val]) => val)
-                        .map(([key]) => key)
+                        .map(([key]) => permLabels[key as keyof Permissions])
                         .join(", ")
                     : "Nessun permesso"}
                 </td>

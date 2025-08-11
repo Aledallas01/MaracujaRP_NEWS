@@ -58,15 +58,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Al mount verifica se c'è sessione attiva
   useEffect(() => {
-    const session = supabase.auth.getSession();
-    session.then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         fetchProfile(session.user.id);
       }
     });
 
-    // Subscribe ad eventi auth (login, logout)
+    // Listener per cambiamenti auth (login/logout)
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (session?.user) {
@@ -74,6 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } else {
           setCurrentUser(null);
           setIsAuthenticated(false);
+          localStorage.removeItem("currentUser");
         }
       }
     );
@@ -83,6 +84,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []);
 
+  // Carica profilo dal db e aggiorna stato
   const fetchProfile = async (userId: string) => {
     const { data, error } = await supabase
       .from("profiles")
@@ -90,10 +92,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .eq("id", userId)
       .single();
 
+    if (error) {
+      console.error("Errore fetch profilo:", error.message);
+      setCurrentUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem("currentUser");
+      return;
+    }
+
     if (data) {
+      // Prendo email dall'utente Supabase
+      const email = supabase.auth.getUser().data?.user?.email || null;
+
       setCurrentUser({
         id: data.id,
-        email: supabase.auth.getUser().data?.user?.email || null,
+        email,
         username: data.username,
         permissions: data.permissions || defaultPermissions,
       });
@@ -102,22 +115,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Funzione login con email e password
   const login = async (email: string, password: string): Promise<boolean> => {
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
     if (error) {
       console.error("Errore login:", error.message);
       return false;
     }
+
     if (data.user) {
       await fetchProfile(data.user.id);
       return true;
     }
+
     return false;
   };
 
+  // Logout
   const logout = async () => {
     await supabase.auth.signOut();
     setCurrentUser(null);

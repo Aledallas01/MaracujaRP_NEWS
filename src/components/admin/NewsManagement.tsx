@@ -6,7 +6,6 @@ import { useAuth } from "../../contexts/AuthContext";
 const NewsManagement: React.FC = () => {
   const { currentUser } = useAuth();
 
-  // Prendo i permessi o uso default false per ognuno
   const permissions = currentUser?.permissions ?? {
     createSections: false,
     editSections: false,
@@ -18,9 +17,10 @@ const NewsManagement: React.FC = () => {
   };
 
   const [news, setNews] = useState<
-    (News & { author?: User; section?: Section })[]
+    (News & { authorName?: string; section?: Section })[]
   >([]);
   const [sections, setSections] = useState<Section[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -37,30 +37,52 @@ const NewsManagement: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const [newsResult, sectionsResult] = await Promise.all([
+      setLoading(true);
+      // Carica news, sections e users in parallelo
+      const [newsResult, sectionsResult, usersResult] = await Promise.all([
         supabase
           .from("news")
-          .select(
-            `
-          *,
-          author:users ( id, username ),
-          section:sections ( id, title )
-        `
-          )
+          .select("*")
           .order("created_at", { ascending: false }),
         supabase
           .from("sections")
           .select("*")
           .order("title", { ascending: true }),
+        supabase.from("users").select("id, username"),
       ]);
 
-      if (newsResult.error) throw newsResult.error;
-      if (sectionsResult.error) throw sectionsResult.error;
+      if (
+        !newsResult.error &&
+        newsResult.data &&
+        !sectionsResult.error &&
+        sectionsResult.data &&
+        !usersResult.error &&
+        usersResult.data
+      ) {
+        setSections(sectionsResult.data);
 
-      if (newsResult.data) setNews(newsResult.data);
-      if (sectionsResult.data) setSections(sectionsResult.data);
+        // Mappa userId -> username
+        const userMap = new Map(
+          usersResult.data.map((user) => [user.id, user.username])
+        );
+
+        // Aggiungi authorName a ogni news basandoti su created_by
+        const newsWithAuthors = newsResult.data.map((item) => ({
+          ...item,
+          authorName: userMap.get(item.created_by) ?? "Sconosciuto",
+          section: sectionsResult.data.find((s) => s.id === item.section_id),
+        }));
+
+        setNews(newsWithAuthors);
+        setUsers(usersResult.data);
+      } else {
+        console.error(
+          "Errore caricamento dati:",
+          newsResult.error || sectionsResult.error || usersResult.error
+        );
+      }
     } catch (error) {
-      console.error("Errore caricamento:", error);
+      console.error("Errore caricamento dati:", error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +103,7 @@ const NewsManagement: React.FC = () => {
     try {
       const newsData = {
         ...formData,
-        created_by: currentUser!.username,
+        created_by: currentUser!.id,
         updated_at: new Date().toISOString(),
       };
 
@@ -301,11 +323,11 @@ const NewsManagement: React.FC = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-600 text-white">
-                    {item.section?.title}
+                    {item.section?.title || "N/D"}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                  {item.author?.username || "Sconosciuto"}
+                  {item.authorName}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {item.created_at

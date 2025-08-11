@@ -26,10 +26,9 @@ const defaultPermissions: Permissions = {
 interface User {
   id: string;
   username: string;
-  password?: string; // solo per creazione/modifica, mai esposto
-  permissions: Permissions;
   created_at: string;
   updated_at?: string;
+  permissions: Permissions;
 }
 
 const permLabels: Record<keyof Permissions, string> = {
@@ -43,7 +42,7 @@ const permLabels: Record<keyof Permissions, string> = {
 };
 
 const UsersManagement: React.FC = () => {
-  const { permissions } = useAuth();
+  const { currentUser, permissions } = useAuth();
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,22 +72,45 @@ const UsersManagement: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Carica utenti con permessi joinati da permission
   const loadUsers = async () => {
     setLoading(true);
     try {
+      // Join tra users e permission
       const { data, error } = await supabase
         .from("users")
-        .select("id, username, permissions, created_at, updated_at")
+        .select(
+          `
+          id,
+          username,
+          created_at,
+          updated_at,
+          permission:permission(
+            createSections,
+            editSections,
+            deleteSections,
+            createNews,
+            editNews,
+            deleteNews,
+            manageUsers
+          )
+        `
+        )
         .order("created_at", { ascending: false });
 
       if (error) throw error;
+
       if (data) {
-        // Assicuriamoci che permissions siano oggetti coerenti
-        const usersParsed = data.map((u) => ({
-          ...u,
-          permissions: u.permissions || defaultPermissions,
+        // Mappa dati combinati
+        const usersWithPermissions: User[] = data.map((u: any) => ({
+          id: u.id,
+          username: u.username,
+          created_at: u.created_at,
+          updated_at: u.updated_at,
+          permissions: u.permission || defaultPermissions,
         }));
-        setUsers(usersParsed);
+
+        setUsers(usersWithPermissions);
       }
     } catch (error) {
       console.error("Errore caricamento utenti:", error);
@@ -97,38 +119,53 @@ const UsersManagement: React.FC = () => {
     }
   };
 
+  // Salva o crea utente e permessi
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.username.trim()) {
-      alert("Username è obbligatorio");
-      return;
-    }
-
+    // Dati base utente
     const userData: Partial<User> = {
-      username: formData.username.trim(),
-      permissions: formData.permissions,
+      username: formData.username,
       updated_at: new Date().toISOString(),
     };
 
+    // Password richiesta solo se nuovo utente
     if (!editingId) {
       if (!formData.password.trim()) {
         alert("La password è obbligatoria per creare un nuovo utente.");
         return;
       }
-      userData.password = formData.password;
-    } else {
-      if (formData.password.trim()) {
-        userData.password = formData.password;
-      }
+      (userData as any).password = formData.password; // ⚠️ in produzione usa hash e back-end!
     }
 
     try {
       if (editingId) {
+        // Aggiorna utente
         await supabase.from("users").update(userData).eq("id", editingId);
+        // Aggiorna permessi (solo se la riga esiste, altrimenti errore)
+        await supabase
+          .from("permission")
+          .update(formData.permissions)
+          .eq("user_id", editingId);
       } else {
-        await supabase.from("users").insert([userData]);
+        // Inserisce nuovo utente e permessi
+        const { data: insertData, error: insertError } = await supabase
+          .from("users")
+          .insert([userData])
+          .select("id")
+          .single();
+
+        if (insertError || !insertData) {
+          alert("Errore creazione utente.");
+          return;
+        }
+
+        // Inserisci permessi associati
+        await supabase
+          .from("permission")
+          .insert([{ user_id: insertData.id, ...formData.permissions }]);
       }
+
       await loadUsers();
       resetForm();
     } catch (error) {
@@ -149,8 +186,13 @@ const UsersManagement: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Sei sicuro di voler eliminare questo utente?")) return;
+
     try {
+      // Elimina prima permessi
+      await supabase.from("permission").delete().eq("user_id", id);
+      // Poi elimina utente
       await supabase.from("users").delete().eq("id", id);
+
       await loadUsers();
     } catch (error) {
       console.error("Errore eliminazione utente:", error);
@@ -199,6 +241,7 @@ const UsersManagement: React.FC = () => {
         </button>
       </div>
 
+      {/* Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-auto">
@@ -209,6 +252,7 @@ const UsersManagement: React.FC = () => {
               <button
                 onClick={resetForm}
                 className="text-gray-400 hover:text-gray-600"
+                aria-label="Chiudi"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -216,10 +260,14 @@ const UsersManagement: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Username
                 </label>
                 <input
+                  id="username"
                   type="text"
                   value={formData.username}
                   onChange={(e) =>
@@ -234,7 +282,10 @@ const UsersManagement: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Password{" "}
                   {editingId && (
                     <span className="text-xs text-gray-500">
@@ -243,6 +294,7 @@ const UsersManagement: React.FC = () => {
                   )}
                 </label>
                 <input
+                  id="password"
                   type="password"
                   value={formData.password}
                   onChange={(e) =>
@@ -298,6 +350,7 @@ const UsersManagement: React.FC = () => {
         </div>
       )}
 
+      {/* Tabella Utenti */}
       <div className="bg-white rounded-lg shadow overflow-hidden max-h-[70vh] overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

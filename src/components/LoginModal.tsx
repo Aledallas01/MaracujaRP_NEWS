@@ -59,9 +59,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         <div className="p-6">
           {isAuthenticated ? (
             <div className="text-center">
-              // elementi sulla stessa riga
               <div className="flex items-center justify-center mb-4">
-                <div className="mb-4">
+                <div className="mb-4 flex items-center gap-2">
                   <p className="text-gray-400">Connesso come:</p>
                   <p className="text-lg font-semibold text-gray-100">
                     {typeof currentUser === "string"

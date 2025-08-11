@@ -40,7 +40,7 @@ const NewsManagement: React.FC = () => {
       const [newsResult, sectionsResult] = await Promise.all([
         supabase
           .from("news")
-          .select(`*`)
+          .select(`*, author:users(username), section:sections(title)`)
           .order("created_at", { ascending: false }),
         supabase
           .from("sections")
@@ -72,7 +72,7 @@ const NewsManagement: React.FC = () => {
     try {
       const newsData = {
         ...formData,
-        created_by: currentUser!.id,
+        created_by: currentUser!.username,
         updated_at: new Date().toISOString(),
       };
 

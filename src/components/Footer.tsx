@@ -3,7 +3,10 @@ import { Facebook, Instagram, Twitter } from "lucide-react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-900 border-t border-gray-800 px-6 py-4 mt-8">
+    <footer
+      className="border-t border-gray-800 px-6 py-4 mt-auto"
+      style={{ backgroundColor: "#30334E" }}
+    >
       <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
         {/* Link rapidi */}
         <div className="flex space-x-6 text-gray-300 text-sm">

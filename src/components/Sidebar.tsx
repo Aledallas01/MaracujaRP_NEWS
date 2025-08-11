@@ -21,70 +21,70 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
   const menuItems = isAuthenticated ? adminMenuItems : publicMenuItems;
 
   return (
-    <aside className="bg-gray-900 text-white w-64 min-h-screen p-6 flex flex-col">
+    <aside
+      className="text-white w-64 min-h-screen p-5 flex flex-col"
+      style={{ backgroundColor: "#262944" }}
+    >
       {/* Logo + scritta */}
-      <div className="flex items-center mb-8 gap-3">
+      <div className="flex items-center mb-6 gap-2">
         <img
           src="https://maracuja-rp.vercel.app/logo.png"
           alt="MaracujaRP Logo"
-          className="h-10 w-10 object-contain"
+          className="h-7 w-7 object-contain"
         />
-        <h1 className="text-2xl font-bold select-none">MaracujaRP</h1>
+        <h1 className="text-lg font-bold select-none">MaracujaRP</h1>
       </div>
 
       {/* Sezione Servizi */}
-      <div className="mb-4">
-        <h3 className="text-gray-400 uppercase text-xs font-semibold tracking-wide mb-2">
+      <div className="mb-5">
+        <h3 className="text-gray-400 uppercase text-[10px] font-semibold tracking-wide mb-3">
           Servizi
         </h3>
 
-        {/* Solo voce "Notizie" cliccabile */}
+        {/* Bottone Notizie */}
         <button
           onClick={() => onViewChange("home")}
-          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             currentView === "home"
-              ? "bg-blue-600 text-white"
-              : "text-gray-300 hover:bg-gray-800 hover:text-white"
+              ? "bg-[#666CFF] text-white"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white"
           }`}
         >
-          <Home className="h-5 w-5" />
+          <Home className="h-4 w-4" />
           Notizie
         </button>
       </div>
 
-      {/* Sezione menu admin o altro (solo se autenticato) */}
+      {/* Sezione menu admin solo se autenticato */}
       {isAuthenticated && (
-        <>
-          <div className="mb-2 mt-auto">
-            <h3 className="text-gray-400 uppercase text-xs font-semibold tracking-wide mb-2">
-              Admin
-            </h3>
-            <nav className="space-y-2">
-              {menuItems.map((item) => {
-                const Icon = item.icon;
-                // Escludo la voce 'home' che è già in "Servizi"
-                if (item.id === "home") return null;
+        <div className="mt-auto mb-2">
+          <h3 className="text-gray-400 uppercase text-[10px] font-semibold tracking-wide mb-2">
+            Admin
+          </h3>
+          <nav className="space-y-2">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              if (item.id === "home") return null; // Escludo 'home'
 
-                const isActive = currentView === item.id;
+              const isActive = currentView === item.id;
 
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onViewChange(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                      isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        </>
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => onViewChange(item.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors ${
+                    isActive
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
       )}
     </aside>
   );

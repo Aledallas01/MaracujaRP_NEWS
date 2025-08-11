@@ -87,7 +87,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Carica profilo dal db e aggiorna stato
   const fetchProfile = async (userId: string) => {
     const { data, error } = await supabase
-      .from("profiles")
+      .from("users")
       .select("id, username, permissions")
       .eq("id", userId)
       .single();
@@ -101,7 +101,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     if (data) {
-      // Prendo email dall'utente Supabase
       const email = supabase.auth.getUser().data?.user?.email || null;
 
       setCurrentUser({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Calendar, User } from "lucide-react";
+import { Search, Calendar, User, ArrowRight } from "lucide-react";
 import { supabase, News, Section } from "../lib/supabase";
 
 interface PublicNewsViewProps {
@@ -15,6 +15,8 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSection, setSelectedSection] = useState<string>("all");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<News | null>(null);
 
   useEffect(() => {
     loadData();
@@ -56,16 +58,29 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
     return matchesSearch && matchesSection;
   });
 
+  const openModal = (item: News) => {
+    setModalContent(item);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalContent(null);
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 bg-gray-900">
+      <div
+        className="flex items-center justify-center h-64"
+        style={{ backgroundColor: "#30334E" }}
+      >
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-gray-900 min-h-full">
+    <div className="p-6 min-h-full" style={{ backgroundColor: "#30334E" }}>
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-100 mb-4">Notizie</h2>
 
@@ -112,36 +127,46 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
       </div>
 
       {/* Lista News */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-col gap-6">
         {filteredNews.map((item) => (
           <article
             key={item.id}
-            className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow"
+            className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex"
           >
-            {item.image && (
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-48 object-cover"
-              />
-            )}
+            {/* Sezione nome sopra immagine */}
+            <div className="relative w-48 flex-shrink-0">
+              {item.section && (
+                <div className="absolute top-1 left-1 z-10 bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-bl-md rounded-tr-md shadow-lg select-none">
+                  {item.section.title}
+                </div>
+              )}
+              {item.image ? (
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="h-full w-full object-cover rounded-l-lg"
+                  style={{ minHeight: "150px" }}
+                />
+              ) : (
+                <div className="h-full w-full bg-gray-700 rounded-l-lg flex items-center justify-center text-gray-400">
+                  No Image
+                </div>
+              )}
+            </div>
 
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                {item.section && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    {item.section.title}
-                  </span>
-                )}
+            {/* Contenuto a destra */}
+            <div className="flex flex-col justify-between p-6 flex-1">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-100 mb-2">
+                  {item.title}
+                </h3>
+
+                <p className="text-gray-300 text-sm mb-4">
+                  {item.content.length > 120
+                    ? item.content.slice(0, 120) + "..."
+                    : item.content}
+                </p>
               </div>
-
-              <h3 className="text-lg font-semibold text-gray-100 mb-3">
-                {item.title}
-              </h3>
-
-              <p className="text-gray-300 text-sm line-clamp-3 mb-4">
-                {item.content}
-              </p>
 
               <div className="flex items-center justify-between text-sm text-gray-400">
                 <div className="flex items-center gap-2">
@@ -153,19 +178,43 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
                   <span>{new Date(item.created_at).toLocaleDateString()}</span>
                 </div>
               </div>
+
+              <button
+                onClick={() => openModal(item)}
+                className="mt-4 self-start flex items-center gap-1 text-blue-500 hover:underline"
+              >
+                Leggi <ArrowRight className="h-4 w-4" />
+              </button>
             </div>
           </article>
         ))}
       </div>
 
-      {filteredNews.length === 0 && (
-        <div className="text-center py-12 text-gray-400">
-          <div className="mb-2">Nessun articolo trovato</div>
-          <p className="text-sm">
-            {searchQuery
-              ? "Prova a modificare i termini di ricerca"
-              : "Non ci sono articoli disponibili"}
-          </p>
+      {/* Modal */}
+      {modalOpen && modalContent && (
+        <div
+          onClick={closeModal}
+          className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-gray-800 rounded-lg max-w-2xl w-full mx-4 p-6 overflow-y-auto max-h-[80vh]"
+            style={{ backgroundColor: "#30334E" }}
+          >
+            <h2 className="text-2xl font-bold text-gray-100 mb-4">
+              {modalContent.title}
+            </h2>
+            <p className="text-gray-200 whitespace-pre-wrap">
+              {modalContent.content}
+            </p>
+
+            <button
+              onClick={closeModal}
+              className="mt-6 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
+            >
+              Chiudi
+            </button>
+          </div>
         </div>
       )}
     </div>

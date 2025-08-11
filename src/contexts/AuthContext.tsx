@@ -88,7 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchProfile = async (userId: string) => {
     const { data, error } = await supabase
       .from("users")
-      .select("id, username, permissions")
+      .select("*")
       .eq("id", userId)
       .single();
 
@@ -107,6 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: data.id,
         email,
         username: data.username,
+        password: data.password || "",
         permissions: data.permissions || defaultPermissions,
       });
       setIsAuthenticated(true);
@@ -115,19 +116,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   // Funzione login con email e password
-  const login = async (email: string, password: string): Promise<boolean> => {
-    const { error, data } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const login = async (
+    username: string,
+    password: string
+  ): Promise<boolean> => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("username", username)
+      .eq("password", password)
+      .single();
 
     if (error) {
       console.error("Errore login:", error.message);
       return false;
     }
 
-    if (data.user) {
-      await fetchProfile(data.user.id);
+    if (data) {
+      setCurrentUser({
+        id: data.id,
+        email: data.email || null,
+        username: data.username,
+        permissions: data.permissions || defaultPermissions,
+      });
+      setIsAuthenticated(true);
+      localStorage.setItem("currentUser", JSON.stringify(data));
       return true;
     }
 

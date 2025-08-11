@@ -167,7 +167,7 @@ const NewsManagement: React.FC = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-900 min-h-full text-gray-200">
+    <div className="p-6 bg-[#30334E] min-h-full text-gray-200">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-100">Gestione News</h2>
         {permissions.createNews && (

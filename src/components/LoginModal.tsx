@@ -59,13 +59,16 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         <div className="p-6">
           {isAuthenticated ? (
             <div className="text-center">
-              <div className="mb-4">
-                <p className="text-gray-400">Connesso come:</p>
-                <p className="text-lg font-semibold text-gray-100">
-                  {typeof currentUser === "string"
-                    ? currentUser
-                    : currentUser?.username || "Utente"}
-                </p>
+              // elementi sulla stessa riga
+              <div className="flex items-center justify-center mb-4">
+                <div className="mb-4">
+                  <p className="text-gray-400">Connesso come:</p>
+                  <p className="text-lg font-semibold text-gray-100">
+                    {typeof currentUser === "string"
+                      ? currentUser
+                      : currentUser?.username || "Utente"}
+                  </p>
+                </div>
               </div>
               <button
                 onClick={handleLogout}

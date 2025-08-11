@@ -40,13 +40,22 @@ const NewsManagement: React.FC = () => {
       const [newsResult, sectionsResult] = await Promise.all([
         supabase
           .from("news")
-          .select(`*, author:users.username, section:sections.title`)
+          .select(
+            `
+          *,
+          author:users ( id, username ),
+          section:sections ( id, title )
+        `
+          )
           .order("created_at", { ascending: false }),
         supabase
           .from("sections")
           .select("*")
           .order("title", { ascending: true }),
       ]);
+
+      if (newsResult.error) throw newsResult.error;
+      if (sectionsResult.error) throw sectionsResult.error;
 
       if (newsResult.data) setNews(newsResult.data);
       if (sectionsResult.data) setSections(sectionsResult.data);

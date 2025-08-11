@@ -32,18 +32,20 @@ const permLabels: Record<keyof Permissions, string> = {
   manageUsers: "Gestione Utenti",
 };
 
-const UsersManagement: React.FC = () => {
-  const { currentUser, permissions } = useAuth();
+const emptyPermissions: Permissions = {
+  createSections: false,
+  editSections: false,
+  deleteSections: false,
+  createNews: false,
+  editNews: false,
+  deleteNews: false,
+  manageUsers: false,
+};
 
-  const permissions = currentUser?.permissions ?? {
-    createSections: false,
-    editSections: false,
-    deleteSections: false,
-    createNews: false,
-    editNews: false,
-    deleteNews: false,
-    manageUsers: false,
-  };
+const UsersManagement: React.FC = () => {
+  const { currentUser, permissions: userPermissions } = useAuth();
+
+  const permissions = userPermissions ?? emptyPermissions;
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,11 +58,11 @@ const UsersManagement: React.FC = () => {
   }>({
     username: "",
     password: "",
-    permissions: permissions,
+    permissions: emptyPermissions,
   });
 
   // Blocca accesso se non ha permessi manageUsers
-  if (!permissions?.manageUsers) {
+  if (!permissions.manageUsers) {
     return (
       <div className="p-6 text-red-600 font-semibold">
         Non hai i permessi per gestire gli utenti.
@@ -108,7 +110,7 @@ const UsersManagement: React.FC = () => {
           username: u.username,
           created_at: u.created_at,
           updated_at: u.updated_at,
-          permissions: u.permission || permissions,
+          permissions: u.permission || emptyPermissions,
         }));
 
         setUsers(usersWithPermissions);
@@ -125,7 +127,7 @@ const UsersManagement: React.FC = () => {
     e.preventDefault();
 
     // Controlli permessi lato frontend
-    if (editingId && !permissions.editUsers) {
+    if (editingId && !permissions.manageUsers) {
       alert("Non hai i permessi per modificare utenti.");
       return;
     }
@@ -190,14 +192,14 @@ const UsersManagement: React.FC = () => {
     setFormData({
       username: user.username,
       password: "",
-      permissions: user.permissions || permissions,
+      permissions: user.permissions || emptyPermissions,
     });
     setEditingId(user.id);
     setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
-    if (!permissions.deleteUsers) {
+    if (!permissions.manageUsers) {
       alert("Non hai i permessi per eliminare utenti.");
       return;
     }
@@ -221,7 +223,7 @@ const UsersManagement: React.FC = () => {
     setFormData({
       username: "",
       password: "",
-      permissions: permissions,
+      permissions: emptyPermissions,
     });
     setEditingId(null);
     setShowForm(false);
@@ -329,7 +331,7 @@ const UsersManagement: React.FC = () => {
 
               <fieldset className="border rounded p-4">
                 <legend className="text-sm font-medium mb-2">Permessi</legend>
-                {Object.keys(permissions).map((perm) => (
+                {Object.keys(emptyPermissions).map((perm) => (
                   <label
                     key={perm}
                     className="flex items-center gap-2 mb-2 text-sm"
@@ -406,21 +408,21 @@ const UsersManagement: React.FC = () => {
                   {new Date(user.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  {permissions.editUsers && (
-                    <button
-                      onClick={() => handleEdit(user)}
-                      className="text-blue-400 hover:text-blue-600 mr-3"
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </button>
-                  )}
-                  {permissions.deleteUsers && (
-                    <button
-                      onClick={() => handleDelete(user.id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                  {permissions.manageUsers && (
+                    <>
+                      <button
+                        onClick={() => handleEdit(user)}
+                        className="text-blue-400 hover:text-blue-600 mr-3"
+                      >
+                        <Edit2 className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(user.id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>

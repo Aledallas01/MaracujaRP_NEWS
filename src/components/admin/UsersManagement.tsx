@@ -108,7 +108,7 @@ const UsersManagement: React.FC = () => {
           username: u.username,
           created_at: u.created_at,
           updated_at: u.updated_at,
-          permissions: u.permission || defaultPermissions,
+          permissions: u.permission || permissions,
         }));
 
         setUsers(usersWithPermissions);
@@ -190,7 +190,7 @@ const UsersManagement: React.FC = () => {
     setFormData({
       username: user.username,
       password: "",
-      permissions: user.permissions || defaultPermissions,
+      permissions: user.permissions || permissions,
     });
     setEditingId(user.id);
     setShowForm(true);
@@ -221,7 +221,7 @@ const UsersManagement: React.FC = () => {
     setFormData({
       username: "",
       password: "",
-      permissions: defaultPermissions,
+      permissions: permissions,
     });
     setEditingId(null);
     setShowForm(false);
@@ -329,7 +329,7 @@ const UsersManagement: React.FC = () => {
 
               <fieldset className="border rounded p-4">
                 <legend className="text-sm font-medium mb-2">Permessi</legend>
-                {Object.keys(defaultPermissions).map((perm) => (
+                {Object.keys(permissions).map((perm) => (
                   <label
                     key={perm}
                     className="flex items-center gap-2 mb-2 text-sm"

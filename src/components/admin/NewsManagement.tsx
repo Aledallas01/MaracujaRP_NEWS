@@ -3,6 +3,51 @@ import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
 import { supabase, News, Section, User } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 
+// Metti qui il tuo URL webhook Discord (cambia con il tuo!)
+const DISCORD_WEBHOOK_URL =
+  "https://discord.com/api/webhooks/1404830444226084964/z6sDsQFa_K4ULXwrpYs9_fqIJkgOe4eiPHm6EartEmHn-T_AOKFFFsMlG27gKwkPJLPF";
+
+async function sendDiscordWebhook(newsItem: {
+  title: string;
+  content: string;
+  image?: string;
+  created_by: string;
+}) {
+  try {
+    const payload = {
+      username: "News Bot",
+      avatar_url: "https://maracuja-rp.vercel.app/logo.png",
+      embeds: [
+        {
+          title: newsItem.title,
+          description:
+            newsItem.content.length > 200
+              ? newsItem.content.slice(0, 200) + "..."
+              : newsItem.content,
+          color: 0x6a1b9a,
+          footer: {
+            text: `Autore: ${newsItem.created_by}`,
+          },
+          image: newsItem.image ? { url: newsItem.image } : undefined,
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    };
+
+    const res = await fetch(DISCORD_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error("Errore invio webhook Discord:", await res.text());
+    }
+  } catch (error) {
+    console.error("Errore invio webhook Discord:", error);
+  }
+}
+
 const NewsManagement: React.FC = () => {
   const { currentUser } = useAuth();
 
@@ -110,8 +155,14 @@ const NewsManagement: React.FC = () => {
 
       if (editingId) {
         await supabase.from("news").update(newsData).eq("id", editingId);
+        // Se vuoi inviare webhook anche per modifiche, scommenta la prossima riga
+        // await sendDiscordWebhook(newsData);
       } else {
-        await supabase.from("news").insert([newsData]);
+        const insertResult = await supabase.from("news").insert([newsData]);
+        if (insertResult.error) throw insertResult.error;
+
+        // Invia webhook solo per nuove news
+        await sendDiscordWebhook(newsData);
       }
 
       await loadData();

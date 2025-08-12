@@ -222,11 +222,10 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
             <h2 className="text-2xl font-bold text-gray-100 mb-4">
               {modalContent.title}
             </h2>
-            <p className="text-gray-200 whitespace-pre-wrap">
-              {modalContent.content}
-              dangerouslySetInnerHTML=
-              {{ __html: modalContent.content }}
-            </p>
+            <p
+              className="text-gray-200 whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: modalContent.content }}
+            />
 
             <button
               onClick={closeModal}

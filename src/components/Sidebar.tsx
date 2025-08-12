@@ -81,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
 
         {/* Sezione Servizi */}
         <div className="mb-5">
-          <h3 className="text-gray-400 uppercase text-[10px] font-semibold tracking-wide mb-3">
+          <h3 className="text-gray-400 uppercase text-[15px] font-semibold tracking-wide mb-3">
             Servizi
           </h3>
           <button
@@ -100,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
         {/* Menu admin */}
         {isAuthenticated && (
           <div className="mt-auto mb-2">
-            <h3 className="text-gray-400 uppercase text-[10px] font-semibold tracking-wide mb-2">
+            <h3 className="text-gray-400 uppercase text-[15px] font-semibold tracking-wide mb-2">
               Admin
             </h3>
             <nav className="space-y-2">

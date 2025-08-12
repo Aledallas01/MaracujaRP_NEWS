@@ -119,7 +119,7 @@ const UsersManagement: React.FC = () => {
 
       if (data) {
         const usersWithPermissions: User[] = data
-          .filter((u: any) => !u.God) // filtro God = true fuori
+          .filter((u: any) => !u.God)
           .map((u: any) => ({
             id: u.id,
             username: u.username,
@@ -355,8 +355,46 @@ const UsersManagement: React.FC = () => {
                   required={!editingId}
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Permessi
+                </label>
+                <div className="grid grid-cols-2 gap-3 max-h-40 overflow-y-auto border border-gray-600 rounded-md p-3 bg-gray-900">
+                  {Object.entries(permLabels).map(([key, label]) => (
+                    <label
+                      key={key}
+                      className="flex items-center gap-2 text-sm"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.permissions[key as keyof Permissions]}
+                        onChange={() =>
+                          togglePermission(key as keyof Permissions)
+                        }
+                        className="w-4 h-4 rounded border-gray-400 text-indigo-600 focus:ring-indigo-500"
+                      />
+                      {label}
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-              {/* Rimuovo permessi perché hai detto di toglierli */}
+              <div className="flex justify-end gap-4 pt-4">
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="px-5 py-3 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700 transition"
+                >
+                  Annulla
+                </button>
+                <button
+                  type="submit"
+                  className="flex items-center gap-2 px-5 py-3 bg-indigo-600 rounded-lg shadow hover:bg-indigo-700 transition text-white font-semibold"
+                >
+                  <Save className="h-5 w-5" />
+                  Salva
+                </button>
+              </div>
 
               <div className="flex justify-end gap-4 pt-4">
                 <button

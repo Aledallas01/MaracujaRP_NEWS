@@ -10,6 +10,9 @@ const Profile: React.FC = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [messageType, setMessageType] = useState<"success" | "error" | null>(
+    null
+  );
 
   useEffect(() => {
     if (currentUser) {
@@ -21,9 +24,11 @@ const Profile: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
+    setMessageType(null);
 
     if (!username.trim()) {
       setMessage("Username non può essere vuoto.");
+      setMessageType("error");
       setLoading(false);
       return;
     }
@@ -45,9 +50,11 @@ const Profile: React.FC = () => {
       if (error) throw error;
 
       setMessage("Profilo aggiornato con successo.");
+      setMessageType("success");
       setPassword("");
     } catch (error) {
       setMessage("Errore durante l'aggiornamento.");
+      setMessageType("error");
       console.error(error);
     } finally {
       setLoading(false);
@@ -56,31 +63,51 @@ const Profile: React.FC = () => {
 
   if (!currentUser) {
     return (
-      <div className="p-6 text-red-600 font-semibold">
+      <div className="p-6 text-red-600 font-semibold text-center">
         Devi essere loggato per vedere questa pagina.
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-[#30334E] min-h-full text-gray-200 max-w-md mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Il tuo Profilo</h2>
+    <div className="p-8 bg-[#2c2f4a] min-h-screen flex flex-col items-center justify-center text-gray-200 max-w-md mx-auto rounded-lg shadow-lg">
+      <div className="flex items-center justify-between w-full mb-8">
+        <h2 className="text-3xl font-extrabold tracking-tight">
+          Il tuo Profilo
+        </h2>
         <button
           onClick={logout}
-          className="text-red-500 hover:text-red-700 font-semibold"
+          className="text-red-500 hover:text-red-700 font-semibold transition-colors"
+          title="Logout"
+          aria-label="Logout"
         >
-          Logout
+          <X className="h-6 w-6" />
         </button>
       </div>
 
       {message && (
-        <div className="mb-4 text-center text-sm text-blue-400">{message}</div>
+        <div
+          className={`mb-6 w-full rounded-md px-4 py-3 text-center font-medium ${
+            messageType === "success"
+              ? "bg-green-600 text-green-100"
+              : "bg-red-600 text-red-100"
+          }`}
+          role="alert"
+        >
+          {message}
+        </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full bg-[#3a3f65] p-6 rounded-lg shadow-md space-y-6"
+        noValidate
+      >
         <div>
-          <label htmlFor="username" className="block mb-1 font-medium">
+          <label
+            htmlFor="username"
+            className="block mb-2 font-semibold text-gray-300"
+          >
             Username
           </label>
           <input
@@ -88,15 +115,19 @@ const Profile: React.FC = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-3 rounded-lg bg-[#262a4c] border border-gray-600 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            placeholder="Inserisci il tuo username"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block mb-1 font-medium">
+          <label
+            htmlFor="password"
+            className="block mb-2 font-semibold text-gray-300"
+          >
             Nuova password{" "}
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-400 font-normal">
               (lascia vuoto per non cambiare)
             </span>
           </label>
@@ -105,29 +136,33 @@ const Profile: React.FC = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-3 rounded-lg bg-[#262a4c] border border-gray-600 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            placeholder="Nuova password"
+            autoComplete="new-password"
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Save className="h-4 w-4" />
-            Salva
-          </button>
+        <div className="flex justify-end gap-4">
           <button
             type="button"
             onClick={() => {
               setUsername(currentUser.username);
               setPassword("");
               setMessage(null);
+              setMessageType(null);
             }}
-            className="px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+            disabled={loading}
+            className="px-5 py-3 rounded-lg border border-gray-600 text-gray-400 hover:bg-gray-700 transition-colors"
           >
             Annulla
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <Save className="h-5 w-5" />
+            {loading ? "Salvando..." : "Salva"}
           </button>
         </div>
       </form>

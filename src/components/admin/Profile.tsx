@@ -1,158 +1,140 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Profile: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{
-    type: "error" | "success";
-    text: string;
-  } | null>(null);
+  const { currentUser, logout } = useAuth();
 
-  const user = supabase.auth.user();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState(""); // Nuova password
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) return;
-
-    const fetchUserData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("users")
-          .select("username")
-          .eq("user_id", user.id)
-          .single();
-
-        if (error) throw error;
-
-        if (data) {
-          setUsername(data.username);
-        }
-      } catch (error: any) {
-        setMessage({
-          type: "error",
-          text: error.message || "Errore nel caricamento dati",
-        });
-      }
-    };
-
+    if (!currentUser) return;
     fetchUserData();
-  }, [user]);
+  }, [currentUser]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage(null);
-
-    if (password && password !== passwordConfirm) {
-      setMessage({ type: "error", text: "Le password non corrispondono." });
-      return;
-    }
-
+  const fetchUserData = async () => {
     setLoading(true);
+    setError(null);
     try {
-      const updates: any = { username };
-
-      if (password) {
-        updates.password = password; // Attenzione: in chiaro
-      }
-
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("users")
-        .update(updates)
-        .eq("user_id", user?.id);
+        .select("username")
+        .eq("id", currentUser?.id)
+        .single();
 
       if (error) throw error;
-
-      setMessage({ type: "success", text: "Profilo aggiornato con successo!" });
-      setPassword("");
-      setPasswordConfirm("");
-    } catch (error: any) {
-      setMessage({
-        type: "error",
-        text: error.message || "Errore nell'aggiornamento.",
-      });
+      if (data) setUsername(data.username);
+    } catch (err: any) {
+      setError("Errore nel recuperare i dati utente.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!user) {
+  const handleSave = async () => {
+    setError(null);
+    setSuccessMsg(null);
+
+    if (!username.trim()) {
+      setError("Username non può essere vuoto.");
+      return;
+    }
+    if (password && password.length < 6) {
+      setError("La password deve essere di almeno 6 caratteri.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const updates: any = { username };
+      if (password) updates.password = password; // ⚠️ come prima, in produzione hashare!
+
+      const { error } = await supabase
+        .from("users")
+        .update(updates)
+        .eq("id", currentUser?.id);
+
+      if (error) throw error;
+
+      setSuccessMsg("Profilo aggiornato con successo!");
+      setPassword("");
+    } catch (err: any) {
+      setError("Errore durante il salvataggio.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (!currentUser) {
     return (
-      <div className="p-6 text-gray-100" style={{ backgroundColor: "#30334E" }}>
-        <p>Devi essere autenticato per vedere questa pagina.</p>
+      <div className="p-6 text-gray-200">
+        <p>Devi essere loggato per accedere al profilo.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6 flex justify-center items-center text-gray-200">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
       </div>
     );
   }
 
   return (
     <div
-      className="max-w-md mx-auto p-6 bg-gray-800 rounded-lg text-gray-100"
+      className="p-6 max-w-md mx-auto"
       style={{ backgroundColor: "#30334E" }}
     >
-      <h1 className="text-2xl font-bold mb-6">Profilo utente</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Il tuo Profilo</h1>
 
-      {message && (
-        <div
-          className={`mb-4 px-4 py-2 rounded ${
-            message.type === "error" ? "bg-red-600" : "bg-green-600"
-          }`}
-        >
-          {message.text}
-        </div>
+      {error && <div className="mb-4 text-red-500 font-semibold">{error}</div>}
+      {successMsg && (
+        <div className="mb-4 text-green-400 font-semibold">{successMsg}</div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="username" className="block mb-1 font-medium">
-            Username
-          </label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full rounded px-3 py-2 bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-        </div>
+      <label className="block mb-2 text-gray-300 font-medium">Username</label>
+      <input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="w-full mb-4 px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
 
-        <div>
-          <label htmlFor="password" className="block mb-1 font-medium">
-            Nuova Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded px-3 py-2 bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Lascia vuoto per non cambiare"
-          />
-        </div>
+      <label className="block mb-2 text-gray-300 font-medium">
+        Nuova Password (lascia vuoto per non cambiare)
+      </label>
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="w-full mb-6 px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Almeno 6 caratteri"
+      />
 
-        <div>
-          <label htmlFor="passwordConfirm" className="block mb-1 font-medium">
-            Conferma Password
-          </label>
-          <input
-            id="passwordConfirm"
-            type="password"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            className="w-full rounded px-3 py-2 bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Conferma nuova password"
-          />
-        </div>
+      <button
+        onClick={handleSave}
+        disabled={saving}
+        className={`w-full py-2 rounded text-white font-semibold transition-colors ${
+          saving
+            ? "bg-blue-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700"
+        }`}
+      >
+        {saving ? "Salvando..." : "Salva"}
+      </button>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-colors disabled:opacity-50"
-        >
-          {loading ? "Salvando..." : "Salva"}
-        </button>
-      </form>
+      <button
+        onClick={logout}
+        className="mt-4 w-full py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
+      >
+        Logout
+      </button>
     </div>
   );
 };

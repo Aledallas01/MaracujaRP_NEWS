@@ -16,12 +16,12 @@ interface Permissions {
 interface User {
   id: string;
   username: string;
+  password?: string;
   created_at: string;
   updated_at?: string;
   permissions: Permissions;
 }
 
-// Etichette per checkbox permessi
 const permLabels: Record<keyof Permissions, string> = {
   createSections: "Crea Sezioni",
   editSections: "Modifica Sezioni",
@@ -43,9 +43,8 @@ const emptyPermissions: Permissions = {
 };
 
 const UsersManagement: React.FC = () => {
-  const { currentUser, permissions: userPermissions } = useAuth();
-
-  const permissions = currentUser.permissions ?? emptyPermissions;
+  const { currentUser } = useAuth();
+  const permissions = currentUser?.permissions ?? emptyPermissions;
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,10 +57,9 @@ const UsersManagement: React.FC = () => {
   }>({
     username: "",
     password: "",
-    permissions: emptyPermissions,
+    permissions: { ...emptyPermissions },
   });
 
-  // Blocca accesso se non ha permessi manageUsers
   if (!permissions.manageUsers) {
     return (
       <div className="p-6 text-red-600 font-semibold">
@@ -72,20 +70,18 @@ const UsersManagement: React.FC = () => {
 
   useEffect(() => {
     loadUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Carica utenti con permessi joinati da permission
   const loadUsers = async () => {
     setLoading(true);
     try {
-      // Join tra users e permission
       const { data, error } = await supabase
         .from("users")
         .select(
           `
           id,
           username,
+          password,
           created_at,
           updated_at,
           permission:permission(
@@ -104,13 +100,23 @@ const UsersManagement: React.FC = () => {
       if (error) throw error;
 
       if (data) {
-        // Mappa dati combinati
         const usersWithPermissions: User[] = data.map((u: any) => ({
           id: u.id,
           username: u.username,
+          password: u.password,
           created_at: u.created_at,
           updated_at: u.updated_at,
-          permissions: u.permission || emptyPermissions,
+          permissions: u.permission
+            ? {
+                createSections: u.permission.createSections || false,
+                editSections: u.permission.editSections || false,
+                deleteSections: u.permission.deleteSections || false,
+                createNews: u.permission.createNews || false,
+                editNews: u.permission.editNews || false,
+                deleteNews: u.permission.deleteNews || false,
+                manageUsers: u.permission.manageUsers || false,
+              }
+            : { ...emptyPermissions },
         }));
 
         setUsers(usersWithPermissions);
@@ -122,50 +128,51 @@ const UsersManagement: React.FC = () => {
     }
   };
 
-  // Salva o crea utente e permessi
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Controlli permessi lato frontend
-    if (editingId && !permissions.manageUsers) {
-      alert("Non hai i permessi per modificare utenti.");
+    if (!formData.username.trim()) {
+      alert("Inserisci un username.");
       return;
-    }
-    if (!editingId && !permissions.manageUsers) {
-      alert("Non hai i permessi per creare utenti.");
-      return;
-    }
-
-    // Dati base utente
-    const userData: Partial<User> = {
-      username: formData.username,
-      updated_at: new Date().toISOString(),
-    };
-
-    // Password richiesta solo se nuovo utente
-    if (!editingId) {
-      if (!formData.password.trim()) {
-        alert("La password è obbligatoria per creare un nuovo utente.");
-        return;
-      }
-      // ⚠️ Attenzione: password va hashata nel backend, qui demo
-      (userData as any).password = formData.password;
     }
 
     try {
       if (editingId) {
-        // Aggiorna utente
-        await supabase.from("users").update(userData).eq("id", editingId);
-        // Aggiorna permessi (solo se la riga esiste, altrimenti errore)
-        await supabase
-          .from("permission")
-          .update(formData.permissions)
-          .eq("user_id", editingId);
+        // Modifica utente
+        const userUpdate: any = {
+          username: formData.username,
+          updated_at: new Date().toISOString(),
+        };
+
+        if (formData.password.trim()) {
+          userUpdate.password = formData.password;
+        }
+
+        await supabase.from("users").update(userUpdate).eq("id", editingId);
+
+        await supabase.from("permission").upsert(
+          {
+            user_id: editingId,
+            ...formData.permissions,
+          },
+          { onConflict: "user_id" }
+        );
       } else {
-        // Inserisce nuovo utente e permessi
+        // Creazione nuovo utente
+        if (!formData.password.trim()) {
+          alert("La password è obbligatoria per creare un nuovo utente.");
+          return;
+        }
+
         const { data: insertData, error: insertError } = await supabase
           .from("users")
-          .insert([userData])
+          .insert([
+            {
+              username: formData.username,
+              password: formData.password,
+              created_at: new Date().toISOString(),
+            },
+          ])
           .select("id")
           .single();
 
@@ -174,10 +181,12 @@ const UsersManagement: React.FC = () => {
           return;
         }
 
-        // Inserisci permessi associati
-        await supabase
-          .from("permission")
-          .insert([{ user_id: insertData.id, ...formData.permissions }]);
+        await supabase.from("permission").insert([
+          {
+            user_id: insertData.id,
+            ...formData.permissions,
+          },
+        ]);
       }
 
       await loadUsers();
@@ -192,24 +201,17 @@ const UsersManagement: React.FC = () => {
     setFormData({
       username: user.username,
       password: "",
-      permissions: user.permissions || emptyPermissions,
+      permissions: { ...user.permissions },
     });
     setEditingId(user.id);
     setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
-    if (!permissions.manageUsers) {
-      alert("Non hai i permessi per eliminare utenti.");
-      return;
-    }
-
     if (!confirm("Sei sicuro di voler eliminare questo utente?")) return;
 
     try {
-      // Elimina prima permessi
       await supabase.from("permission").delete().eq("user_id", id);
-      // Poi elimina utente
       await supabase.from("users").delete().eq("id", id);
 
       await loadUsers();
@@ -223,7 +225,7 @@ const UsersManagement: React.FC = () => {
     setFormData({
       username: "",
       password: "",
-      permissions: emptyPermissions,
+      permissions: { ...emptyPermissions },
     });
     setEditingId(null);
     setShowForm(false);
@@ -251,15 +253,13 @@ const UsersManagement: React.FC = () => {
     <div className="p-6 bg-[#30334E] min-h-full text-gray-200">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-100">Gestione Utenti</h2>
-        {permissions.manageUsers && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            Nuovo Utente
-          </button>
-        )}
+        <button
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          Nuovo Utente
+        </button>
       </div>
 
       {/* Form */}
@@ -369,7 +369,7 @@ const UsersManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Tabella Utenti */}
+      {/* Tabella */}
       <div className="bg-gray-800 rounded-lg shadow overflow-hidden max-h-[70vh] overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-700">
           <thead className="bg-gray-700">
@@ -397,33 +397,27 @@ const UsersManagement: React.FC = () => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 max-w-[400px]">
-                  {user.permissions
-                    ? Object.entries(user.permissions)
-                        .filter(([, val]) => val)
-                        .map(([key]) => permLabels[key as keyof Permissions])
-                        .join(", ")
-                    : "Nessun permesso"}
+                  {Object.entries(user.permissions)
+                    .filter(([, val]) => val)
+                    .map(([key]) => permLabels[key as keyof Permissions])
+                    .join(", ") || "Nessun permesso"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {new Date(user.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  {permissions.manageUsers && (
-                    <>
-                      <button
-                        onClick={() => handleEdit(user)}
-                        className="text-blue-400 hover:text-blue-600 mr-3"
-                      >
-                        <Edit2 className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(user.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </>
-                  )}
+                  <button
+                    onClick={() => handleEdit(user)}
+                    className="text-blue-400 hover:text-blue-600 mr-3"
+                  >
+                    <Edit2 className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(user.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
                 </td>
               </tr>
             ))}

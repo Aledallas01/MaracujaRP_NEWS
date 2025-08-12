@@ -7,6 +7,7 @@ import PublicNewsView from "./components/PublicNewsView";
 import NewsManagement from "./components/admin/NewsManagement";
 import SectionsManagement from "./components/admin/SectionsManagement";
 import UsersManagement from "./components/admin/UsersManagement";
+import Profile from "./components/admin/Profile";
 import { useAuth } from "./contexts/AuthContext";
 
 const AppContent: React.FC = () => {
@@ -33,6 +34,8 @@ const AppContent: React.FC = () => {
         return <SectionsManagement />;
       case "users":
         return <UsersManagement />;
+      case "profile":
+        return <Profile />;
       default:
         return (
           <PublicNewsView

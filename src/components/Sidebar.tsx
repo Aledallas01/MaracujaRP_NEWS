@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Newspaper, Users, FolderTree, Home, Menu, X } from "lucide-react";
+import {
+  Newspaper,
+  Users,
+  User,
+  FolderTree,
+  Home,
+  Menu,
+  X,
+} from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
 interface SidebarProps {
@@ -17,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
     { id: "news", label: "News", icon: Newspaper },
     { id: "sections", label: "Sections", icon: FolderTree },
     { id: "users", label: "Users", icon: Users },
+    { id: "profile", label: "Profile", icon: User },
   ];
 
   const menuItems = isAuthenticated ? adminMenuItems : publicMenuItems;

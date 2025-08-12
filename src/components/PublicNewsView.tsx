@@ -224,6 +224,8 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
             </h2>
             <p className="text-gray-200 whitespace-pre-wrap">
               {modalContent.content}
+              dangerouslySetInnerHTML=
+              {{ __html: item.content }}
             </p>
 
             <button

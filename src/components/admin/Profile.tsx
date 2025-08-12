@@ -71,7 +71,7 @@ const Profile: React.FC = () => {
 
   return (
     <div className="bg-[#2c2f4a] min-h-screen flex flex-col items-center justify-center text-gray-200 px-6">
-      <div className="w-full max-w-md rounded-lg shadow-lg bg-[#3a3f65] p-8">
+      <div className="w-full max-w-md rounded-lg shadow-lg bg-[#3a3f65] p-8 mt-[-40px]">
         <h2 className="text-3xl font-extrabold tracking-tight mb-8 text-center">
           Il tuo Profilo
         </h2>

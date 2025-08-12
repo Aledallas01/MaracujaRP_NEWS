@@ -127,14 +127,14 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
       </div>
 
       {/* Lista News in griglia responsive */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {filteredNews.map((item) => (
           <article
             key={item.id}
-            className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex flex-col"
+            className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex flex-col md:flex-row"
           >
             {/* Immagine con sezione */}
-            <div className="relative w-full h-48">
+            <div className="relative w-full h-48 md:w-48 md:h-auto flex-shrink-0">
               {item.section && (
                 <div className="absolute top-1 left-1 z-10 bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-bl-md rounded-tr-md shadow-lg select-none">
                   {item.section.title}
@@ -159,7 +159,6 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
                 <h3 className="text-lg font-semibold text-gray-100 mb-2">
                   {item.title}
                 </h3>
-
                 <p className="text-gray-300 text-sm mb-4">
                   {item.content.length > 120
                     ? item.content.slice(0, 120) + "..."
@@ -167,7 +166,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
                 </p>
               </div>
 
-              {/* Data e autore (autore sotto la data) */}
+              {/* Data e autore */}
               <div className="flex flex-col gap-1 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />

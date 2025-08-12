@@ -85,7 +85,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
         <h2 className="text-2xl font-bold text-gray-100 mb-4">Notizie</h2>
 
         {/* Search Bar */}
-        <div className="relative mb-4 w-64">
+        <div className="relative mb-4 w-full sm:w-64">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-gray-400" />
           </div>
@@ -126,15 +126,15 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
         </div>
       </div>
 
-      {/* Lista News */}
-      <div className="flex flex-col gap-6">
+      {/* Lista News in griglia responsive */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredNews.map((item) => (
           <article
             key={item.id}
-            className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex"
+            className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex flex-col"
           >
-            {/* Sezione nome sopra immagine */}
-            <div className="relative w-48 flex-shrink-0">
+            {/* Immagine con sezione */}
+            <div className="relative w-full h-48">
               {item.section && (
                 <div className="absolute top-1 left-1 z-10 bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-bl-md rounded-tr-md shadow-lg select-none">
                   {item.section.title}
@@ -144,17 +144,16 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="h-full w-full object-cover rounded-l-lg"
-                  style={{ minHeight: "150px" }}
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full bg-gray-700 rounded-l-lg flex items-center justify-center text-gray-400">
+                <div className="h-full w-full bg-gray-700 flex items-center justify-center text-gray-400">
                   No Image
                 </div>
               )}
             </div>
 
-            {/* Contenuto a destra */}
+            {/* Contenuto */}
             <div className="flex flex-col justify-between p-6 flex-1">
               <div>
                 <h3 className="text-lg font-semibold text-gray-100 mb-2">
@@ -168,14 +167,15 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
                 </p>
               </div>
 
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>{item.created_by}</span>
-                </div>
+              {/* Data e autore (autore sotto la data) */}
+              <div className="flex flex-col gap-1 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   <span>{new Date(item.created_at).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  <span>{item.created_by}</span>
                 </div>
               </div>
 

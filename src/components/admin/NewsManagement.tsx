@@ -9,6 +9,7 @@ const DISCORD_WEBHOOK_URL =
 const NEWS_ROLE_ID = "1404802744811917312";
 
 async function sendDiscordWebhook(newsItem: {
+  id: string;
   title: string;
   content: string;
   image?: string;
@@ -32,6 +33,11 @@ async function sendDiscordWebhook(newsItem: {
           },
           thumbnail: newsItem.image ? { url: newsItem.image } : undefined,
           timestamp: newsItem.created_at,
+        },
+        {
+          title: "Leggi tutto l'articolo",
+          description: `https://newsmaracuja-rp.vercel.app/?id=${article.id}`,
+          color: E4934C,
         },
       ],
     };

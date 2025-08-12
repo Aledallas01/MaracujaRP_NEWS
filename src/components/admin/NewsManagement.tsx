@@ -14,7 +14,7 @@ async function sendDiscordWebhook(newsItem: {
   content: string;
   image?: string;
   created_by: string;
-  created_at: string; // aggiunto created_at!
+  created_at: string;
 }) {
   try {
     const payload = {
@@ -28,17 +28,17 @@ async function sendDiscordWebhook(newsItem: {
             newsItem.content.length > 200
               ? newsItem.content.slice(0, 200) + "..."
               : newsItem.content,
-          color: 0xe4934c, // <-- correggi qui, metti 0x
+          color: 0xe4934c,
           footer: {
             text: `Autore: ${newsItem.created_by}`,
           },
           thumbnail: newsItem.image ? { url: newsItem.image } : undefined,
-          timestamp: newsItem.created_at, // assicurati sia stringa ISO
+          timestamp: newsItem.created_at,
         },
         {
           title: "Leggi tutto l'articolo",
           description: `https://newsmaracuja-rp.vercel.app/?id=${newsItem.id}`,
-          color: 0xe4934c, // anche qui 0x
+          color: 0xe4934c,
         },
       ],
     };
@@ -92,7 +92,6 @@ const NewsManagement: React.FC = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      // Carica news, sections e users in parallelo
       const [newsResult, sectionsResult, usersResult] = await Promise.all([
         supabase
           .from("news")
@@ -115,12 +114,10 @@ const NewsManagement: React.FC = () => {
       ) {
         setSections(sectionsResult.data);
 
-        // Mappa userId -> username
         const userMap = new Map(
           usersResult.data.map((user) => [user.id, user.username])
         );
 
-        // Aggiungi authorName a ogni news basandoti su created_by
         const newsWithAuthors = newsResult.data.map((item) => ({
           ...item,
           authorName: userMap.get(item.created_by) ?? "Sconosciuto",
@@ -156,22 +153,32 @@ const NewsManagement: React.FC = () => {
     }
 
     try {
-      const newsData = {
-        ...formData,
-        created_by: currentUser!.username,
-        updated_at: new Date().toISOString(),
-      };
-
       if (editingId) {
-        await supabase.from("news").update(newsData).eq("id", editingId);
-        // Se vuoi inviare webhook anche per modifiche, scommenta la prossima riga
-        // await sendDiscordWebhook(newsData);
+        // Modifica news
+        await supabase.from("news").update(formData).eq("id", editingId);
+        // Se vuoi inviare webhook anche per modifiche, scommenta la prossima riga:
+        // await sendDiscordWebhook({ ...formData, id: editingId, created_by: currentUser!.username, created_at: new Date().toISOString() });
       } else {
-        const insertResult = await supabase.from("news").insert([newsData]);
+        // Nuova news: aggiungo created_at e updated_at
+        const now = new Date().toISOString();
+        const newsData = {
+          ...formData,
+          created_by: currentUser!.username,
+          created_at: now,
+          updated_at: now,
+        };
+
+        // Inserisco e recupero l’oggetto inserito con id e created_at
+        const insertResult = await supabase
+          .from("news")
+          .insert([newsData])
+          .select()
+          .single();
+
         if (insertResult.error) throw insertResult.error;
 
-        // Invia webhook solo per nuove news
-        await sendDiscordWebhook(newsData);
+        // Invio webhook con i dati completi
+        await sendDiscordWebhook(insertResult.data);
       }
 
       await loadData();
@@ -182,7 +189,6 @@ const NewsManagement: React.FC = () => {
     }
   };
 
-  // Avvia modifica
   const handleEdit = (item: News) => {
     if (!permissions.editNews) {
       alert("Non hai i permessi per modificare le news.");
@@ -193,13 +199,12 @@ const NewsManagement: React.FC = () => {
       section_id: item.section_id,
       title: item.title,
       content: item.content,
-      image: item.image,
+      image: item.image ?? "",
     });
     setEditingId(item.id);
     setShowForm(true);
   };
 
-  // Elimina news
   const handleDelete = async (id: string) => {
     if (!permissions.deleteNews) {
       alert("Non hai i permessi per eliminare le news.");

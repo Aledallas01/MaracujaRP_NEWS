@@ -6,6 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 // Metti qui il tuo URL webhook Discord (cambia con il tuo!)
 const DISCORD_WEBHOOK_URL =
   "https://discord.com/api/webhooks/1404830444226084964/z6sDsQFa_K4ULXwrpYs9_fqIJkgOe4eiPHm6EartEmHn-T_AOKFFFsMlG27gKwkPJLPF";
+const NEWS_ROLE_ID = "1404802744811917312";
 
 async function sendDiscordWebhook(newsItem: {
   title: string;
@@ -17,6 +18,7 @@ async function sendDiscordWebhook(newsItem: {
     const payload = {
       username: "Maracuja News",
       avatar_url: "https://maracuja-rp.vercel.app/logo.png",
+      content: `<@&${NEWS_ROLE_ID}> Nuova news pubblicata!`,
       embeds: [
         {
           title: newsItem.title,

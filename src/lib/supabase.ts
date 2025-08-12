@@ -60,6 +60,7 @@ export interface User {
   permissions: Permissions;
   created_at: string;
   updated_at: string;
+  God: boolean;
 }
 
 export interface Section {

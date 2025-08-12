@@ -101,6 +101,7 @@ const UsersManagement: React.FC = () => {
           password,
           created_at,
           updated_at,
+          God,
           permission:permission(
             createSections,
             editSections,
@@ -117,24 +118,27 @@ const UsersManagement: React.FC = () => {
       if (error) throw error;
 
       if (data) {
-        const usersWithPermissions: User[] = data.map((u: any) => ({
-          id: u.id,
-          username: u.username,
-          password: u.password,
-          created_at: u.created_at,
-          updated_at: u.updated_at,
-          permissions: u.permission
-            ? {
-                createSections: u.permission.createSections || false,
-                editSections: u.permission.editSections || false,
-                deleteSections: u.permission.deleteSections || false,
-                createNews: u.permission.createNews || false,
-                editNews: u.permission.editNews || false,
-                deleteNews: u.permission.deleteNews || false,
-                manageUsers: u.permission.manageUsers || false,
-              }
-            : { ...emptyPermissions },
-        }));
+        const usersWithPermissions: User[] = data
+          .filter((u: any) => !u.God) // filtro God = true fuori
+          .map((u: any) => ({
+            id: u.id,
+            username: u.username,
+            password: u.password,
+            created_at: u.created_at,
+            updated_at: u.updated_at,
+            God: u.God,
+            permissions: u.permission
+              ? {
+                  createSections: u.permission.createSections || false,
+                  editSections: u.permission.editSections || false,
+                  deleteSections: u.permission.deleteSections || false,
+                  createNews: u.permission.createNews || false,
+                  editNews: u.permission.editNews || false,
+                  deleteNews: u.permission.deleteNews || false,
+                  manageUsers: u.permission.manageUsers || false,
+                }
+              : { ...emptyPermissions },
+          }));
 
         setUsers(usersWithPermissions);
       }

@@ -104,7 +104,7 @@ const NewsManagement: React.FC = () => {
     try {
       const newsData = {
         ...formData,
-        created_by: currentUser!.id,
+        created_by: currentUser!.username,
         updated_at: new Date().toISOString(),
       };
 

@@ -14,6 +14,7 @@ async function sendDiscordWebhook(newsItem: {
   content: string;
   image?: string;
   created_by: string;
+  created_at: string; // aggiunto created_at!
 }) {
   try {
     const payload = {
@@ -27,17 +28,17 @@ async function sendDiscordWebhook(newsItem: {
             newsItem.content.length > 200
               ? newsItem.content.slice(0, 200) + "..."
               : newsItem.content,
-          color: E4934C,
+          color: 0xe4934c, // <-- correggi qui, metti 0x
           footer: {
             text: `Autore: ${newsItem.created_by}`,
           },
           thumbnail: newsItem.image ? { url: newsItem.image } : undefined,
-          timestamp: newsItem.created_at,
+          timestamp: newsItem.created_at, // assicurati sia stringa ISO
         },
         {
           title: "Leggi tutto l'articolo",
           description: `https://newsmaracuja-rp.vercel.app/?id=${newsItem.id}`,
-          color: E4934C,
+          color: 0xe4934c, // anche qui 0x
         },
       ],
     };

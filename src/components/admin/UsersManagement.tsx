@@ -62,8 +62,25 @@ const UsersManagement: React.FC = () => {
 
   if (!permissions.manageUsers) {
     return (
-      <div className="p-6 text-red-600 font-semibold">
-        Non hai i permessi per gestire gli utenti.
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#1E1F2F] p-8 text-red-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-20 w-20 mb-6 text-red-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.8}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v2m0 4h.01M21 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"
+          />
+        </svg>
+        <h1 className="text-2xl font-semibold mb-2">Accesso Negato</h1>
+        <p className="text-center max-w-sm text-gray-400">
+          Non hai i permessi necessari per gestire gli utenti.
+        </p>
       </div>
     );
   }

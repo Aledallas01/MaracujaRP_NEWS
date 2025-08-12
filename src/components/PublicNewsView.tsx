@@ -46,6 +46,21 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
     }
   };
 
+  // Ecco il nuovo useEffect per aprire modal da ?id=xxx
+  useEffect(() => {
+    if (news.length === 0) return; // aspetta che news siano caricate
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const newsId = urlParams.get("id");
+
+    if (newsId) {
+      const foundNews = news.find((n) => String(n.id) === newsId);
+      if (foundNews) {
+        openModal(foundNews);
+      }
+    }
+  }, [news]);
+
   const filteredNews = news.filter((item) => {
     const matchesSearch =
       searchQuery === "" ||
@@ -178,7 +193,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
                 </div>
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  <span>{item.created_by}</span>
+                  <span>{item.created_by || "Autore Sconosciuto"}</span>
                 </div>
               </div>
 

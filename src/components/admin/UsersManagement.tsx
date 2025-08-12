@@ -250,24 +250,24 @@ const UsersManagement: React.FC = () => {
   }
 
   return (
-    <div className="p-6 bg-[#30334E] min-h-full text-gray-200">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-100">Gestione Utenti</h2>
+    <div className="bg-[#1E1F2F] min-h-screen p-8 text-gray-300 flex flex-col">
+      <header className="flex items-center justify-between mb-8">
+        <h2 className="text-3xl font-semibold text-white">Gestione Utenti</h2>
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-indigo-600 px-5 py-3 rounded-lg shadow-md hover:bg-indigo-700 transition"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-5 w-5" />
           Nuovo Utente
         </button>
-      </div>
+      </header>
 
-      {/* Form */}
+      {/* Form modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-auto text-gray-200">
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center pt-20 z-50 overflow-auto">
+          <div className="bg-[#2A2E47] rounded-xl shadow-xl w-full max-w-lg mx-4 max-h-[85vh] overflow-y-auto text-gray-200">
             <div className="flex items-center justify-between p-6 border-b border-gray-700">
-              <h3 className="text-lg font-semibold">
+              <h3 className="text-xl font-semibold">
                 {editingId ? "Modifica Utente" : "Nuovo Utente"}
               </h3>
               <button
@@ -279,7 +279,7 @@ const UsersManagement: React.FC = () => {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
               <div>
                 <label
                   htmlFor="username"
@@ -297,7 +297,8 @@ const UsersManagement: React.FC = () => {
                       username: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Inserisci username"
                   required
                 />
               </div>
@@ -309,7 +310,7 @@ const UsersManagement: React.FC = () => {
                 >
                   Password{" "}
                   {editingId && (
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-500 italic">
                       (lascia vuoto per non cambiare)
                     </span>
                   )}
@@ -324,43 +325,31 @@ const UsersManagement: React.FC = () => {
                       password: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder={
+                    editingId
+                      ? "Nuova password (opzionale)"
+                      : "Inserisci password"
+                  }
                   required={!editingId}
                 />
               </div>
 
-              <fieldset className="border rounded p-4">
-                <legend className="text-sm font-medium mb-2">Permessi</legend>
-                {Object.keys(emptyPermissions).map((perm) => (
-                  <label
-                    key={perm}
-                    className="flex items-center gap-2 mb-2 text-sm"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={formData.permissions[perm as keyof Permissions]}
-                      onChange={() =>
-                        togglePermission(perm as keyof Permissions)
-                      }
-                    />
-                    {permLabels[perm as keyof Permissions]}
-                  </label>
-                ))}
-              </fieldset>
+              {/* Rimuovo permessi perché hai detto di toglierli */}
 
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-4 pt-4">
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+                  className="px-5 py-3 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700 transition"
                 >
                   Annulla
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center gap-2 px-5 py-3 bg-indigo-600 rounded-lg shadow hover:bg-indigo-700 transition text-white font-semibold"
                 >
-                  <Save className="h-4 w-4" />
+                  <Save className="h-5 w-5" />
                   Salva
                 </button>
               </div>
@@ -369,54 +358,50 @@ const UsersManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Tabella */}
-      <div className="bg-gray-800 rounded-lg shadow overflow-hidden max-h-[70vh] overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-700">
-          <thead className="bg-gray-700">
+      {/* Tabella utenti */}
+      <div className="bg-[#2A2E47] rounded-xl shadow-lg overflow-hidden flex-grow mt-6 max-h-[70vh] overflow-y-auto">
+        <table className="min-w-full divide-y divide-gray-700 table-auto">
+          <thead className="bg-[#3B4060]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-400 uppercase tracking-wide">
                 Username
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Permessi
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-400 uppercase tracking-wide">
                 Data Creazione
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-sm font-semibold text-gray-400 uppercase tracking-wide">
                 Azioni
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {users.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-700">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-100">
-                    {user.username}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 max-w-[400px]">
-                  {Object.entries(user.permissions)
-                    .filter(([, val]) => val)
-                    .map(([key]) => permLabels[key as keyof Permissions])
-                    .join(", ") || "Nessun permesso"}
+            {users.map((user, idx) => (
+              <tr
+                key={user.id}
+                className={`${
+                  idx % 2 === 0 ? "bg-[#33385A]" : "bg-[#2A2E47]"
+                } hover:bg-indigo-600 transition-colors cursor-pointer`}
+              >
+                <td className="px-6 py-4 whitespace-nowrap text-gray-100 font-medium">
+                  {user.username}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {new Date(user.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
                   <button
                     onClick={() => handleEdit(user)}
-                    className="text-blue-400 hover:text-blue-600 mr-3"
+                    className="text-indigo-400 hover:text-indigo-300"
+                    aria-label={`Modifica ${user.username}`}
                   >
-                    <Edit2 className="h-4 w-4" />
+                    <Edit2 className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleDelete(user.id)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 hover:text-red-600"
+                    aria-label={`Elimina ${user.username}`}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-5 w-5" />
                   </button>
                 </td>
               </tr>
@@ -425,7 +410,7 @@ const UsersManagement: React.FC = () => {
         </table>
 
         {users.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
+          <div className="text-center py-12 text-gray-500 font-medium">
             Nessun utente trovato
           </div>
         )}

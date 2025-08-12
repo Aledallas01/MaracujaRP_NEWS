@@ -36,7 +36,7 @@ async function sendDiscordWebhook(newsItem: {
         },
         {
           title: "Leggi tutto l'articolo",
-          description: `https://newsmaracuja-rp.vercel.app/?id=${article.id}`,
+          description: `https://newsmaracuja-rp.vercel.app/?id=${newsItem.id}`,
           color: E4934C,
         },
       ],

@@ -199,7 +199,7 @@ const NewsManagement: React.FC = () => {
       section_id: item.section_id,
       title: item.title,
       content: item.content,
-      image: item.image ?? "",
+      image: item.image ?? "https://maracuja-rp.vercel.app/logo.png",
     });
     setEditingId(item.id);
     setShowForm(true);

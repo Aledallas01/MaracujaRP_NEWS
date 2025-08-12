@@ -159,11 +159,15 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
                 <h3 className="text-lg font-semibold text-gray-100 mb-2">
                   {item.title}
                 </h3>
-                <p className="text-gray-300 text-sm mb-4">
-                  {item.content.length > 120
-                    ? item.content.slice(0, 120) + "..."
-                    : item.content}
-                </p>
+                <p
+                  className="text-gray-300 text-sm mb-4"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      item.content.length > 120
+                        ? item.content.slice(0, 120) + "..."
+                        : item.content,
+                  }}
+                />
               </div>
 
               {/* Data e autore */}

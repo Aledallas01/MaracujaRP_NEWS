@@ -26,12 +26,6 @@ const Footer: React.FC = () => {
           >
             Store
           </a>
-          <a
-            href="mailto:support@maracuja-rp.com"
-            className="hover:text-blue-400 transition-colors"
-          >
-            Contatti
-          </a>
         </div>
 
         {/* Icone social */}

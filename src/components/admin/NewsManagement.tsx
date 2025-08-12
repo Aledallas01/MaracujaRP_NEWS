@@ -15,7 +15,7 @@ async function sendDiscordWebhook(newsItem: {
 }) {
   try {
     const payload = {
-      username: "News Bot",
+      username: "Maracuja News",
       avatar_url: "https://maracuja-rp.vercel.app/logo.png",
       embeds: [
         {
@@ -24,12 +24,12 @@ async function sendDiscordWebhook(newsItem: {
             newsItem.content.length > 200
               ? newsItem.content.slice(0, 200) + "..."
               : newsItem.content,
-          color: 0x6a1b9a,
+          color: E4934C,
           footer: {
             text: `Autore: ${newsItem.created_by}`,
           },
-          image: newsItem.image ? { url: newsItem.image } : undefined,
-          timestamp: new Date().toISOString(),
+          thumbnail: newsItem.image ? { url: newsItem.image } : undefined,
+          timestamp: newsItem.created_at,
         },
       ],
     };

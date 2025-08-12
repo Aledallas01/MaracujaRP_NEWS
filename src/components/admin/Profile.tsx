@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Save, X } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -6,135 +7,130 @@ const Profile: React.FC = () => {
   const { currentUser, logout } = useAuth();
 
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState(""); // Nuova password
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!currentUser) return;
-    fetchUserData();
+    if (currentUser) {
+      setUsername(currentUser.username);
+    }
   }, [currentUser]);
 
-  const fetchUserData = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
-    setError(null);
+    setMessage(null);
+
+    if (!username.trim()) {
+      setMessage("Username non può essere vuoto.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const { data, error } = await supabase
+      const updateData: any = {
+        username: username.trim(),
+      };
+
+      if (password.trim()) {
+        updateData.password = password.trim();
+      }
+
+      const { error } = await supabase
         .from("users")
-        .select("username")
-        .eq("id", currentUser?.id)
-        .single();
+        .update(updateData)
+        .eq("id", currentUser?.id);
 
       if (error) throw error;
-      if (data) setUsername(data.username);
-    } catch (err: any) {
-      setError("Errore nel recuperare i dati utente.");
+
+      setMessage("Profilo aggiornato con successo.");
+      setPassword("");
+    } catch (error) {
+      setMessage("Errore durante l'aggiornamento.");
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSave = async () => {
-    setError(null);
-    setSuccessMsg(null);
-
-    if (!username.trim()) {
-      setError("Username non può essere vuoto.");
-      return;
-    }
-    if (password && password.length < 6) {
-      setError("La password deve essere di almeno 6 caratteri.");
-      return;
-    }
-
-    setSaving(true);
-    try {
-      const updates: any = { username };
-      if (password) updates.password = password; // ⚠️ come prima, in produzione hashare!
-
-      const { error } = await supabase
-        .from("users")
-        .update(updates)
-        .eq("id", currentUser?.id);
-
-      if (error) throw error;
-
-      setSuccessMsg("Profilo aggiornato con successo!");
-      setPassword("");
-    } catch (err: any) {
-      setError("Errore durante il salvataggio.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
   if (!currentUser) {
     return (
-      <div className="p-6 text-gray-200">
-        <p>Devi essere loggato per accedere al profilo.</p>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="p-6 flex justify-center items-center text-gray-200">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+      <div className="p-6 text-red-600 font-semibold">
+        Devi essere loggato per vedere questa pagina.
       </div>
     );
   }
 
   return (
-    <div
-      className="p-6 max-w-md mx-auto"
-      style={{ backgroundColor: "#30334E" }}
-    >
-      <h1 className="text-2xl font-bold text-white mb-6">Il tuo Profilo</h1>
+    <div className="p-6 bg-[#30334E] min-h-full text-gray-200 max-w-md mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold">Il tuo Profilo</h2>
+        <button
+          onClick={logout}
+          className="text-red-500 hover:text-red-700 font-semibold"
+        >
+          Logout
+        </button>
+      </div>
 
-      {error && <div className="mb-4 text-red-500 font-semibold">{error}</div>}
-      {successMsg && (
-        <div className="mb-4 text-green-400 font-semibold">{successMsg}</div>
+      {message && (
+        <div className="mb-4 text-center text-sm text-blue-400">{message}</div>
       )}
 
-      <label className="block mb-2 text-gray-300 font-medium">Username</label>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="w-full mb-4 px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="username" className="block mb-1 font-medium">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          />
+        </div>
 
-      <label className="block mb-2 text-gray-300 font-medium">
-        Nuova Password (lascia vuoto per non cambiare)
-      </label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full mb-6 px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-        placeholder="Almeno 6 caratteri"
-      />
+        <div>
+          <label htmlFor="password" className="block mb-1 font-medium">
+            Nuova password{" "}
+            <span className="text-xs text-gray-400">
+              (lascia vuoto per non cambiare)
+            </span>
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
 
-      <button
-        onClick={handleSave}
-        disabled={saving}
-        className={`w-full py-2 rounded text-white font-semibold transition-colors ${
-          saving
-            ? "bg-blue-400 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-700"
-        }`}
-      >
-        {saving ? "Salvando..." : "Salva"}
-      </button>
-
-      <button
-        onClick={logout}
-        className="mt-4 w-full py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
-      >
-        Logout
-      </button>
+        <div className="flex justify-end gap-3 pt-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Save className="h-4 w-4" />
+            Salva
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setUsername(currentUser.username);
+              setPassword("");
+              setMessage(null);
+            }}
+            className="px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            Annulla
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

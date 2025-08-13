@@ -3,11 +3,12 @@ import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
 import { supabase, News, Section, User } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 
-// Metti qui il tuo URL webhook Discord (cambia con il tuo!)
+// Variabili per il webhook Discord
 const DISCORD_WEBHOOK_URL =
   "https://discord.com/api/webhooks/1404830444226084964/z6sDsQFa_K4ULXwrpYs9_fqIJkgOe4eiPHm6EartEmHn-T_AOKFFFsMlG27gKwkPJLPF";
 const NEWS_ROLE_ID = "1404802744811917312";
 
+// Funzione per inviare il webhook Discord
 async function sendDiscordWebhook(newsItem: {
   id: string;
   title: string;

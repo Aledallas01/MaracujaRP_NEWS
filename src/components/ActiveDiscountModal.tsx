@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tag, X } from "lucide-react";
-import { supabaseOther } from "../lib/other"; // Usa lo stesso client che usi nello store
+import { supabaseOther } from "../lib/other";
 import { Discount } from "../lib/types";
 
 interface ActiveDiscountModalProps {

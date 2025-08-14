@@ -4,10 +4,8 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import PublicNewsView from "./components/PublicNewsView";
-import NewsManagement from "./components/admin/NewsManagement";
-import SectionsManagement from "./components/admin/SectionsManagement";
-import UsersManagement from "./components/admin/UsersManagement";
-import Profile from "./components/admin/Profile";
+import PublicRulesView from "./components/PublicRulesView";
+import PublicStoreView from "./components/PublicStoreView";
 import { useAuth } from "./contexts/AuthContext";
 
 const AppContent: React.FC = () => {
@@ -28,14 +26,12 @@ const AppContent: React.FC = () => {
 
     // Vista per utenti autenticati in base a currentView
     switch (currentView) {
-      case "news":
-        return <NewsManagement />;
-      case "sections":
-        return <SectionsManagement />;
-      case "users":
-        return <UsersManagement />;
-      case "profile":
-        return <Profile />;
+      case "home":
+        return <PublicNewsView />;
+      case "rules":
+        return <PublicRulesView />;
+      case "store":
+        return <PublicStoreView />;
       default:
         return (
           <PublicNewsView

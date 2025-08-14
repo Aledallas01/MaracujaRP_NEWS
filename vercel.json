@@ -10,9 +10,9 @@
     }
   ],
   "routes": [
-    { "src": "/news", "dest": "/index.html" },
-    { "src": "/store", "dest": "/index.html" },
-    { "src": "/rules", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/((?!assets/|favicon\\.ico|.*\\..*).*)",
+      "dest": "/index.html"
+    }
   ]
 }

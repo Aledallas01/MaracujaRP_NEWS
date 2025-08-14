@@ -42,15 +42,6 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
         >
           <ShoppingCart className="h-6 w-6" />
         </a>
-
-        <button
-          onClick={() => setIsLoginModalOpen(true)}
-          className="p-2 rounded-md text-gray-400 hover:text-blue-400 hover:bg-gray-800 transition-colors duration-300 ease-in-out"
-          title="Impostazioni"
-          aria-label="Impostazioni"
-        >
-          <Settings className="h-6 w-6" />
-        </button>
       </header>
 
       <LoginModal

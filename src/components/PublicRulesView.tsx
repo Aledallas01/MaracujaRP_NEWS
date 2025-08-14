@@ -53,10 +53,13 @@ const PublicRulesView: React.FC = () => {
   }, [rules]);
 
   const filteredRules = rules.filter((rule) => {
+    const title = rule.title || "";
+    const content = rule.content || "";
+
     const matchesSearch =
       searchQuery === "" ||
-      rule.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      rule.content.toLowerCase().includes(searchQuery.toLowerCase());
+      title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      content.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesSection =
       selectedSection === "all" || rule.section_id === selectedSection;

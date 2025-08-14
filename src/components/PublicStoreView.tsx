@@ -1,5 +1,5 @@
 // src/components/PublicStoreView.tsx
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ShoppingCart, MessageCircle, PackageOpen, Folder } from "lucide-react";
 import { supabaseOther } from "../lib/other";
 import { Package, StoreSection } from "../lib/types";
@@ -22,54 +22,61 @@ const PublicStoreView: React.FC = () => {
 
   const loadStoreData = async () => {
     setLoading(true);
-    try {
-      const [packagesResult, sectionsResult, discountsResult] =
-        await Promise.all([
-          supabaseOther
-            .from("packages")
-            .select(`*, section:store_sections(*)`)
-            .order("order_index", { ascending: true }),
-          supabaseOther
-            .from("store_sections")
-            .select("*")
-            .order("order_index", { ascending: true }),
-          supabaseOther.from("discounts").select("*").eq("isActive", true),
-        ]);
+    setError(null);
 
-      if (packagesResult.data) setPackages(packagesResult.data);
-      if (sectionsResult.data) setSections(sectionsResult.data);
-      if (discountsResult.data) setActiveDiscounts(discountsResult.data);
-    } catch (error) {
-      console.error("Errore caricamento dati store:", error);
+    try {
+      // Query packages
+      const packagesResult = await supabaseOther
+        .from("packages")
+        .select(`*, section:store_sections(*)`)
+        .order("order_index", { ascending: true });
+
+      if (packagesResult.error) {
+        console.error("Errore packages:", packagesResult.error);
+        setPackages([]);
+      } else {
+        console.log("Packages result:", packagesResult.data);
+        setPackages(packagesResult.data || []);
+      }
+
+      // Query sections
+      const sectionsResult = await supabaseOther
+        .from("store_sections")
+        .select("*")
+        .order("order_index", { ascending: true });
+
+      if (sectionsResult.error) {
+        console.error("Errore sections:", sectionsResult.error);
+        setSections([]);
+      } else {
+        console.log("Sections result:", sectionsResult.data);
+        setSections(sectionsResult.data || []);
+      }
+
+      // Query active discounts
+      const discountsResult = await supabaseOther
+        .from("discounts")
+        .select("*")
+        .eq("isActive", true);
+
+      if (discountsResult.error) {
+        console.error("Errore discounts:", discountsResult.error);
+        setActiveDiscounts([]);
+      } else {
+        console.log("Discounts result:", discountsResult.data);
+        setActiveDiscounts(discountsResult.data || []);
+      }
+    } catch (err: any) {
+      console.error("Errore caricamento dati store:", err);
+      setError("Errore caricamento dati store. Controlla console.");
     } finally {
       setLoading(false);
     }
   };
 
-  {
-    /* const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [packagesData, sectionsData, discountsData] = await Promise.all([
-        Packages.getInfo(),
-        StoreSections.getSections(),
-        Discount.getActiveDiscounts(),
-      ]);
-      setPackages(packagesData);
-      setSections(sectionsData);
-      setActiveDiscounts(discountsData);
-    } catch {
-      setError("Errore durante il caricamento dei pacchetti.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
-    fetchData();
-  }, [fetchData]); */
-  }
+    loadStoreData();
+  }, []);
 
   const getDiscountForProduct = useCallback(
     (productId: string) => {
@@ -92,13 +99,9 @@ const PublicStoreView: React.FC = () => {
     []
   );
 
-  /* const filteredPackages = useMemo(
-    () =>
-      activeSection
-        ? packages.filter((pkg) => pkg.section_id === activeSection)
-        : packages,
-    [packages, activeSection]
-  ); */
+  const filteredPackages = activeSection
+    ? packages.filter((pkg) => pkg.section_id === activeSection)
+    : packages;
 
   if (loading) {
     return (
@@ -167,7 +170,7 @@ const PublicStoreView: React.FC = () => {
         )}
 
         {/* Empty */}
-        {packages.length === 0 && (
+        {filteredPackages.length === 0 && (
           <div className="text-center py-16 bg-gradient-to-br from-teal-800/30 to-emerald-800/30 backdrop-blur-sm border border-teal-400/30 rounded-3xl shadow-xl">
             <PackageOpen className="h-10 w-10 text-orange-300 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-orange-200 mb-3">
@@ -193,7 +196,7 @@ const PublicStoreView: React.FC = () => {
 
         {/* Pacchetti */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {packages.map((pkg) => {
+          {filteredPackages.map((pkg) => {
             const section = sections.find((s) => s.id === pkg.section_id);
             const discount = getDiscountForProduct(pkg.id);
             const discountedPrice = discount

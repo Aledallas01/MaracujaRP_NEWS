@@ -13,6 +13,19 @@ const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useAuth();
 
+  // Leggi la query string al montaggio del componente
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get("news")
+      ? "home"
+      : params.get("store")
+      ? "store"
+      : params.get("rules")
+      ? "rules"
+      : "home";
+    setCurrentView(view);
+  }, []);
+
   const renderContent = () => {
     if (!isAuthenticated) {
       // Quando NON autenticato, mostra la vista pubblica con ricerca abilitata

@@ -2,7 +2,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { ShoppingCart, MessageCircle, PackageOpen, Folder } from "lucide-react";
 import { supabase } from "../lib/other";
-import { Discount, Package, StoreSection } from "../lib/types";
+import { Package, StoreSection } from "../lib/types";
+import type { Discount } from "../lib/types";
 import ProductDetailsModal from "../components/ProductDetailsModal";
 import ActiveDiscountModal from "../components/ActiveDiscountModal";
 
@@ -19,7 +20,34 @@ const PublicStoreView: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
 
-  const fetchData = useCallback(async () => {
+  const loadStoreData = async () => {
+    setLoading(true);
+    try {
+      const [packagesResult, sectionsResult, discountsResult] =
+        await Promise.all([
+          supabase
+            .from("packages")
+            .select(`*, section:store_sections(*)`)
+            .order("order_index", { ascending: true }),
+          supabase
+            .from("store_sections")
+            .select("*")
+            .order("order_index", { ascending: true }),
+          supabase.from("discounts").select("*").eq("isActive", true),
+        ]);
+
+      if (packagesResult.data) setPackages(packagesResult.data);
+      if (sectionsResult.data) setSections(sectionsResult.data);
+      if (discountsResult.data) setActiveDiscounts(discountsResult.data);
+    } catch (error) {
+      console.error("Errore caricamento dati store:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  {
+    /* const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -40,7 +68,8 @@ const PublicStoreView: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData]); */
+  }
 
   const getDiscountForProduct = useCallback(
     (productId: string) => {

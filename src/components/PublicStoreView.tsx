@@ -1,7 +1,7 @@
 // src/components/PublicStoreView.tsx
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { ShoppingCart, MessageCircle, PackageOpen, Folder } from "lucide-react";
-import { supabase } from "../lib/other";
+import { supabaseOther } from "../lib/other";
 import { Package, StoreSection } from "../lib/types";
 import type { Discount } from "../lib/types";
 import ProductDetailsModal from "../components/ProductDetailsModal";
@@ -25,15 +25,15 @@ const PublicStoreView: React.FC = () => {
     try {
       const [packagesResult, sectionsResult, discountsResult] =
         await Promise.all([
-          supabase
+          supabaseOther
             .from("packages")
             .select(`*, section:store_sections(*)`)
             .order("order_index", { ascending: true }),
-          supabase
+          supabaseOther
             .from("store_sections")
             .select("*")
             .order("order_index", { ascending: true }),
-          supabase.from("discounts").select("*").eq("isActive", true),
+          supabaseOther.from("discounts").select("*").eq("isActive", true),
         ]);
 
       if (packagesResult.data) setPackages(packagesResult.data);

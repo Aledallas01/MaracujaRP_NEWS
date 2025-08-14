@@ -112,7 +112,7 @@ const PublicStoreView: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-16">
+      <div className="text-center py-16" style={{ backgroundColor: "#30334E" }}>
         <div className="animate-pulse">
           <ShoppingCart className="h-12 w-12 text-blue-400 mx-auto mb-4" />
           <p className="text-gray-300 text-lg">Caricamento in corso...</p>
@@ -123,7 +123,7 @@ const PublicStoreView: React.FC = () => {
 
   if (error) {
     return (
-      <div className="text-center py-16">
+      <div className="text-center py-16" style={{ backgroundColor: "#30334E" }}>
         <div className="bg-red-500/10 text-red-300 border border-red-500/30 rounded-xl p-6">
           <p className="text-lg font-semibold mb-2">Errore</p>
           <p>{error}</p>

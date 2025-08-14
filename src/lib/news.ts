@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseAnonKey = import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabaseUrl = import.meta.env.VITE_NEWS_SUPABASE_URL || "";
+const supabaseAnonKey = import.meta.env.VITE_NEWS_SUPABASE_ANON_KEY || "";
 
 // Crea un client Supabase oppure un mock se le env non sono configurate
 const createSupabaseClient = () => {

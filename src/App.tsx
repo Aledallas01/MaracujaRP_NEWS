@@ -18,31 +18,35 @@ const AppContent: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen w-screen bg-gray-100">
+      {/* Sidebar fissa */}
       <Sidebar />
 
+      {/* Contenuto principale */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
         <main className="flex-1 overflow-y-auto p-4">
           <Routes>
-            {/* Rotte pubbliche */}
-            {!isAuthenticated && (
-              <Route
-                path="/news"
-                element={
-                  <PublicNewsView
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                  />
-                }
-              />
-            )}
-            <Route path="/news" element={<PublicNewsView />} />
+            {/* Rotte pubbliche sempre disponibili */}
+            <Route
+              path="/news"
+              element={
+                <PublicNewsView
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                />
+              }
+            />
             <Route path="/rules" element={<PublicRulesView />} />
             <Route path="/store" element={<PublicStoreView />} />
 
-            {/* Redirect default */}
+            {/* Esempio di route protetta */}
+            {isAuthenticated && (
+              <Route path="/admin" element={<div>Area Admin</div>} />
+            )}
+
+            {/* Redirect di default */}
             <Route path="*" element={<Navigate to="/news" />} />
           </Routes>
         </main>

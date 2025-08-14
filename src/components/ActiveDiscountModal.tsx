@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tag, X } from "lucide-react";
+import { supabaseOther } from "../lib/other"; // Usa lo stesso client che usi nello store
 import { Discount } from "../lib/types";
 
 interface ActiveDiscountModalProps {
@@ -22,8 +23,16 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
   useEffect(() => {
     const fetchDiscounts = async () => {
       try {
-        const discounts = await DiscountAPI.getActiveDiscounts();
-        setActiveDiscounts(discounts);
+        setLoading(true);
+        setError(null);
+
+        const { data, error } = await supabaseOther
+          .from("discounts")
+          .select("*")
+          .eq("isActive", true);
+
+        if (error) throw error;
+        setActiveDiscounts(data || []);
       } catch (err) {
         console.error("Errore nel fetch degli sconti:", err);
         setError("Impossibile caricare gli sconti.");
@@ -121,17 +130,18 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
         </div>
 
         <ul className="space-y-3 max-h-96 overflow-y-auto">
-          {activeDiscounts.map((d, i) => {
-            const productName = d.name || "Prodotto sconosciuto";
+          {activeDiscounts.map((d) => {
             const discountValue = d.percentage || d.valore || 0;
             const countdown = getCountdown(d.expiresAt);
 
             return (
               <li
-                key={i}
+                key={d.id}
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
               >
-                <span className="font-medium text-gray-100">{productName}</span>
+                <span className="font-medium text-gray-100">
+                  {d.name || "Prodotto sconosciuto"}
+                </span>
                 <div className="flex items-center flex-wrap gap-2 mt-2 sm:mt-0">
                   {countdown && (
                     <span className="text-xs text-gray-400 italic">

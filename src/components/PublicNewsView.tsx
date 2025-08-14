@@ -153,7 +153,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
 
       {/* Lista News in griglia responsive */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredNews.map((item) => (
+        {news.map((item) => (
           <article
             key={item.id}
             className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex flex-col md:flex-row"

@@ -1,64 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { AuthProvider } from "./contexts/AuthContext";
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import PublicNewsView from "./components/PublicNewsView";
 import PublicRulesView from "./components/PublicRulesView";
 import PublicStoreView from "./components/PublicStoreView";
-import { useAuth } from "./contexts/AuthContext";
 
 const AppContent: React.FC = () => {
-  const [currentView, setCurrentView] = useState("home");
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useAuth();
 
-  // Leggi la query string al montaggio del componente
-  useEffect(() => {
-    const query = window.location.search;
-    if (query === "?news") setCurrentView("home");
-    else if (query === "?store") setCurrentView("store");
-    else if (query === "?rules") setCurrentView("rules");
-    else setCurrentView("home");
-  }, []);
-
-  const renderContent = () => {
-    if (!isAuthenticated) {
-      // Quando NON autenticato, mostra la vista pubblica con ricerca abilitata
-      return (
-        <PublicNewsView
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery} // necessario per aggiornare la ricerca
-        />
-      );
-    }
-
-    // Vista per utenti autenticati in base a currentView
-    switch (currentView) {
-      case "home":
-        return <PublicNewsView />;
-      case "rules":
-        return <PublicRulesView />;
-      case "store":
-        return <PublicStoreView />;
-      default:
-        return (
-          <PublicNewsView
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-          />
-        );
-    }
-  };
-
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar currentView={currentView} onViewChange={setCurrentView} />
-
+      <Sidebar />{" "}
+      {/* Puoi fare il routing anche qui se vuoi evidenziare la voce attiva */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
-        <main className="flex-1 overflow-y-auto">{renderContent()}</main>
+        <main className="flex-1 overflow-y-auto">
+          <Routes>
+            {/* Se NON autenticato */}
+            {!isAuthenticated && (
+              <Route
+                path="/news"
+                element={
+                  <PublicNewsView
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                  />
+                }
+              />
+            )}
+
+            {/* Rotte pubbliche per tutti */}
+            <Route path="/news" element={<PublicNewsView />} />
+            <Route path="/rules" element={<PublicRulesView />} />
+            <Route path="/store" element={<PublicStoreView />} />
+
+            {/* Redirect di default */}
+            <Route path="*" element={<Navigate to="/news" />} />
+          </Routes>
+        </main>
         <Footer />
       </div>
     </div>
@@ -68,7 +57,9 @@ const AppContent: React.FC = () => {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <Router>
+        <AppContent />
+      </Router>
     </AuthProvider>
   );
 }

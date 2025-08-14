@@ -132,8 +132,8 @@ export interface Discount {
   name: string;
   productName?: string;
   percentage: number;
-  valore?: number; // Alias per percentage per compatibilità legacy
-  nome?: string; // Alias per productName per compatibilità legacy
+  valore?: number;
+  nome?: string;
   expiresAt?: string;
   created_at: string;
   isActive?: boolean;

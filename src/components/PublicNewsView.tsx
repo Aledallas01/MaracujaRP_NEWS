@@ -65,10 +65,11 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
   const filteredNews = news.filter((item) => {
     const title = item.title || "";
     const content = item.content || "";
+
     const matchesSearch =
       searchQuery === "" ||
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.content.toLowerCase().includes(searchQuery.toLowerCase());
+      title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      content.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesSection =
       selectedSection === "all" || item.section_id === selectedSection;

@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Header from "./components/Header";
@@ -16,17 +17,24 @@ import PublicStoreView from "./components/PublicStoreView";
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  // Deriva la sezione attiva dalla rotta
+  const activeSection = location.pathname.startsWith("/rules")
+    ? "rules"
+    : location.pathname.startsWith("/store")
+    ? "store"
+    : "news"; // default
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar />{" "}
-      {/* Puoi fare il routing anche qui se vuoi evidenziare la voce attiva */}
+      <Sidebar activeSection={activeSection} />{" "}
+      {/* Sidebar riceve la sezione attiva */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
         <main className="flex-1 overflow-y-auto">
           <Routes>
-            {/* Se NON autenticato */}
             {!isAuthenticated && (
               <Route
                 path="/news"
@@ -39,12 +47,10 @@ const AppContent: React.FC = () => {
               />
             )}
 
-            {/* Rotte pubbliche per tutti */}
             <Route path="/news" element={<PublicNewsView />} />
             <Route path="/rules" element={<PublicRulesView />} />
             <Route path="/store" element={<PublicStoreView />} />
 
-            {/* Redirect di default */}
             <Route path="*" element={<Navigate to="/news" />} />
           </Routes>
         </main>

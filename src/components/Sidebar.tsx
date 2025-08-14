@@ -8,7 +8,7 @@ import {
   Menu,
   X,
   ShoppingCart,
-  BookText,
+  Book,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
 
   const publicMenuItems = [
     { id: "home", label: "Notizie", icon: Home },
-    { id: "rules", label: "Regole", icon: BookText },
+    { id: "rules", label: "Regole", icon: Book },
     { id: "store", label: "Store", icon: ShoppingCart },
   ];
 
@@ -110,7 +110,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
                 : "text-gray-300 hover:bg-gray-700 hover:text-white"
             }`}
           >
-            <BookText className="h-4 w-4" />
+            <Book className="h-4 w-4" />
             Regolamento
           </button>
 

@@ -4,7 +4,6 @@ import {
   Routes,
   Route,
   Navigate,
-  useLocation,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Header from "./components/Header";
@@ -17,24 +16,17 @@ import PublicStoreView from "./components/PublicStoreView";
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useAuth();
-  const location = useLocation();
-
-  // Deriva la sezione attiva dalla rotta
-  const activeSection = location.pathname.startsWith("/rules")
-    ? "rules"
-    : location.pathname.startsWith("/store")
-    ? "store"
-    : "news"; // default
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar activeSection={activeSection} />{" "}
-      {/* Sidebar riceve la sezione attiva */}
+      <Sidebar />
+
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto p-4">
           <Routes>
+            {/* Rotte pubbliche */}
             {!isAuthenticated && (
               <Route
                 path="/news"
@@ -46,14 +38,15 @@ const AppContent: React.FC = () => {
                 }
               />
             )}
-
             <Route path="/news" element={<PublicNewsView />} />
             <Route path="/rules" element={<PublicRulesView />} />
             <Route path="/store" element={<PublicStoreView />} />
 
+            {/* Redirect default */}
             <Route path="*" element={<Navigate to="/news" />} />
           </Routes>
         </main>
+
         <Footer />
       </div>
     </div>

@@ -137,6 +137,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 if (item.id === "home") return null;
+                if (item.id === "rules") return null;
+                if (item.id === "store") return null;
                 const isActive = currentView === item.id;
                 return (
                   <button

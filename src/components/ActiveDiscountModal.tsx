@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tag, X } from "lucide-react";
-import { Discount } from "../lib/supabase";
+import { Discount } from "../lib/other";
 
 interface ActiveDiscountModalProps {
   onClose: () => void;

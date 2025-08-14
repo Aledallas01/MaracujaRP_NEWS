@@ -1,7 +1,7 @@
 // src/components/PublicStoreView.tsx
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { ShoppingCart, MessageCircle, PackageOpen, Folder } from "lucide-react";
-import { supabase, Package, StoreSection, Discount } from "../lib/supabase";
+import { supabase, Package, StoreSection, Discount } from "../lib/other";
 import ProductDetailsModal from "../components/ProductDetailsModal";
 import ActiveDiscountModal from "../components/ActiveDiscountModal";
 

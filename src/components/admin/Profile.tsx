@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Save } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../lib/news";
 import { useAuth } from "../../contexts/AuthContext";
 
 const Profile: React.FC = () => {

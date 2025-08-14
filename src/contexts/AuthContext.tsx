@@ -5,7 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../lib/news";
 
 interface Permissions {
   createSections: boolean;

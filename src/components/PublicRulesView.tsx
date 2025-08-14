@@ -1,7 +1,7 @@
 // src/components/PublicRulesView.tsx
 import React, { useState, useEffect } from "react";
 import { Search, Palmtree, Calendar, User, ArrowRight } from "lucide-react";
-import { supabase, Rule, RuleSection } from "../lib/supabase";
+import { supabase, Rule, RuleSection } from "../lib/other";
 
 const PublicRulesView: React.FC = () => {
   const [rules, setRules] = useState<Rule[]>([]);

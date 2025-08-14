@@ -1,7 +1,7 @@
 // src/components/ProductDetailsModal.tsx
 
 import React from "react";
-import { Discount } from "../lib/supabase";
+import { Discount } from "../lib/other";
 
 interface ProductDetailsModalProps {
   product: {

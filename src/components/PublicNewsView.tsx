@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Search, Calendar, User, ArrowRight } from "lucide-react";
-import { supabase, News, Section } from "../lib/supabase";
+import { supabase, News, Section } from "../lib/news";
 
 interface PublicNewsViewProps {
   searchQuery: string;

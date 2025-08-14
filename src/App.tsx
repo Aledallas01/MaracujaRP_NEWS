@@ -18,7 +18,7 @@ const AppContent: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="flex h-screen w-screen bg-gray-100">
+    <div className="bg-gray-100 flex h-screen w-screen bg-gray-100">
       {/* Sidebar fissa */}
       <Sidebar />
 

@@ -7,6 +7,8 @@ import {
   Home,
   Menu,
   X,
+  ShoppingCart,
+  BookText,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -19,7 +21,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
   const { isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
-  const publicMenuItems = [{ id: "home", label: "Notizie", icon: Home }];
+  const publicMenuItems = [
+    { id: "home", label: "Notizie", icon: Home },
+    { id: "rules", label: "Regole", icon: BookText },
+    { id: "store", label: "Store", icon: ShoppingCart },
+  ];
 
   const adminMenuItems = [
     { id: "news", label: "News", icon: Newspaper },
@@ -88,12 +94,36 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
             onClick={() => handleViewChange("home")}
             className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               currentView === "home"
-                ? "bg-[#666CFF] text-white"
+                ? "bg-[#FE9900] text-white"
                 : "text-gray-300 hover:bg-gray-700 hover:text-white"
             }`}
           >
             <Home className="h-4 w-4" />
             Notizie
+          </button>
+
+          <button
+            onClick={() => handleViewChange("rules")}
+            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              currentView === "rules"
+                ? "bg-[#FE9900] text-white"
+                : "text-gray-300 hover:bg-gray-700 hover:text-white"
+            }`}
+          >
+            <BookText className="h-4 w-4" />
+            Regolamento
+          </button>
+
+          <button
+            onClick={() => handleViewChange("store")}
+            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              currentView === "store"
+                ? "bg-[#FE9900] text-white"
+                : "text-gray-300 hover:bg-gray-700 hover:text-white"
+            }`}
+          >
+            <ShoppingCart className="h-4 w-4" />
+            Store
           </button>
         </div>
 

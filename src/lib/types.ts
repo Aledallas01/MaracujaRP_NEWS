@@ -1,25 +1,3 @@
-export interface Permissions {
-  id: string;
-  user_id: string;
-  createSections: boolean;
-  editSections: boolean;
-  deleteSections: boolean;
-  createNews: boolean;
-  editNews: boolean;
-  deleteNews: boolean;
-  manageUsers: boolean;
-}
-
-export interface User {
-  id: string;
-  username: string;
-  password: string;
-  permissions: Permissions;
-  created_at: string;
-  updated_at: string;
-  God: boolean;
-}
-
 export interface Section {
   id: string;
   title: string;

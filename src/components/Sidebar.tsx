@@ -27,14 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
     { id: "store", label: "Store", icon: ShoppingCart },
   ];
 
-  const adminMenuItems = [
-    { id: "news", label: "News", icon: Newspaper },
-    { id: "sections", label: "Sections", icon: FolderTree },
-    { id: "users", label: "Users", icon: Users },
-    { id: "profile", label: "Profile", icon: User },
-  ];
-
-  const menuItems = isAuthenticated ? adminMenuItems : publicMenuItems;
+  const menuItems = publicMenuItems;
 
   const handleViewChange = (view: string) => {
     onViewChange(view);
@@ -126,38 +119,6 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
             Store
           </button>
         </div>
-
-        {/* Menu admin */}
-        {isAuthenticated && (
-          <div className="mt-auto mb-2">
-            <h3 className="text-gray-400 uppercase text-[12px] font-semibold tracking-wide mb-2">
-              Admin
-            </h3>
-            <nav className="space-y-2">
-              {menuItems.map((item) => {
-                const Icon = item.icon;
-                if (item.id === "home") return null;
-                if (item.id === "rules") return store;
-                if (item.id === "store") return null;
-                const isActive = currentView === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleViewChange(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors ${
-                      isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        )}
       </aside>
     </>
   );

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Search, Palmtree, Calendar, User, ArrowRight } from "lucide-react";
 import { Rule, RuleSection } from "../lib/types";
-import { supabase } from "../lib/other";
+import { supabaseOther } from "../lib/other";
 
 const PublicRulesView: React.FC = () => {
   const [rules, setRules] = useState<Rule[]>([]);
@@ -21,11 +21,11 @@ const PublicRulesView: React.FC = () => {
     setLoading(true);
     try {
       const [rulesResult, sectionsResult] = await Promise.all([
-        supabase
+        supabaseOther
           .from("rules")
           .select(`*, section:rule_sections(*)`)
           .order("order_index", { ascending: true }),
-        supabase
+        supabaseOther
           .from("rule_sections")
           .select("*")
           .order("order_index", { ascending: true }),

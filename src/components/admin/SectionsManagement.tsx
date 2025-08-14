@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
-import { supabase, Section, User } from "../../lib/news";
+import { supabase } from "../../lib/news";
+import { Section, User } from "../../lib/types";
 import { useAuth } from "../../contexts/AuthContext";
 
 const SectionsManagement: React.FC = () => {

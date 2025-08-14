@@ -1,4 +1,3 @@
-// src/components/PublicStoreView.tsx
 import React, { useEffect, useState, useCallback } from "react";
 import { ShoppingCart, MessageCircle, PackageOpen, Folder } from "lucide-react";
 import { supabaseOther } from "../lib/other";
@@ -25,50 +24,28 @@ const PublicStoreView: React.FC = () => {
     setError(null);
 
     try {
-      // Query packages
-      const packagesResult = await supabaseOther
-        .from("packages")
-        .select(`*, section:store_sections(*)`)
-        .order("order_index", { ascending: true });
+      const [pkgRes, secRes, discRes] = await Promise.all([
+        supabaseOther
+          .from("packages")
+          .select("*")
+          .order("order_index", { ascending: true }),
+        supabaseOther
+          .from("store_sections")
+          .select("*")
+          .order("order_index", { ascending: true }),
+        supabaseOther.from("discounts").select("*").eq("isActive", true),
+      ]);
 
-      if (packagesResult.error) {
-        console.error("Errore packages:", packagesResult.error);
-        setPackages([]);
-      } else {
-        console.log("Packages result:", packagesResult.data);
-        setPackages(packagesResult.data || []);
-      }
+      if (pkgRes.error) throw pkgRes.error;
+      if (secRes.error) throw secRes.error;
+      if (discRes.error) throw discRes.error;
 
-      // Query sections
-      const sectionsResult = await supabaseOther
-        .from("store_sections")
-        .select("*")
-        .order("order_index", { ascending: true });
-
-      if (sectionsResult.error) {
-        console.error("Errore sections:", sectionsResult.error);
-        setSections([]);
-      } else {
-        console.log("Sections result:", sectionsResult.data);
-        setSections(sectionsResult.data || []);
-      }
-
-      // Query active discounts
-      const discountsResult = await supabaseOther
-        .from("discounts")
-        .select("*")
-        .eq("isActive", true);
-
-      if (discountsResult.error) {
-        console.error("Errore discounts:", discountsResult.error);
-        setActiveDiscounts([]);
-      } else {
-        console.log("Discounts result:", discountsResult.data);
-        setActiveDiscounts(discountsResult.data || []);
-      }
+      setPackages(pkgRes.data || []);
+      setSections(secRes.data || []);
+      setActiveDiscounts(discRes.data || []);
     } catch (err: any) {
-      console.error("Errore caricamento dati store:", err);
-      setError("Errore caricamento dati store. Controlla console.");
+      console.error(err);
+      setError("Errore caricamento dati store. Riprova più tardi.");
     } finally {
       setLoading(false);
     }
@@ -83,16 +60,15 @@ const PublicStoreView: React.FC = () => {
       const discount = activeDiscounts.find(
         (d) => String(d.productId) === String(productId)
       );
-      if (discount?.expiresAt && new Date(discount.expiresAt) < new Date()) {
+      if (discount?.expiresAt && new Date(discount.expiresAt) < new Date())
         return null;
-      }
       return discount;
     },
     [activeDiscounts]
   );
 
   const calculateDiscountedPrice = useCallback(
-    (originalPrice: number, discount: Discount): number => {
+    (originalPrice: number, discount: Discount) => {
       const percentage = discount.percentage || discount.valore || 0;
       return originalPrice * (1 - percentage / 100);
     },
@@ -103,7 +79,7 @@ const PublicStoreView: React.FC = () => {
     ? packages.filter((pkg) => pkg.section_id === activeSection)
     : packages;
 
-  if (loading) {
+  if (loading)
     return (
       <div className="text-center py-16">
         <div className="animate-pulse">
@@ -112,9 +88,8 @@ const PublicStoreView: React.FC = () => {
         </div>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <div className="text-center py-16">
         <div className="bg-red-500/10 text-red-200 border border-red-400/30 rounded-xl p-6">
@@ -123,32 +98,10 @@ const PublicStoreView: React.FC = () => {
         </div>
       </div>
     );
-  }
 
   return (
     <div className="p-4 sm:p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Hero */}
-        <div className="relative bg-gradient-to-br from-teal-800/30 to-emerald-800/30 backdrop-blur-sm border border-teal-400/30 rounded-3xl shadow-xl p-6 sm:p-8 lg:p-10 mb-8 text-center">
-          <button
-            onClick={() => setShowDiscountModal(true)}
-            title="Vedi gli sconti attivi"
-            className="absolute top-4 right-4 inline-flex items-center justify-center bg-orange-500/20 text-orange-200 border border-orange-400/30 rounded-full p-2 hover:bg-orange-500/40 hover:text-white transition-all shadow-lg animate-bounce"
-          >
-            <span className="font-bold text-lg leading-none">!</span>
-          </button>
-          <div className="flex items-center justify-center space-x-4 mb-4">
-            <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-orange-300" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-orange-200">
-              Store
-            </h1>
-          </div>
-          <p className="text-teal-200 text-base sm:text-lg">
-            Esplora i pacchetti disponibili e personalizza la tua esperienza nel
-            server!
-          </p>
-        </div>
-
         {/* Sezioni */}
         {sections.length > 0 && (
           <div className="mb-8 flex flex-wrap gap-3 justify-center">
@@ -169,8 +122,8 @@ const PublicStoreView: React.FC = () => {
           </div>
         )}
 
-        {/* Empty */}
-        {filteredPackages.length === 0 && (
+        {/* Pacchetti */}
+        {filteredPackages.length === 0 ? (
           <div className="text-center py-16 bg-gradient-to-br from-teal-800/30 to-emerald-800/30 backdrop-blur-sm border border-teal-400/30 rounded-3xl shadow-xl">
             <PackageOpen className="h-10 w-10 text-orange-300 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-orange-200 mb-3">
@@ -180,8 +133,8 @@ const PublicStoreView: React.FC = () => {
             </h3>
             <p className="text-teal-200 text-base mb-4">
               {activeSection
-                ? "Prova a selezionare un'altra sezione o visualizza tutti i prodotti."
-                : "Al momento non ci sono pacchetti acquistabili nello store."}
+                ? "Prova a selezionare un'altra sezione."
+                : "Al momento non ci sono pacchetti acquistabili."}
             </p>
             <a
               href={discordLink}
@@ -192,57 +145,48 @@ const PublicStoreView: React.FC = () => {
               💬 Contattaci su Discord
             </a>
           </div>
-        )}
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredPackages.map((pkg) => {
+              const section = sections.find((s) => s.id === pkg.section_id);
+              const discount = getDiscountForProduct(pkg.id);
+              const discountedPrice = discount
+                ? calculateDiscountedPrice(pkg.prezzo, discount)
+                : pkg.prezzo;
 
-        {/* Pacchetti */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredPackages.map((pkg) => {
-            const section = sections.find((s) => s.id === pkg.section_id);
-            const discount = getDiscountForProduct(pkg.id);
-            const discountedPrice = discount
-              ? calculateDiscountedPrice(pkg.prezzo, discount)
-              : pkg.prezzo;
-
-            return (
-              <div
-                key={pkg.id}
-                onClick={() => setSelectedPackage(pkg)}
-                className="cursor-pointer bg-gradient-to-br from-emerald-700/40 to-teal-700/40 backdrop-blur-sm border border-teal-400/30 rounded-2xl p-6 flex flex-col justify-between shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-              >
-                {pkg.immagine && (
-                  <div className="relative mb-4">
-                    <img
-                      src={pkg.immagine}
-                      alt={pkg.nome}
-                      className="object-cover w-full h-48 rounded-lg"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/logo.png";
-                      }}
-                    />
-                    {section && (
-                      <span className="absolute top-2 left-2 bg-teal-700/80 text-teal-100 text-xs font-semibold px-2 py-1 rounded-md shadow-md backdrop-blur-sm border border-teal-400/30">
-                        {section.nome}
-                      </span>
-                    )}
-                    {discount && (
-                      <span className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
-                        -{discount.percentage || discount.valore}%
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-orange-200">
+              return (
+                <div
+                  key={pkg.id}
+                  onClick={() => setSelectedPackage(pkg)}
+                  className="cursor-pointer bg-gradient-to-br from-emerald-700/40 to-teal-700/40 backdrop-blur-sm border border-teal-400/30 rounded-2xl p-6 flex flex-col justify-between shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                >
+                  {pkg.immagine && (
+                    <div className="relative mb-4">
+                      <img
+                        src={pkg.immagine}
+                        alt={pkg.nome}
+                        className="object-cover w-full h-48 rounded-lg"
+                        onError={(e) => (e.currentTarget.src = "/logo.png")}
+                      />
+                      {section && (
+                        <span className="absolute top-2 left-2 bg-teal-700/80 text-teal-100 text-xs font-semibold px-2 py-1 rounded-md shadow-md">
+                          {section.nome}
+                        </span>
+                      )}
+                      {discount && (
+                        <span className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
+                          -{discount.percentage || discount.valore}%
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  <h3 className="text-xl font-bold text-orange-200 mb-2">
                     {pkg.nome}
                   </h3>
-                </div>
-                <p className="text-teal-200 text-sm mb-4 line-clamp-3">
-                  Clicca per visualizzare i dettagli del prodotto.
-                </p>
-
-                <div className="mt-auto">
-                  <div className="flex items-center justify-between mb-4">
+                  <p className="text-teal-200 text-sm mb-4 line-clamp-3">
+                    Clicca per dettagli
+                  </p>
+                  <div className="mt-auto flex items-center justify-between mb-4">
                     {discount ? (
                       <div className="space-y-0.5">
                         <p className="text-sm text-teal-300 line-through">
@@ -270,14 +214,13 @@ const PublicStoreView: React.FC = () => {
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 bg-orange-500/30 hover:bg-orange-500/50 backdrop-blur-sm text-orange-200 hover:text-white font-medium py-2 px-4 rounded-xl transition-all"
                   >
-                    <MessageCircle className="h-5 w-5" />
-                    Supporto Discord
+                    <MessageCircle className="h-5 w-5" /> Supporto Discord
                   </a>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {selectedPackage && (
@@ -293,7 +236,6 @@ const PublicStoreView: React.FC = () => {
           onClose={() => setSelectedPackage(null)}
         />
       )}
-
       {showDiscountModal && (
         <ActiveDiscountModal onClose={() => setShowDiscountModal(false)} />
       )}

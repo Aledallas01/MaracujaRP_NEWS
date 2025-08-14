@@ -29,7 +29,7 @@ const PublicStoreView: React.FC = () => {
         supabaseOther
           .from("packages")
           .select("*")
-          .order("created_at", { ascending: true }),
+          .order("prezzo", { ascending: true }),
         supabaseOther
           .from("store_sections")
           .select("*")

@@ -133,7 +133,7 @@ const PublicStoreView: React.FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-4 sm:p-6" style={{ backgroundColor: "#30334E" }}>
       <div className="max-w-6xl mx-auto">
         {/* Hero */}
         <div className="relative bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">

@@ -62,7 +62,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
     }
   }, [news]);
 
-  const matchesFilter = (item: {
+  /* const matchesFilter = (item: {
     title?: string;
     content?: string;
     section_id?: string;
@@ -81,7 +81,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
     return matchesSearch && matchesSection;
   };
 
-  const filteredNews = news.filter(matchesFilter);
+  const filteredNews = news.filter(matchesFilter); */
 
   const openModal = (item: News) => {
     setModalContent(item);

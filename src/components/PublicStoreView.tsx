@@ -25,7 +25,6 @@ const PublicStoreView: React.FC = () => {
 
     try {
       const [pkgRes, secRes, discRes] = await Promise.all([
-        // ATTENZIONE: su "packages" NON usiamo order_index, perché non esiste nel tuo tipo.
         supabaseOther
           .from("packages")
           .select("*")
@@ -34,9 +33,10 @@ const PublicStoreView: React.FC = () => {
           .from("store_sections")
           .select("*")
           .order("order_index", { ascending: true }),
-        supabaseOther.from("discounts").select("*").eq("isActive", true),
+        supabaseOther.from("discounts").select("*"), // senza filtro isActive
       ]);
 
+      // Pacchetti
       if (pkgRes.error) {
         console.error("[Supabase] packages error:", pkgRes.error);
         setPackages([]);
@@ -46,6 +46,7 @@ const PublicStoreView: React.FC = () => {
         );
       }
 
+      // Sezioni
       if (secRes.error) {
         console.error("[Supabase] store_sections error:", secRes.error);
         setSections([]);
@@ -55,13 +56,18 @@ const PublicStoreView: React.FC = () => {
         );
       }
 
+      // Sconti
       if (discRes.error) {
         console.error("[Supabase] discounts error:", discRes.error);
         setActiveDiscounts([]);
       } else {
-        setActiveDiscounts(
-          Array.isArray(discRes.data) ? (discRes.data as Discount[]) : []
-        );
+        const now = new Date();
+        const discounts = (discRes.data as Discount[]).filter((d) => {
+          const startOk = d.startDate ? new Date(d.startDate) <= now : true;
+          const endOk = d.expiresAt ? new Date(d.expiresAt) >= now : true;
+          return startOk && endOk;
+        });
+        setActiveDiscounts(discounts);
       }
     } catch (err) {
       console.error("Errore caricamento dati store:", err);
@@ -83,7 +89,6 @@ const PublicStoreView: React.FC = () => {
       );
       if (!d) return null;
 
-      // Se c'è una data di scadenza e risulta nel passato, ignora
       if (d.expiresAt) {
         const exp = new Date(d.expiresAt);
         if (!isNaN(exp.getTime()) && exp < new Date()) return null;
@@ -206,7 +211,6 @@ const PublicStoreView: React.FC = () => {
             </a>
           </div>
         ) : (
-          /* Cards prodotti */
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredPackages.map((pkg) => {
               const section = sections.find(

@@ -15,11 +15,13 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Aggiorna l'orologio ogni secondo
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch degli sconti attivi calcolati
   useEffect(() => {
     const fetchDiscounts = async () => {
       try {
@@ -28,11 +30,17 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
 
         const { data, error } = await supabaseOther
           .from("discounts")
-          .select("*")
-          .eq("isActive", true);
+          .select("*");
 
         if (error) throw error;
-        setActiveDiscounts(data || []);
+
+        // Calcolo isActive: sconto attivo se non ha data di scadenza
+        // oppure se la data di scadenza è nel futuro
+        const active = (data || []).filter(
+          (d) => !d.expiresAt || new Date(d.expiresAt) > new Date()
+        );
+
+        setActiveDiscounts(active);
       } catch (err) {
         console.error("Errore nel fetch degli sconti:", err);
         setError("Impossibile caricare gli sconti.");

@@ -15,15 +15,11 @@ const AppContent: React.FC = () => {
 
   // Leggi la query string al montaggio del componente
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const view = params.get("news")
-      ? "home"
-      : params.get("store")
-      ? "store"
-      : params.get("rules")
-      ? "rules"
-      : "home";
-    setCurrentView(view);
+    const query = window.location.search;
+    if (query === "?news") setCurrentView("home");
+    else if (query === "?store") setCurrentView("store");
+    else if (query === "?rules") setCurrentView("rules");
+    else setCurrentView("home");
   }, []);
 
   const renderContent = () => {

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Book, ShoppingCart, Settings } from "lucide-react";
-import LoginModal from "./LoginModal";
 
 interface HeaderProps {
   searchQuery: string;
@@ -8,8 +7,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
   return (
     <>
       <header
@@ -42,21 +39,7 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
         >
           <ShoppingCart className="h-6 w-6" />
         </a>
-
-        <button
-          onClick={() => setIsLoginModalOpen(true)}
-          className="p-2 rounded-md text-gray-400 hover:text-blue-400 hover:bg-gray-800 transition-colors duration-300 ease-in-out"
-          title="Impostazioni"
-          aria-label="Impostazioni"
-        >
-          <Settings className="h-6 w-6" />
-        </button>
       </header>
-
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-      />
     </>
   );
 };

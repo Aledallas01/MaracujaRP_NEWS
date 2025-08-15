@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
     <>
       {/* Hamburger mobile */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 bg-[#262944] p-2 rounded-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 bg-[#262944] p-2 rounded-lg"
         onClick={() => setIsOpen(true)}
       >
         <Menu className="text-white h-6 w-6" />
@@ -36,8 +36,8 @@ const Sidebar: React.FC = () => {
       )}
 
       <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 p-5 flex flex-col transform transition-transform duration-300 z-50
-        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+        className={`fixed lg:static top-0 left-0 h-full w-64 p-5 flex flex-col transform transition-transform duration-300 z-50
+        ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
         style={{ backgroundColor: "#262944" }}
       >
         {/* Header sidebar */}

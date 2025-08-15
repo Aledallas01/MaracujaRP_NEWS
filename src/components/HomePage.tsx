@@ -70,8 +70,7 @@ const HomePage: React.FC = () => (
       id="home"
       className="flex-1 flex flex-col justify-center items-center text-center px-6 py-32 relative min-h-screen"
       style={{
-        backgroundImage:
-          "url('https://images.pexels.com/photos/1402787/pexels-photo-1402787.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')",
+        backgroundImage: "url('/bg-hero.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -88,11 +87,15 @@ const HomePage: React.FC = () => (
         <div className="flex gap-4 justify-center flex-wrap">
           <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] hover:from-[#FF8801] hover:to-[#FF6601] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
             <Play className="w-6 h-6" />
-            <span>GIOCA ORA</span>
+            <span>
+              <a href="#join">GIOCA ORA</a>
+            </span>
           </button>
           <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] hover:from-[#1EFF48] hover:to-[#52B62B] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
             <ExternalLink className="w-6 h-6" />
-            <span>Gestionale</span>
+            <span>
+              <a href="/news">Gestionale</a>
+            </span>
           </button>
         </div>
       </div>
@@ -125,8 +128,8 @@ const HomePage: React.FC = () => (
               Mondo Autentico
             </h3>
             <p className="text-gray-300">
-              Un server completamente personalizzato con ambientazioni tropicali
-              uniche e una lore ricca di dettagli.
+              Un server completamente personalizzato con ambientazioni uniche e
+              una lore ricca di dettagli.
             </p>
           </div>
 
@@ -138,7 +141,7 @@ const HomePage: React.FC = () => (
               Community Attiva
             </h3>
             <p className="text-gray-300">
-              Oltre 1000 giocatori attivi che creano storie indimenticabili
+              Oltre 100 giocatori attivi che creano storie indimenticabili
               insieme ogni giorno.
             </p>
           </div>
@@ -182,27 +185,11 @@ const HomePage: React.FC = () => (
                   <Building2 className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Imprese Personalizzate
-                  </h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Locali</h3>
                   <p className="text-gray-300">
-                    Crea la tua attività unica: ristoranti, negozi, servizi di
-                    trasporto e molto altro.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Star className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Economia Realistica
-                  </h3>
-                  <p className="text-gray-300">
-                    Sistema economico complesso con mercato libero, investimenti
-                    e partnership.
+                    Crea il tuo locale: ristorante, negozio di abbigliamento o
+                    bar. Gestisci il tuo business e attira clienti con offerte
+                    uniche.
                   </p>
                 </div>
               </div>
@@ -212,36 +199,12 @@ const HomePage: React.FC = () => (
                   <Trophy className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Competizione Sana
-                  </h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Servizi</h3>
                   <p className="text-gray-300">
-                    Competi con altri giocatori in un ambiente equo e
-                    stimolante.
+                    Crea il tuo servizio: trasporto, riparazioni o consulenze.
+                    Offri servizi di qualità e costruisci una reputazione
+                    solida.
                   </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="bg-gradient-to-r from-[#FF6A00]/20 to-[#1EFE86]/20 p-8 rounded-2xl border border-gray-600">
-              <img
-                src="https://images.pexels.com/photos/2068975/pexels-photo-2068975.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop"
-                alt="Business"
-                className="w-full h-64 object-cover rounded-xl mb-6"
-              />
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Statistiche Economiche
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-xl">
-                  <div className="text-2xl font-bold text-[#FF6A00]">200+</div>
-                  <div className="text-gray-300">Attività Attive</div>
-                </div>
-                <div className="bg-gray-800/50 p-4 rounded-xl">
-                  <div className="text-2xl font-bold text-[#1EFE86]">50M+</div>
-                  <div className="text-gray-300">Volume Affari</div>
                 </div>
               </div>
             </div>
@@ -278,7 +241,10 @@ const HomePage: React.FC = () => (
             <p className="text-gray-300 mb-6">
               Costruisci il tuo impero criminale attraverso rapine, traffici e
               alleanze strategiche. Ma attento: ogni mossa sbagliata potrebbe
-              costarti tutto.
+              costarti tutto.{" "}
+              <p className="text-orange-500">
+                Crea la tua Gang con il pacchetto <b>formazione Gang</b>
+              </p>
             </p>
 
             <ul className="space-y-3 text-gray-300">
@@ -315,13 +281,17 @@ const HomePage: React.FC = () => (
             <p className="text-gray-300 mb-6">
               Proteggi la città e i suoi cittadini. Conduci indagini, arresta i
               criminali e mantieni l'ordine in un mondo dove il crimine non
-              dorme mai.
+              dorme mai.{" "}
+              <p className="text-orange-500">
+                Diventa subito un poliziotto con il pacchetto{" "}
+                <b>Nuovo Agente</b>
+              </p>
             </p>
 
             <ul className="space-y-3 text-gray-300">
               <li className="flex items-center gap-3">
                 <ArrowRight className="w-5 h-5 text-blue-500" />
-                <span>Dipartimenti specializzati (SWAT, Narcotics)</span>
+                <span>Dipartimenti specializzati</span>
               </li>
               <li className="flex items-center gap-3">
                 <ArrowRight className="w-5 h-5 text-blue-500" />
@@ -363,7 +333,7 @@ const HomePage: React.FC = () => (
             <div className="w-20 h-20 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center mx-auto mb-4">
               <Users className="w-10 h-10 text-white" />
             </div>
-            <div className="text-3xl font-bold text-white mb-2">1000+</div>
+            <div className="text-3xl font-bold text-white mb-2">100+</div>
             <div className="text-gray-300">Giocatori Attivi</div>
           </div>
 
@@ -373,22 +343,6 @@ const HomePage: React.FC = () => (
             </div>
             <div className="text-3xl font-bold text-white mb-2">24/7</div>
             <div className="text-gray-300">Support Discord</div>
-          </div>
-
-          <div className="text-center">
-            <div className="w-20 h-20 bg-gradient-to-r from-[#FFB347] to-[#FF7701] rounded-full flex items-center justify-center mx-auto mb-4">
-              <Heart className="w-10 h-10 text-white" />
-            </div>
-            <div className="text-3xl font-bold text-white mb-2">5000+</div>
-            <div className="text-gray-300">Ore di Roleplay</div>
-          </div>
-
-          <div className="text-center">
-            <div className="w-20 h-20 bg-gradient-to-r from-[#FF6A00] to-[#1EFE86] rounded-full flex items-center justify-center mx-auto mb-4">
-              <Star className="w-10 h-10 text-white" />
-            </div>
-            <div className="text-3xl font-bold text-white mb-2">4.9/5</div>
-            <div className="text-gray-300">Rating Medio</div>
           </div>
         </div>
 
@@ -432,37 +386,29 @@ const HomePage: React.FC = () => (
               <UserPlus className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">
-              1. Registrazione
+              1. Apri Minecraft
             </h3>
             <p className="text-gray-300">
-              Crea il tuo account sul nostro sito web e completa la whitelist
-              con la tua storia personale.
+              Apri Minecraft ed entra nella sezione MultiGiocatore
             </p>
           </div>
 
           <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 text-center group hover:border-[#1EFE86] transition-all duration-300">
-            <div className="w-16 h-16 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-              <Download className="w-8 h-8 text-white" />
-            </div>
             <h3 className="text-2xl font-bold text-white mb-4">
-              2. Setup Client
+              2. Aggiungi il Server
             </h3>
             <p className="text-gray-300">
-              Scarica le mod necessarie e configura il tuo client Minecraft per
-              l'esperienza ottimale.
+              Clicca su "Aggiungi Server", inserisci l'IP e abilita le risorse
+              del server.
             </p>
           </div>
 
           <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 text-center group hover:border-[#FFB347] transition-all duration-300">
-            <div className="w-16 h-16 bg-gradient-to-r from-[#FFB347] to-[#FF7701] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-              <Play className="w-8 h-8 text-white" />
-            </div>
             <h3 className="text-2xl font-bold text-white mb-4">
-              3. Inizia a Giocare
+              3. Entra nel Server
             </h3>
             <p className="text-gray-300">
-              Entra nel server, crea il tuo personaggio e inizia la tua
-              avventura nel mondo di MaracujaRP!
+              leggi il regolamento e goditi l'esperienza di gioco su MaracujaRP!
             </p>
           </div>
         </div>
@@ -472,24 +418,8 @@ const HomePage: React.FC = () => (
             <h3 className="text-2xl font-bold text-white mb-4">IP Server:</h3>
             <div className="bg-gray-800/50 px-6 py-4 rounded-xl inline-block mb-6">
               <span className="text-2xl font-mono text-[#FF6A00] font-bold">
-                play.maracujaRP.it
+                coming soon...
               </span>
-            </div>
-            <p className="text-gray-300 mb-8">
-              Versione supportata:{" "}
-              <span className="text-white font-bold">1.20.1</span> | Modalità:{" "}
-              <span className="text-white font-bold">Roleplay</span> |
-              Whitelist: <span className="text-white font-bold">Attiva</span>
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] hover:from-[#FF8801] hover:to-[#FF6601] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105">
-                <UserPlus className="w-6 h-6" />
-                <span>Richiedi Whitelist</span>
-              </button>
-              <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] hover:from-[#1EFF48] hover:to-[#52B62B] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105">
-                <Download className="w-6 h-6" />
-                <span>Download Mod Pack</span>
-              </button>
             </div>
           </div>
         </div>

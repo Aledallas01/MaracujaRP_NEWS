@@ -159,27 +159,18 @@ const HomePage: React.FC = () => (
           Unirsi a MaracujaRP è semplice e veloce! Segui questi passaggi per
           iniziare la tua avventura:
         </p>
-      </div>
-
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
-          <h4 className="text-xl font-semibold mb-4">
-            1. Avvia Minecraft e vai nella sezione MultiPlayer
-          </h4>
-        </div>
-
-        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
-          <h4 className="text-xl font-semibold mb-4">
-            2. Clicca su <b>Aggiungi Server</b>
-          </h4>
-        </div>
-
-        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
-          <h4 className="text-xl font-semibold mb-4">
-            3. Inserisci l'<b>IP</b>
-          </h4>
-          <p>Coming Soon...</p>
-        </div>
+        <p style="background-color: #e8f5e9; padding: 10px; border-radius: 5px;">
+          1. Apri Minecraft e vai alla sezione "Multigiocatore".
+          <br />
+          2. Clicca su "Aggiungi server" e inserisci l'ip del server.
+          <br />
+          3. Abilita le risorse del server.
+          <br />
+          4. Goditi il divertimento e il roleplay con la nostra community!
+        </p>
+        <h5>
+          Prima di accedere al server leggi il <a href="/rules">REGOLAMENTO</a>
+        </h5>
       </div>
     </section>
   </div>

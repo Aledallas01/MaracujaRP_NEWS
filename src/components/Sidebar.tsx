@@ -53,8 +53,8 @@ const Sidebar: React.FC = () => {
             </h1>
           </div>
           <button
-            className="lg:hidden fixed top-4 left-4 z-50 bg-[#262944] p-2 rounded-lg"
-            onClick={() => setIsOpen(true)}
+            className="lg:hidden p-1 rounded-lg hover:bg-gray-700"
+            onClick={() => setIsOpen(false)}
           >
             <X className="text-white h-5 w-5" />
           </button>

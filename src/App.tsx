@@ -6,9 +6,14 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+
+// Componenti
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
+
+// Pagine
+import HomePage from "./pages/HomePage";
 import PublicNewsView from "./components/PublicNewsView";
 import PublicRulesView from "./components/PublicRulesView";
 import PublicStoreView from "./components/PublicStoreView";
@@ -29,6 +34,7 @@ const AppContent: React.FC = () => {
         <main className="flex-1 overflow-y-auto p-0">
           <Routes>
             {/* Rotte pubbliche sempre disponibili */}
+            <Route path="/" element={<HomePage />} />
             <Route
               path="/news"
               element={
@@ -41,13 +47,8 @@ const AppContent: React.FC = () => {
             <Route path="/rules" element={<PublicRulesView />} />
             <Route path="/store" element={<PublicStoreView />} />
 
-            {/* Esempio di route protetta */}
-            {isAuthenticated && (
-              <Route path="/admin" element={<div>Area Admin</div>} />
-            )}
-
             {/* Redirect di default */}
-            <Route path="*" element={<Navigate to="/news" />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
 

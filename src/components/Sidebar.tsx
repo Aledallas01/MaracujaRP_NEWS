@@ -9,12 +9,13 @@ const Sidebar: React.FC = () => {
   const location = useLocation();
 
   const publicMenuItems = [
+    { id: "home", label: "Home", icon: Home, path: "/" },
     { id: "news", label: "Notizie", icon: Home, path: "/news" },
     { id: "rules", label: "Regole", icon: Book, path: "/rules" },
     { id: "store", label: "Store", icon: ShoppingCart, path: "/store" },
   ];
 
-  const adminMenuItems: any[] = []; // eventualmente da completare
+  const adminMenuItems: any[] = [];
   const menuItems = isAuthenticated ? adminMenuItems : publicMenuItems;
 
   return (

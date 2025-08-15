@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
             rel="noopener noreferrer"
             className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
           >
-            <img src="/social/tiktok.svg" alt="TikTok" className="h-5 w-5" />
+            <img src="/Social/tiktok.svg" alt="TikTok" className="h-5 w-5" />
           </a>
           <a
             href="https://discord.com"
@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
             rel="noopener noreferrer"
             className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
           >
-            <img src="/social/discord.svg" alt="Discord" className="h-5 w-5" />
+            <img src="/Social/discord.svg" alt="Discord" className="h-5 w-5" />
           </a>
           <a
             href="https://telegram.org"
@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
             className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <img
-              src="/social/telegram.svg"
+              src="/Social/telegram.svg"
               alt="Telegram"
               className="h-5 w-5"
             />

@@ -7,7 +7,7 @@ const HomePage: React.FC = () => (
     <section
       className="flex-1 flex flex-col justify-center items-center text-center px-6 py-32 relative"
       style={{
-        backgroundImage: "url('/tropical-hero-bg.png')",
+        backgroundImage: "url('/hero-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

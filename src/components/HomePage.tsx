@@ -1,5 +1,21 @@
 import React from "react";
-import { ArrowRight } from "lucide-react";
+import {
+  Play,
+  Users,
+  Building2,
+  Shield,
+  MessageCircle,
+  ArrowRight,
+  Server,
+  Globe,
+  Heart,
+  Star,
+  Zap,
+  Trophy,
+  UserPlus,
+  Download,
+  ExternalLink,
+} from "lucide-react";
 
 const HomePage: React.FC = () => (
   <div className="min-h-screen bg-gray-900">

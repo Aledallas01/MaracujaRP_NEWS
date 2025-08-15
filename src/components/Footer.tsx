@@ -19,7 +19,15 @@ const Footer: React.FC = () => {
             Home
           </a>
           <a
-            href="https://maracuja-rp.vercel.app/?store"
+            href="https://maracuja-rp.vercel.app/rules"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-blue-400 transition-colors"
+          >
+            Regole
+          </a>
+          <a
+            href="https://maracuja-rp.vercel.app/store"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-blue-400 transition-colors"

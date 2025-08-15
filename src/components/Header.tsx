@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
         </a>
 
         <a
-          href="https://maracuja-rp.vercel.app/?store"
+          href="https://maracuja-rp.vercel.app/store"
           target="_blank"
           rel="noopener noreferrer"
           className="p-2 rounded-md text-gray-400 hover:text-blue-400 hover:bg-gray-800 transition-colors duration-300 ease-in-out"

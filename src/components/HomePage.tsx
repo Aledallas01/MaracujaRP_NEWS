@@ -150,6 +150,8 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* How to join */}
+    {/* 
+    
     <section className="py-24 px-6 bg-gray-800">
       <div className="max-w-5xl mx-auto text-center mb-16">
         <h3 className="text-4xl font-extrabold mb-4 text-white tracking-wide">
@@ -173,6 +175,8 @@ const HomePage: React.FC = () => (
         </h5>
       </div>
     </section>
+
+    */}
   </div>
 );
 

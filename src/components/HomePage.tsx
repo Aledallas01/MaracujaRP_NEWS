@@ -22,22 +22,17 @@ const HomePage: React.FC = () => (
           interagisci in un mondo ricco di avventure e atmosfere tropicali.
         </p>
         <div className="flex gap-4 justify-center">
-          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] hover:from-[#FFB347] hover:to-[#FF6A00] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
-            <a href="#gioca">
-              GIOCA <ArrowRight className="h-6 w-6" />
-            </a>
+          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] hover:from-[#FF8801] hover:to-[#FF6601] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
+            <a href="#gioca">GIOCA</a>
           </button>
-          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#00C9A7] to-[#00F2FE] hover:from-[#00F2FE] hover:to-[#00C9A7] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
-            <a href="/news">
-              Gestionale <ArrowRight className="h-6 w-6" />
-            </a>
+          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] hover:from-[#1EFF48] hover:to-[#52B62B] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
+            <a href="/news">Gestionale</a>
           </button>
         </div>
       </div>
     </section>
-
     {/* Features */}
-    <section className="py-24 px-6 bg-gray-800">
+    <section className="py-24 px-6 bg-gray-900">
       <div className="max-w-5xl mx-auto text-center mb-16">
         <h3 className="text-4xl font-extrabold mb-4 text-white tracking-wide">
           UN ROLEPLAY
@@ -45,7 +40,7 @@ const HomePage: React.FC = () => (
         <h2 className="text-4xl font-extrabold mb-4 text-[#FF6A00] tracking-wide">
           DIVERSO
         </h2>
-        <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+        <p className="text-right text-gray-300 text-lg max-w-3xl mx-auto">
           MaracujaRP offre un'esperienza di gioco unica, con un'ampia gamma di
           funzionalità che rendono il roleplay coinvolgente e realistico. Dalla
           creazione di personaggi personalizzati alla gestione di attività
@@ -58,13 +53,14 @@ const HomePage: React.FC = () => (
           ricordi che dureranno nel tempo.
         </p>
       </div>
-
+    </section>
+    <section>
       <div>
         <h3 className="text-3xl font-bold text-center mb-10 text-[#FF6A00] tracking-wide">
           Avvia la tua attività
         </h3>
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="bg-gradient-to-br from-green-600 via-green-500 to-green-400 p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
+          <div className="bg-[#9D8989] p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
             <h4 className="text-xl font-semibold mb-4">Imprese</h4>
             <p>
               Avvia la tua impresa e diventa un imprenditore di successo!
@@ -73,7 +69,7 @@ const HomePage: React.FC = () => (
               tropicale e dinamico.
             </p>
           </div>
-          <div className="bg-gradient-to-br from-purple-700 via-purple-600 to-purple-500 p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
+          <div className="bg-[#9D8989] p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
             <h4 className="text-xl font-semibold mb-4">Servizi</h4>
             <p>
               Offri servizi unici e diventa un punto di riferimento nella
@@ -85,7 +81,6 @@ const HomePage: React.FC = () => (
         </div>
       </div>
     </section>
-
     {/* Community */}
     <section className="py-24 px-6 bg-gray-900">
       <div className="max-w-5xl mx-auto text-center mb-16">
@@ -100,14 +95,14 @@ const HomePage: React.FC = () => (
       </div>
 
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
+        <div className="bg-[#7280DA] p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
           <h4 className="text-xl font-semibold mb-4">Discord</h4>
           <p>
             Unisciti al nostro server Discord per rimanere sempre aggiornato su
             eventi, novità e comunicazioni importanti.
           </p>
         </div>
-        <div className="bg-gradient-to-br from-green-700 via-green-600 to-green-500 p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
+        <div className="bg-[#269CD5] p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
           <h4 className="text-xl font-semibold mb-4">Telegram</h4>
           <p>
             Segui il nostro canale Telegram per ricevere aggiornamenti rapidi e
@@ -116,7 +111,6 @@ const HomePage: React.FC = () => (
         </div>
       </div>
     </section>
-
     {/* Crime vs Police */}
     <section className="py-24 px-6 bg-gray-900">
       <div className="max-w-5xl mx-auto text-center mb-16">
@@ -131,7 +125,7 @@ const HomePage: React.FC = () => (
       </div>
 
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="bg-gradient-to-br from-red-700 via-red-600 to-red-500 p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
+        <div className="bg-[#0026ff3f] p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
           <h4 className="text-xl font-semibold mb-4">Criminali</h4>
           <p>
             Pianifica rapine audaci, gestisci traffici illeciti e sfida le forze
@@ -141,7 +135,7 @@ const HomePage: React.FC = () => (
             Pacchetto Formazione Gang
           </p>
         </div>
-        <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
+        <div className="bg-[#ff00003f] p-8 rounded-3xl shadow-2xl text-white hover:shadow-3xl transform hover:-translate-y-1 transition duration-300">
           <h4 className="text-xl font-semibold mb-4">Polizia</h4>
           <p>
             Lavora in squadra con altri agenti, combatti il crimine e proteggi i
@@ -155,32 +149,46 @@ const HomePage: React.FC = () => (
       </div>
     </section>
 
-    {/* How to Join */}
-    <section className="py-24 px-6 bg-gray-800">
+    {/* How to join */}
+    <section className="py-24 px-6 bg-gray-900">
       <div className="max-w-5xl mx-auto text-center mb-16">
         <h3 className="text-4xl font-extrabold mb-4 text-white tracking-wide">
           UNISCITI ORA A MARACUJARP
         </h3>
         <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-          Segui questi passaggi per iniziare la tua avventura tropicale:
+          Unirsi a MaracujaRP è semplice e veloce! Segui questi passaggi per
+          iniziare la tua avventura:
         </p>
       </div>
-
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        {[
-          "1. Avvia Minecraft e vai nella sezione MultiPlayer",
-          "2. Clicca su Aggiungi Server",
-          "3. Inserisci l'IP (Coming Soon...)",
-          "4. Abilita le Risorse",
-          "Ora sei pronto per giocare! Leggi il regolamento prima di entrare nel Server!",
-        ].map((step, i) => (
-          <div
-            key={i}
-            className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-1 transition duration-300"
-          >
-            <h4 className="text-xl font-semibold mb-4">{step}</h4>
-          </div>
-        ))}
+        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+          <h4 className="text-xl font-semibold mb-4">
+            1. Avvia Minecraft e vai nella sezione MultiPlayer
+          </h4>
+        </div>
+        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+          <h4 className="text-xl font-semibold mb-4">
+            2. Clicca su <b>Aggiungi Server</b>
+          </h4>
+        </div>
+        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+          <h4 className="text-xl font-semibold mb-4">
+            3. Inserisci l'<b>IP</b>
+          </h4>
+          <p>Coming Soon...</p>
+        </div>
+        <div className="bg -gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+          <h4 className="text-xl font-semibold mb-4">4. Abilita le Risorse</h4>
+        </div>
+        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+          <h3 className="text-xl font-semibold mb-4">
+            Ora sei pronto per giocare
+          </h3>
+          <p>
+            Leggi il <a href="/rules">regolamento</a> prima di entrare nel
+            Server!
+          </p>
+        </div>
       </div>
     </section>
   </div>

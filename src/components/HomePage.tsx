@@ -70,7 +70,7 @@ const HomePage: React.FC = () => (
       id="home"
       className="flex-1 flex flex-col justify-center items-center text-center px-6 py-32 relative min-h-screen"
       style={{
-        backgroundImage: "url('/bg-hero.png')",
+        backgroundImage: "url('/hero-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -342,7 +342,9 @@ const HomePage: React.FC = () => (
               <MessageCircle className="w-10 h-10 text-white" />
             </div>
             <div className="text-3xl font-bold text-white mb-2">24/7</div>
-            <div className="text-gray-300">Support Discord</div>
+            <div className="text-gray-300">
+              <a href="https://discord.gg/7Rxxyr5aKX">Support Discord</a>
+            </div>
           </div>
         </div>
 
@@ -382,9 +384,6 @@ const HomePage: React.FC = () => (
 
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 text-center group hover:border-[#FF6A00] transition-all duration-300">
-            <div className="w-16 h-16 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-              <UserPlus className="w-8 h-8 text-white" />
-            </div>
             <h3 className="text-2xl font-bold text-white mb-4">
               1. Apri Minecraft
             </h3>

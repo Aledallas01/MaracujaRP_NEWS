@@ -113,7 +113,7 @@ const PublicRulesView: React.FC = () => {
             onClick={() => setSelectedSection("all")}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedSection === "all"
-                ? "bg-orange-600 text-white"
+                ? "bg-[#FE9900] text-white"
                 : "bg-gray-700 text-gray-300 hover:bg-gray-600"
             }`}
           >
@@ -125,7 +125,7 @@ const PublicRulesView: React.FC = () => {
               onClick={() => setSelectedSection(section.id)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 selectedSection === section.id
-                  ? "bg-orange-600 text-white"
+                  ? "bg-[#FE9900] text-white"
                   : "bg-gray-700 text-gray-300 hover:bg-gray-600"
               }`}
             >
@@ -159,8 +159,8 @@ const PublicRulesView: React.FC = () => {
                   className="text-gray-300 text-sm mb-4"
                   dangerouslySetInnerHTML={{
                     __html:
-                      rule.content.length > 120
-                        ? rule.content.slice(0, 120) + "..."
+                      rule.content.length > 200
+                        ? rule.content.slice(0, 200) + "..."
                         : rule.content,
                   }}
                 />

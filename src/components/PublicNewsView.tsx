@@ -129,7 +129,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
             onClick={() => setSelectedSection("all")}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedSection === "all"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#FE9900] text-white"
                 : "bg-gray-700 text-gray-300 hover:bg-gray-600"
             }`}
           >
@@ -141,7 +141,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
               onClick={() => setSelectedSection(section.id)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 selectedSection === section.id
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#FE9900] text-white"
                   : "bg-gray-700 text-gray-300 hover:bg-gray-600"
               }`}
             >
@@ -161,7 +161,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
             {/* Immagine con sezione */}
             <div className="relative w-full h-48 md:w-48 md:h-auto flex-shrink-0">
               {item.section && (
-                <div className="absolute top-1 left-1 z-10 bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-bl-md rounded-tr-md shadow-lg select-none">
+                <div className="absolute top-1 left-1 z-10 bg-[#FE9900] text-white text-xs font-semibold px-2 py-0.5 rounded-bl-md rounded-tr-md shadow-lg select-none">
                   {item.section.title}
                 </div>
               )}
@@ -209,7 +209,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
 
               <button
                 onClick={() => openModal(item)}
-                className="mt-4 self-start flex items-center gap-1 text-blue-500 hover:underline"
+                className="mt-4 self-start flex items-center gap-1 text-[#FE9900] hover:underline"
               >
                 Leggi <ArrowRight className="h-4 w-4" />
               </button>

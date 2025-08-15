@@ -114,7 +114,7 @@ const PublicStoreView: React.FC = () => {
     return (
       <div className="text-center py-16" style={{ backgroundColor: "#30334E" }}>
         <div className="animate-pulse">
-          <ShoppingCart className="h-12 w-12 text-blue-400 mx-auto mb-4" />
+          <ShoppingCart className="h-12 w-12 text-[#FE9900] mx-auto mb-4" />
           <p className="text-gray-300 text-lg">Caricamento in corso...</p>
         </div>
       </div>
@@ -145,7 +145,7 @@ const PublicStoreView: React.FC = () => {
             <span className="font-bold text-lg leading-none">%</span>
           </button>
           <div className="flex items-center justify-center space-x-4 mb-4">
-            <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-blue-400" />
+            <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
             <h1 className="text-3xl sm:text-4xl font-bold text-white">Store</h1>
           </div>
           <p className="text-gray-300 text-base sm:text-lg">
@@ -252,7 +252,7 @@ const PublicStoreView: React.FC = () => {
                   <div className="mt-auto flex items-center justify-between mb-4">
                     {discount ? (
                       <div className="space-y-0.5">
-                        <p className="text-sm text-gray-500 line-through">
+                        <p className="text-sm text-[#FE9900] line-through">
                           €{(pkg.prezzo ?? 0).toFixed(2)}
                         </p>
                         <p className="text-xl font-bold text-green-400">
@@ -266,7 +266,7 @@ const PublicStoreView: React.FC = () => {
                         </p>
                       </div>
                     ) : (
-                      <p className="text-xl font-bold text-blue-400">
+                      <p className="text-xl font-bold text-[#FE9900]">
                         €{(pkg.prezzo ?? 0).toFixed(2)}
                       </p>
                     )}

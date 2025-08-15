@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
@@ -21,11 +22,14 @@ import PublicStoreView from "./components/PublicStoreView";
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  // Mostra la sidebar solo se non siamo sulla home
+  const showSidebar = location.pathname !== "/";
 
   return (
-    <div className="bg-gray-100 flex h-screen w-screen bg-gray-100">
-      {/* Sidebar fissa */}
-      <Sidebar />
+    <div className="bg-gray-100 flex h-screen w-screen">
+      {showSidebar && <Sidebar />}
 
       {/* Contenuto principale */}
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -33,7 +37,7 @@ const AppContent: React.FC = () => {
 
         <main className="flex-1 overflow-y-auto p-0">
           <Routes>
-            {/* Rotte pubbliche sempre disponibili */}
+            {/* Rotte pubbliche */}
             <Route path="/" element={<HomePage />} />
             <Route
               path="/news"

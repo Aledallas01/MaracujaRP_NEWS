@@ -40,7 +40,7 @@ const HomePage: React.FC = () => (
         <h2 className="text-4xl font-extrabold mb-4 text-[#FF6A00] tracking-wide">
           DIVERSO
         </h2>
-        <p className="text-right text-gray-300 text-lg max-w-3xl mx-auto">
+        <p className="text-left text-gray-300 text-lg max-w-3xl mx-auto">
           MaracujaRP offre un'esperienza di gioco unica, con un'ampia gamma di
           funzionalità che rendono il roleplay coinvolgente e realistico. Dalla
           creazione di personaggi personalizzati alla gestione di attività
@@ -150,7 +150,7 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* How to join */}
-    <section className="py-24 px-6 bg-gray-900">
+    <section className="py-24 px-6 bg-gray-800">
       <div className="max-w-5xl mx-auto text-center mb-16">
         <h3 className="text-4xl font-extrabold mb-4 text-white tracking-wide">
           UNISCITI ORA A MARACUJARP
@@ -160,34 +160,25 @@ const HomePage: React.FC = () => (
           iniziare la tua avventura:
         </p>
       </div>
+
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
           <h4 className="text-xl font-semibold mb-4">
             1. Avvia Minecraft e vai nella sezione MultiPlayer
           </h4>
         </div>
+
         <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
           <h4 className="text-xl font-semibold mb-4">
             2. Clicca su <b>Aggiungi Server</b>
           </h4>
         </div>
+
         <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
           <h4 className="text-xl font-semibold mb-4">
             3. Inserisci l'<b>IP</b>
           </h4>
           <p>Coming Soon...</p>
-        </div>
-        <div className="bg -gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
-          <h4 className="text-xl font-semibold mb-4">4. Abilita le Risorse</h4>
-        </div>
-        <div className="bg-gray-700 p-8 rounded-3xl shadow-lg text-white hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
-          <h3 className="text-xl font-semibold mb-4">
-            Ora sei pronto per giocare
-          </h3>
-          <p>
-            Leggi il <a href="/rules">regolamento</a> prima di entrare nel
-            Server!
-          </p>
         </div>
       </div>
     </section>

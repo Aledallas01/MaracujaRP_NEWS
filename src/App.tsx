@@ -13,7 +13,7 @@ import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 
 // Pagine
-import HomePage from "./pages/HomePage";
+import HomePage from "./components/HomePage";
 import PublicNewsView from "./components/PublicNewsView";
 import PublicRulesView from "./components/PublicRulesView";
 import PublicStoreView from "./components/PublicStoreView";

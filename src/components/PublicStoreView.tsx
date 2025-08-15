@@ -222,7 +222,7 @@ const PublicStoreView: React.FC = () => {
                   {pkg.immagine && (
                     <div className="relative mb-4">
                       <img
-                        src={pkg.immagine || "/logo.png"}
+                        src={pkg.immagine}
                         alt={pkg.nome}
                         className="object-cover w-full h-48 rounded-lg"
                         onError={(e) => {

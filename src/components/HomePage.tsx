@@ -1,6 +1,5 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
-import { FaPalm } from "react-icons/fa";
 
 const HomePage: React.FC = () => (
   <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans">
@@ -41,7 +40,7 @@ const HomePage: React.FC = () => (
     <section className="py-24 px-6 bg-gray-800">
       <div className="max-w-5xl mx-auto text-center mb-16">
         <h3 className="text-4xl font-extrabold mb-4 text-white tracking-wide">
-          UN ROLEPLAY <FaPalm className="inline text-[#FF6A00]" />
+          UN ROLEPLAY
         </h3>
         <h2 className="text-4xl font-extrabold mb-4 text-[#FF6A00] tracking-wide">
           DIVERSO
@@ -91,7 +90,7 @@ const HomePage: React.FC = () => (
     <section className="py-24 px-6 bg-gray-900">
       <div className="max-w-5xl mx-auto text-center mb-16">
         <h3 className="text-4xl font-extrabold mb-4 text-white tracking-wide">
-          COMMUNITY <FaPalm className="inline text-[#00F2FE]" />
+          COMMUNITY
         </h3>
         <p className="text-gray-300 text-lg max-w-3xl mx-auto">
           La community di MaracujaRP è il cuore pulsante del server. Unisciti a

@@ -110,6 +110,14 @@ const PublicStoreView: React.FC = () => {
 
       const safePrice = typeof originalPrice === "number" ? originalPrice : 0;
       return safePrice * (1 - percentage / 100);
+      console.log(
+        `[calculateDiscountedPrice] Original: €${safePrice.toFixed(
+          2
+        )}, Discount: ${percentage}%, Final: €${(
+          safePrice *
+          (1 - percentage / 100)
+        ).toFixed(2)}`
+      );
     },
     []
   );

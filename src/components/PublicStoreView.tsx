@@ -34,8 +34,9 @@ const PublicStoreView: React.FC = () => {
           .select("*")
           .order("order_index", { ascending: true }),
         supabaseOther.from("discounts").select("*"),
-        console.log("[Supabase] Sconti trovati:", discRes.data),
       ]);
+
+      console.log("[Supabase] Sconti trovati:", discRes.data);
 
       if (pkgRes.error) {
         console.error("[Supabase] packages error:", pkgRes.error);
@@ -63,7 +64,6 @@ const PublicStoreView: React.FC = () => {
           ? (discRes.data as Discount[])
           : [];
 
-        // 🔹 filtro solo quelli validi
         const active = discounts.filter(
           (d) => !d.expiresAt || new Date(d.expiresAt) > new Date()
         );

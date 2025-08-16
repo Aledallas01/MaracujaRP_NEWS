@@ -47,9 +47,8 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
     }
   };
 
-  // Ecco il nuovo useEffect per aprire modal da ?id=xxx
   useEffect(() => {
-    if (news.length === 0) return; // aspetta che news siano caricate
+    if (news.length === 0) return;
 
     const urlParams = new URLSearchParams(window.location.search);
     const newsId = urlParams.get("id");

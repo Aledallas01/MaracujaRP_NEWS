@@ -82,6 +82,17 @@ const PublicStoreView: React.FC = () => {
     void loadStoreData();
   }, [loadStoreData]);
 
+  useEffect(() => {
+    if (packages.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const pkgID = params.get("id");
+
+    if (pkgID) {
+      const found = packages.find((p) => String(p.id) === pkgID);
+      if (found) setSelectedPackage(found);
+    }
+  }, [packages]);
+
   const getDiscountForProduct = useCallback(
     (productId: string) => {
       if (!productId) return null;

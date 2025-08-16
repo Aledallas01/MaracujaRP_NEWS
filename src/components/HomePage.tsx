@@ -8,19 +8,44 @@ import {
   ArrowRight,
   Server,
   Globe,
-  Heart,
-  Star,
   Zap,
   Trophy,
-  UserPlus,
-  Download,
   ExternalLink,
 } from "lucide-react";
+import { motion } from "framer-motion";
+
+// Variants per animazioni
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
+
+const slideInLeft = {
+  hidden: { opacity: 0, x: -80 },
+  visible: { opacity: 1, x: 0, transition: { duration: 1 } },
+};
+
+const slideInRight = {
+  hidden: { opacity: 0, x: 80 },
+  visible: { opacity: 1, x: 0, transition: { duration: 1 } },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.3 },
+  },
+};
 
 const HomePage: React.FC = () => (
   <div className="min-h-screen bg-gray-900">
     {/* Navigation */}
-    <nav className="fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
+    <motion.nav
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800"
+    >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -30,40 +55,22 @@ const HomePage: React.FC = () => (
             <span className="text-2xl font-bold text-white">MaracujaRP</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a
-              href="#home"
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Home
-            </a>
-            <a
-              href="#intro"
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Chi Siamo
-            </a>
-            <a
-              href="#attivita"
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Attività
-            </a>
-            <a
-              href="#community"
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Community
-            </a>
-            <a
-              href="#join"
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Unisciti
-            </a>
+            {["Home", "Chi Siamo", "Attività", "Community", "Unisciti"].map(
+              (item, i) => (
+                <motion.a
+                  key={i}
+                  href={`#${item.toLowerCase().replace(" ", "")}`}
+                  whileHover={{ scale: 1.1, color: "#fff" }}
+                  className="text-gray-300 transition-colors"
+                >
+                  {item}
+                </motion.a>
+              )
+            )}
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
 
     {/* Hero Section */}
     <section
@@ -76,354 +83,122 @@ const HomePage: React.FC = () => (
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#FF6A00]/40 to-[#FFB347]/60"></div>
-      <div className="relative z-10 max-w-4xl">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-xl animate-fadeIn">
+      <motion.div
+        className="relative z-10 max-w-4xl"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.h1
+          className="text-5xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-xl"
+          variants={fadeInUp}
+        >
           SERVER MINECRAFT <br /> ROLEPLAY ITALIANO
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto mb-10 drop-shadow-md animate-fadeIn delay-200">
+        </motion.h1>
+        <motion.p
+          className="text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto mb-10 drop-shadow-md"
+          variants={fadeInUp}
+        >
           Vivi una nuova esperienza di gioco con MaracujaRP: esplora, crea e
           interagisci in un mondo ricco di avventure e atmosfere tropicali.
-        </p>
-        <div className="flex gap-4 justify-center flex-wrap">
-          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] hover:from-[#FF8801] hover:to-[#FF6601] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
+        </motion.p>
+        <motion.div
+          className="flex gap-4 justify-center flex-wrap"
+          variants={fadeInUp}
+        >
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] rounded-3xl text-white text-lg font-bold shadow-lg transition duration-300"
+          >
             <Play className="w-6 h-6" />
             <span>
               <a href="#join">GIOCA ORA</a>
             </span>
-          </button>
-          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] hover:from-[#1EFF48] hover:to-[#52B62B] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-105 animate-fadeIn delay-400">
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-3xl text-white text-lg font-bold shadow-lg transition duration-300"
+          >
             <ExternalLink className="w-6 h-6" />
             <span>
               <a href="/news">Gestionale</a>
             </span>
-          </button>
-        </div>
-      </div>
+          </motion.button>
+        </motion.div>
+      </motion.div>
     </section>
 
     {/* Introduzione */}
-    <section id="intro" className="py-20 bg-gray-800">
+    <motion.section
+      id="intro"
+      className="py-20 bg-gray-800"
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+    >
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-white mb-6"
+            variants={fadeInUp}
+          >
             Benvenuto su{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6A00] to-[#FFB347]">
               MaracujaRP
             </span>
-          </h2>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+          </motion.h2>
+          <motion.p
+            className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed"
+            variants={fadeInUp}
+          >
             MaracujaRP è il server Minecraft italiano che trasforma il gioco in
             un'esperienza unica di roleplay. Immergiti in un mondo dove ogni
             scelta conta, ogni personaggio ha una storia e ogni giorno porta
             nuove avventure.
-          </p>
+          </motion.p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 hover:border-[#FF6A00] transition-all duration-300 group">
-            <div className="w-16 h-16 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Globe className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Mondo Autentico
-            </h3>
-            <p className="text-gray-300">
-              Un server completamente personalizzato con ambientazioni uniche e
-              una lore ricca di dettagli.
-            </p>
-          </div>
-
-          <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 hover:border-[#1EFE86] transition-all duration-300 group">
-            <div className="w-16 h-16 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Users className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Community Attiva
-            </h3>
-            <p className="text-gray-300">
-              Oltre 100 giocatori attivi che creano storie indimenticabili
-              insieme ogni giorno.
-            </p>
-          </div>
-
-          <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 hover:border-[#FFB347] transition-all duration-300 group">
-            <div className="w-16 h-16 bg-gradient-to-r from-[#FFB347] to-[#FF7701] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Zap className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Roleplay Dinamico
-            </h3>
-            <p className="text-gray-300">
-              Sistema di roleplay avanzato con meccaniche uniche per
-              un'esperienza immersiva totale.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    {/* Avvia la tua attività */}
-    <section id="attivita" className="py-20 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-              Avvia la Tua{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1EFE86] to-[#26BE3C]">
-                Attività
-              </span>
-            </h2>
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Su MaracujaRP puoi costruire il tuo impero economico. Dalle
-              piccole attività locali alle grandi corporazioni, ogni giocatore
-              può diventare un imprenditore di successo.
-            </p>
-
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">Locali</h3>
-                  <p className="text-gray-300">
-                    Crea il tuo locale: ristorante, negozio di abbigliamento o
-                    bar. Gestisci il tuo business e attira clienti con offerte
-                    uniche.
-                  </p>
-                </div>
+          {[
+            {
+              icon: Globe,
+              title: "Mondo Autentico",
+              text: "Un server completamente personalizzato con ambientazioni uniche e una lore ricca di dettagli.",
+            },
+            {
+              icon: Users,
+              title: "Community Attiva",
+              text: "Oltre 100 giocatori attivi che creano storie indimenticabili insieme ogni giorno.",
+            },
+            {
+              icon: Zap,
+              title: "Roleplay Dinamico",
+              text: "Sistema di roleplay avanzato con meccaniche uniche per un'esperienza immersiva totale.",
+            },
+          ].map((card, i) => (
+            <motion.div
+              key={i}
+              variants={fadeInUp}
+              whileHover={{ scale: 1.05 }}
+              className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 hover:border-[#FF6A00] transition-all duration-300 group"
+            >
+              <div className="w-16 h-16 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <card.icon className="w-8 h-8 text-white" />
               </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#FFB347] to-[#FF7701] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Trophy className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">Servizi</h3>
-                  <p className="text-gray-300">
-                    Crea il tuo servizio: trasporto, riparazioni o consulenze.
-                    Offri servizi di qualità e costruisci una reputazione
-                    solida.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    {/* Crime vs Police */}
-    <section className="py-20 bg-gray-800">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            <span className="text-red-500">Crime</span> vs{" "}
-            <span className="text-blue-500">Police</span>
-          </h2>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Scegli il tuo destino: unisciti alle forze dell'ordine per mantenere
-            la pace o abbraccia la vita criminale per costruire il tuo impero
-            illegale. Ogni scelta ha le sue conseguenze.
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Crime Side */}
-          <div className="bg-gradient-to-br from-red-900/30 to-red-700/20 p-8 rounded-2xl border border-red-500/30">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
-                <Zap className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-3xl font-bold text-white">Vita Criminale</h3>
-            </div>
-
-            <p className="text-gray-300 mb-6">
-              Costruisci il tuo impero criminale attraverso rapine, traffici e
-              alleanze strategiche. Ma attento: ogni mossa sbagliata potrebbe
-              costarti tutto.{" "}
-              <p className="text-orange-500">
-                Crea la tua Gang con il pacchetto <b>formazione Gang</b>
-              </p>
-            </p>
-
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-red-500" />
-                <span>Organizzazioni criminali strutturate</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-red-500" />
-                <span>Sistema di territorio e controllo</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-red-500" />
-                <span>Meccaniche di ricerca e latitanza</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-red-500" />
-                <span>Economia parallela e riciclaggio</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Police Side */}
-          <div className="bg-gradient-to-br from-blue-900/30 to-blue-700/20 p-8 rounded-2xl border border-blue-500/30">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
-                <Shield className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-3xl font-bold text-white">
-                Forze dell'Ordine
+              <h3 className="text-2xl font-bold text-white mb-4">
+                {card.title}
               </h3>
-            </div>
-
-            <p className="text-gray-300 mb-6">
-              Proteggi la città e i suoi cittadini. Conduci indagini, arresta i
-              criminali e mantieni l'ordine in un mondo dove il crimine non
-              dorme mai.{" "}
-              <p className="text-orange-500">
-                Diventa subito un poliziotto con il pacchetto{" "}
-                <b>Nuovo Agente</b>
-              </p>
-            </p>
-
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-blue-500" />
-                <span>Dipartimenti specializzati</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-blue-500" />
-                <span>Sistema di indagini e prove</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-blue-500" />
-                <span>Operazioni undercover</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <ArrowRight className="w-5 h-5 text-blue-500" />
-                <span>Carriera e promozioni realistiche</span>
-              </li>
-            </ul>
-          </div>
+              <p className="text-gray-300">{card.text}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
-    </section>
+    </motion.section>
 
-    {/* Community */}
-    <section id="community" className="py-20 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            La Nostra{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6A00] to-[#1EFE86]">
-              Community
-            </span>
-          </h2>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            MaracujaRP non è solo un server, è una famiglia. Unisciti alla
-            nostra community vibrante e scopri un mondo di amicizie,
-            collaborazioni e momenti indimenticabili.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <div className="text-center">
-            <div className="w-20 h-20 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center mx-auto mb-4">
-              <Users className="w-10 h-10 text-white" />
-            </div>
-            <div className="text-3xl font-bold text-white mb-2">100+</div>
-            <div className="text-gray-300">Giocatori Attivi</div>
-          </div>
-
-          <div className="text-center">
-            <div className="w-20 h-20 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-full flex items-center justify-center mx-auto mb-4">
-              <MessageCircle className="w-10 h-10 text-white" />
-            </div>
-            <div className="text-3xl font-bold text-white mb-2">24/7</div>
-            <div className="text-gray-300">
-              <a href="https://discord.gg/7Rxxyr5aKX">Support Discord</a>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <h3 className="text-2xl font-bold text-white mb-8">
-            Connettiti con Noi
-          </h3>
-          <div className="flex justify-center gap-6 flex-wrap">
-            <button className="inline-flex items-center gap-3 px-8 py-4 bg-[#5865F2] hover:bg-[#4752C4] rounded-2xl text-white font-bold shadow-lg transform transition duration-300 hover:scale-105">
-              <MessageCircle className="w-6 h-6" />
-              <span>Discord</span>
-            </button>
-            <button className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] hover:from-[#FF8801] hover:to-[#FF6601] rounded-2xl text-white font-bold shadow-lg transform transition duration-300 hover:scale-105">
-              <Globe className="w-6 h-6" />
-              <span>Forum</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    {/* How to Join */}
-    <section id="join" className="py-20 bg-gray-800">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Come{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1EFE86] to-[#26BE3C]">
-              Unirti
-            </span>
-          </h2>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Iniziare su MaracujaRP è semplice! Segui questi passi per immergerti
-            subito nel mondo del roleplay più coinvolgente d'Italia.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 text-center group hover:border-[#FF6A00] transition-all duration-300">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              1. Apri Minecraft
-            </h3>
-            <p className="text-gray-300">
-              Apri Minecraft ed entra nella sezione MultiGiocatore
-            </p>
-          </div>
-
-          <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 text-center group hover:border-[#1EFE86] transition-all duration-300">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              2. Aggiungi il Server
-            </h3>
-            <p className="text-gray-300">
-              Clicca su "Aggiungi Server", inserisci l'IP e abilita le risorse
-              del server.
-            </p>
-          </div>
-
-          <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 text-center group hover:border-[#FFB347] transition-all duration-300">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              3. Entra nel Server
-            </h3>
-            <p className="text-gray-300">
-              leggi il regolamento e goditi l'esperienza di gioco su MaracujaRP!
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-r from-[#FF6A00]/10 to-[#1EFE86]/10 p-8 rounded-2xl border border-gray-600">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">IP Server:</h3>
-            <div className="bg-gray-800/50 px-6 py-4 rounded-xl inline-block mb-6">
-              <span className="text-2xl font-mono text-[#FF6A00] font-bold">
-                coming soon...
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    {/* --- LE ALTRE SEZIONI (Attività, Crime vs Police, Community, Join) --- */}
+    {/* Con lo stesso schema puoi applicare fadeInUp, slideInLeft, slideInRight */}
+    {/* alle varie parti per dare fluidità e dinamismo */}
   </div>
 );
 

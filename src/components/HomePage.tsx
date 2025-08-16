@@ -79,7 +79,7 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* INTRO */}
-    <section id="intro" className="py-20 bg-gray-800">
+    <section id="chisiamo" className="py-20 bg-gray-800">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-fadeInUp">
@@ -137,7 +137,7 @@ const HomePage: React.FC = () => (
 
     {/* ATTIVITÀ */}
     <section
-      id="attivita"
+      id="attività"
       className="relative py-28 bg-gray-950 overflow-hidden"
     >
       {/* Sfondo con leggero gradiente */}
@@ -292,7 +292,7 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* JOIN */}
-    <section id="join" className="py-20 bg-gray-800 text-center">
+    <section id="unisciti" className="py-20 bg-gray-800 text-center">
       <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 animate-fadeInUp">
         Unisciti a <span className="text-[#FF6A00]">MaracujaRP</span>
       </h2>

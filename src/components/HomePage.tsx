@@ -21,7 +21,7 @@ const HomePage: React.FC = () => (
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center">
-              <Server className="w-6 h-6 text-white animate-bounceSlow" />
+              <Server className="w-6 h-6 text-white animate-pulse" />
             </div>
             <span className="text-2xl font-bold text-white">MaracujaRP</span>
           </div>
@@ -63,13 +63,13 @@ const HomePage: React.FC = () => (
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-110 animate-fadeInUp [animation-delay:0.6s] opacity-0">
-            <Play className="w-6 h-6 animate-bounceSlow" />
+            <Play className="w-6 h-6 animate-pulse" />
             <span>
               <a href="#join">GIOCA ORA</a>
             </span>
           </button>
           <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-110 animate-fadeInUp [animation-delay:0.9s] opacity-0">
-            <ExternalLink className="w-6 h-6 animate-bounceSlow" />
+            <ExternalLink className="w-6 h-6 animate-pulse" />
             <span>
               <a href="/news">Gestionale</a>
             </span>
@@ -98,7 +98,7 @@ const HomePage: React.FC = () => (
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 transition-all duration-500 hover:scale-105 hover:border-[#FF6A00] animate-fadeInUp">
             <div className="w-16 h-16 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center mb-6">
-              <Globe className="w-8 h-8 text-white animate-bounceSlow" />
+              <Globe className="w-8 h-8 text-white animate-pulse" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">
               Mondo Autentico
@@ -110,7 +110,7 @@ const HomePage: React.FC = () => (
 
           <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 transition-all duration-500 hover:scale-105 hover:border-[#1EFE86] animate-fadeInUp [animation-delay:0.3s] opacity-0">
             <div className="w-16 h-16 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-full flex items-center justify-center mb-6">
-              <Users className="w-8 h-8 text-white animate-bounceSlow" />
+              <Users className="w-8 h-8 text-white animate-pulse" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">
               Community Attiva
@@ -122,7 +122,7 @@ const HomePage: React.FC = () => (
 
           <div className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 transition-all duration-500 hover:scale-105 hover:border-[#FFB347] animate-fadeInUp [animation-delay:0.6s] opacity-0">
             <div className="w-16 h-16 bg-gradient-to-r from-[#FFB347] to-[#FF7701] rounded-full flex items-center justify-center mb-6">
-              <Zap className="w-8 h-8 text-white animate-bounceSlow" />
+              <Zap className="w-8 h-8 text-white animate-pulse" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">
               Roleplay Dinamico
@@ -177,7 +177,7 @@ const HomePage: React.FC = () => (
               {/* Servizi */}
               <div className="flex items-start gap-5 animate-fadeInUp [animation-delay:0.3s] opacity-0 hover:translate-x-2 transition-transform duration-300">
                 <div className="w-14 h-14 bg-gradient-to-r from-[#FFB347] to-[#FF7701] rounded-2xl flex items-center justify-center shadow-lg shadow-[#FF7701]/40">
-                  <Trophy className="w-7 h-7 text-white animate-bounceSlow" />
+                  <Trophy className="w-7 h-7 text-white animate-pulse" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-2">
@@ -276,15 +276,15 @@ const HomePage: React.FC = () => (
         </p>
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600 animate-fadeInUp">
-            <Users className="w-10 h-10 text-[#1EFE86] mx-auto mb-4 animate-bounceSlow" />
+            <Users className="w-10 h-10 text-[#1EFE86] mx-auto mb-4 animate-pulse" />
             <h3 className="text-xl font-bold text-white">+100 Giocatori</h3>
           </div>
           <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600 animate-fadeInUp [animation-delay:0.3s] opacity-0">
-            <Zap className="w-10 h-10 text-[#FF6A00] mx-auto mb-4 animate-bounceSlow" />
+            <Zap className="w-10 h-10 text-[#FF6A00] mx-auto mb-4 animate-pulse" />
             <h3 className="text-xl font-bold text-white">Eventi Settimanali</h3>
           </div>
           <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600 animate-fadeInUp [animation-delay:0.6s] opacity-0">
-            <Trophy className="w-10 h-10 text-[#FFB347] mx-auto mb-4 animate-bounceSlow" />
+            <Trophy className="w-10 h-10 text-[#FFB347] mx-auto mb-4 animate-pulse" />
             <h3 className="text-xl font-bold text-white">Competizioni RP</h3>
           </div>
         </div>

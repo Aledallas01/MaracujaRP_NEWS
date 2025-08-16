@@ -21,7 +21,7 @@ const HomePage: React.FC = () => (
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center">
-              <Server className="w-6 h-6 text-white animate-pulse" />
+              <img src="/logo.png" alt="Logo MaracujaRP" />
             </div>
             <span className="text-2xl font-bold text-white">MaracujaRP</span>
           </div>
@@ -68,12 +68,12 @@ const HomePage: React.FC = () => (
               <a href="#join">GIOCA ORA</a>
             </span>
           </button>
-          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-110 animate-fadeInUp [animation-delay:0.9s] opacity-0">
-            <ExternalLink className="w-6 h-6 animate-pulse" />
-            <span>
-              <a href="/news">Gestionale</a>
-            </span>
-          </button>
+          <a href="/news">
+            <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-110 animate-fadeInUp [animation-delay:0.9s] opacity-0">
+              <ExternalLink className="w-6 h-6 animate-pulse" />
+              <span>Gestionale</span>
+            </button>
+          </a>
         </div>
       </div>
     </section>

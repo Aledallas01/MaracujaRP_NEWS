@@ -62,12 +62,12 @@ const HomePage: React.FC = () => (
           interagisci in un mondo ricco di avventure e atmosfere tropicali.
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
-          <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-110 animate-fadeInUp [animation-delay:0.6s] opacity-0">
-            <Play className="w-6 h-6 animate-pulse" />
-            <span>
-              <a href="#join">GIOCA ORA</a>
-            </span>
-          </button>
+          <a href="#join">
+            <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#FE9900] to-[#FF7701] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-110 animate-fadeInUp [animation-delay:0.6s] opacity-0">
+              <Play className="w-6 h-6 animate-pulse" />
+              <span>GIOCA ORA</span>
+            </button>
+          </a>
           <a href="/news">
             <button className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-3xl text-white text-lg font-bold shadow-lg transform transition duration-300 hover:scale-110 animate-fadeInUp [animation-delay:0.9s] opacity-0">
               <ExternalLink className="w-6 h-6 animate-pulse" />

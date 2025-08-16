@@ -33,7 +33,8 @@ const PublicStoreView: React.FC = () => {
           .from("store_sections")
           .select("*")
           .order("order_index", { ascending: true }),
-        supabaseOther.from("discounts").select("*"), // 🔹 senza .eq("is_active", true)
+        supabaseOther.from("discounts").select("*"),
+        console.log("[Supabase] Sconti trovati:", discRes.data),
       ]);
 
       if (pkgRes.error) {

@@ -33,7 +33,7 @@ const PublicStoreView: React.FC = () => {
           .from("store_sections")
           .select("*")
           .order("order_index", { ascending: true }),
-        supabaseOther.from("discounts").select("*").eq("is_active", true), // cambiato isActive -> is_active
+        supabaseOther.from("discounts").select("*"), // 🔹 senza .eq("is_active", true)
       ]);
 
       if (pkgRes.error) {
@@ -58,9 +58,16 @@ const PublicStoreView: React.FC = () => {
         console.error("[Supabase] discounts error:", discRes.error);
         setActiveDiscounts([]);
       } else {
-        setActiveDiscounts(
-          Array.isArray(discRes.data) ? (discRes.data as Discount[]) : []
+        const discounts = Array.isArray(discRes.data)
+          ? (discRes.data as Discount[])
+          : [];
+
+        // 🔹 filtro solo quelli validi
+        const active = discounts.filter(
+          (d) => !d.expiresAt || new Date(d.expiresAt) > new Date()
         );
+
+        setActiveDiscounts(active);
       }
     } catch (err) {
       console.error("Errore caricamento dati store:", err);

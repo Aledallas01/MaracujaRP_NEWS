@@ -87,7 +87,7 @@ const Header: React.FC = () => {
           className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-500 shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
           onClick={handleLogin}
         >
-          Login con Discord
+          Login
         </button>
       )}
     </header>

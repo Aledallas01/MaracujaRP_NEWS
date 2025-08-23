@@ -166,7 +166,7 @@ const PublicStoreView: React.FC = () => {
         <div className="absolute top-20 left-0 w-full overflow-hidden">
           <svg
             className="relative block w-full h-48"
-            viewBox="0 0 1500 240"
+            viewBox="0 0 1200 240"
             preserveAspectRatio="none"
           >
             <defs>
@@ -174,7 +174,7 @@ const PublicStoreView: React.FC = () => {
                 id="wave-gradient"
                 x1="0%"
                 y1="0%"
-                x2="100%"
+                x2="80%"
                 y2="0%"
               >
                 <stop offset="0%" stopColor="#FFB088" />

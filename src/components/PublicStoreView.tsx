@@ -210,7 +210,7 @@ const PublicStoreView: React.FC = () => {
 
         {/* Sezioni */}
         {sections.length > 0 && (
-          <div className="mb-8 flex flex-wrap gap-3 justify-center">
+          <div className="mb-8 flex flex-wrap gap-3 justify-center br-trasparent">
             {sections.map((section) => (
               <button
                 key={section.id}

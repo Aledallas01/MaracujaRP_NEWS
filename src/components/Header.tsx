@@ -50,7 +50,7 @@ const Header: React.FC = () => {
   };
 
   const handleLogin = () => {
-    const url = `https://discord.com/oauth2/authorize?client_id=1405164713981251749&response_type=code&redirect_uri=https%3A%2F%2Fmaracuja-rp.vercel.app%2Fnews&scope=identify`;
+    const url = `https://discord.com/oauth2/authorize?client_id=1405164713981251749&redirect_uri=https%3A%2F%2Fmaracuja-rp.vercel.app%2Fnews&response_type=token&scope=identify`;
     window.location.href = url;
   };
 

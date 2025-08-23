@@ -36,29 +36,42 @@ const PublicStoreView: React.FC = () => {
         supabaseOther.from("discounts").select("*"),
       ]);
 
-      if (pkgRes.error) setPackages([]);
-      else
+      console.log("[Supabase] Sconti trovati:", discRes.data);
+
+      if (pkgRes.error) {
+        console.error("[Supabase] packages error:", pkgRes.error);
+        setPackages([]);
+      } else {
         setPackages(
           Array.isArray(pkgRes.data) ? (pkgRes.data as Package[]) : []
         );
+      }
 
-      if (secRes.error) setSections([]);
-      else
+      if (secRes.error) {
+        console.error("[Supabase] store_sections error:", secRes.error);
+        setSections([]);
+      } else {
         setSections(
           Array.isArray(secRes.data) ? (secRes.data as StoreSection[]) : []
         );
+      }
 
-      if (discRes.error) setActiveDiscounts([]);
-      else {
+      if (discRes.error) {
+        console.error("[Supabase] discounts error:", discRes.error);
+        setActiveDiscounts([]);
+      } else {
         const discounts = Array.isArray(discRes.data)
           ? (discRes.data as Discount[])
           : [];
+
         const active = discounts.filter(
           (d) => !d.expiresAt || new Date(d.expiresAt) > new Date()
         );
+
         setActiveDiscounts(active);
       }
     } catch (err) {
+      console.error("Errore caricamento dati store:", err);
       setError("Errore caricamento dati store. Riprova più tardi.");
     } finally {
       setLoading(false);
@@ -70,8 +83,10 @@ const PublicStoreView: React.FC = () => {
   }, [loadStoreData]);
 
   useEffect(() => {
-    if (!packages.length) return;
-    const pkgID = new URLSearchParams(window.location.search).get("id");
+    if (packages.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const pkgID = params.get("id");
+
     if (pkgID) {
       const found = packages.find((p) => String(p.id) === pkgID);
       if (found) setSelectedPackage(found);
@@ -82,10 +97,14 @@ const PublicStoreView: React.FC = () => {
     (productId: string) => {
       if (!productId) return null;
       const d = activeDiscounts.find(
-        (d) => d && String(d.product_id) === String(productId)
+        (disc) => disc && String(disc.product_id) === String(productId)
       );
       if (!d) return null;
-      if (d.expires_at && new Date(d.expires_at) < new Date()) return null;
+
+      if (d.expires_at) {
+        const exp = new Date(d.expires_at);
+        if (!isNaN(exp.getTime()) && exp < new Date()) return null;
+      }
       return d;
     },
     [activeDiscounts]
@@ -94,10 +113,22 @@ const PublicStoreView: React.FC = () => {
   const calculateDiscountedPrice = useCallback(
     (originalPrice: number, discount: Discount) => {
       const percentage =
-        typeof discount.percentage === "number"
+        (typeof discount.percentage === "number"
           ? discount.percentage
-          : discount.valore ?? 0;
-      return originalPrice * (1 - percentage / 100);
+          : undefined) ??
+        (typeof discount.valore === "number" ? discount.valore : undefined) ??
+        0;
+
+      const safePrice = typeof originalPrice === "number" ? originalPrice : 0;
+      return safePrice * (1 - percentage / 100);
+      console.log(
+        `[calculateDiscountedPrice] Original: €${safePrice.toFixed(
+          2
+        )}, Discount: ${percentage}%, Final: €${(
+          safePrice *
+          (1 - percentage / 100)
+        ).toFixed(2)}`
+      );
     },
     []
   );
@@ -106,7 +137,7 @@ const PublicStoreView: React.FC = () => {
     ? packages.filter((pkg) => String(pkg.section_id) === String(activeSection))
     : packages;
 
-  if (loading)
+  if (loading) {
     return (
       <div className="text-center py-16" style={{ backgroundColor: "#30334E" }}>
         <div className="animate-pulse">
@@ -115,8 +146,9 @@ const PublicStoreView: React.FC = () => {
         </div>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
       <div className="text-center py-16" style={{ backgroundColor: "#30334E" }}>
         <div className="bg-red-500/10 text-red-300 border border-red-500/30 rounded-xl p-6">
@@ -125,53 +157,38 @@ const PublicStoreView: React.FC = () => {
         </div>
       </div>
     );
+  }
 
   return (
-    <div className="bg-[#30334E] min-h-screen">
-      {/* Header Giallo */}
-      <header className="bg-yellow-400 text-white shadow-md relative z-20">
-        <div className="max-w-6xl mx-auto flex justify-between items-center py-4 px-6">
-          <div className="font-bold text-lg">ATLANTISRP</div>
-          <nav className="flex space-x-6 font-semibold">
-            <a href="/" className="hover:text-gray-200">
-              HOME
-            </a>
-            <a href="/forum" className="hover:text-gray-200">
-              FORUM
-            </a>
-            <a
-              href="/store"
-              className="bg-yellow-500 px-3 py-1 rounded-lg shadow"
-            >
-              STORE
-            </a>
-            <a
-              href={discordLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gray-200"
-            >
-              DISCORD
-            </a>
-            <a href="/staff" className="hover:text-gray-200">
-              STAFF
-            </a>
-          </nav>
+    <div className="p-4 sm:p-6" style={{ backgroundColor: "#30334E" }}>
+      <div className="max-w-6xl mx-auto">
+        {/* Orange Wave */}
+        <div className="absolute top-20 left-0 w-full overflow-hidden">
+          <svg
+            className="relative block w-full h-48"
+            viewBox="0 0 1200 240"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient
+                id="wave-gradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              >
+                <stop offset="0%" stopColor="#FFB088" />
+                <stop offset="50%" stopColor="#FFCC9F" />
+                <stop offset="100%" stopColor="#FFB088" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M0,0L48,32C96,64,192,128,288,149.3C384,171,480,149,576,170.7C672,192,768,256,864,277.3C960,299,1056,277,1152,234.7C1248,192,1344,128,1392,96L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+              fill="url(#wave-gradient)"
+              className="animate-pulse"
+            />
+          </svg>
         </div>
-        {/* Ondina Arancione */}
-        <svg
-          className="w-full h-12 md:h-16"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="#FF6A00"
-            d="M0,160L80,170.7C160,181,320,203,480,208C640,213,800,203,960,197.3C1120,192,1280,192,1360,192L1440,192L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
-          ></path>
-        </svg>
-      </header>
-
-      <div className="p-4 sm:p-6 max-w-6xl mx-auto">
         {/* Hero */}
         <div className="relative bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
           <button
@@ -215,7 +232,7 @@ const PublicStoreView: React.FC = () => {
           </div>
         )}
 
-        {/* Cards */}
+        {/* Empty state */}
         {filteredPackages.length === 0 ? (
           <div className="text-center py-16 bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
             <PackageOpen className="h-10 w-10 text-blue-400 mx-auto mb-4" />
@@ -239,6 +256,7 @@ const PublicStoreView: React.FC = () => {
             </a>
           </div>
         ) : (
+          /* Cards prodotti */
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredPackages.map((pkg) => {
               const section = sections.find(
@@ -261,6 +279,9 @@ const PublicStoreView: React.FC = () => {
                         src={pkg.immagine || "/logo.png"}
                         alt={pkg.nome}
                         className="object-cover w-full h-48 rounded-lg"
+                        onError={(e) => {
+                          e.currentTarget.src = "/logo.png";
+                        }}
                       />
                       {section && (
                         <span className="absolute top-2 left-2 bg-gray-900/80 text-gray-200 text-xs font-semibold px-2 py-1 rounded-md border border-gray-700">
@@ -323,25 +344,25 @@ const PublicStoreView: React.FC = () => {
             })}
           </div>
         )}
-
-        {selectedPackage && (
-          <ProductDetailsModal
-            product={{
-              id: selectedPackage.id,
-              name: selectedPackage.nome,
-              description: selectedPackage.descrizione,
-              price: selectedPackage.prezzo,
-              image: selectedPackage.immagine,
-            }}
-            discount={getDiscountForProduct(selectedPackage.id)}
-            onClose={() => setSelectedPackage(null)}
-          />
-        )}
-
-        {showDiscountModal && (
-          <ActiveDiscountModal onClose={() => setShowDiscountModal(false)} />
-        )}
       </div>
+
+      {selectedPackage && (
+        <ProductDetailsModal
+          product={{
+            id: selectedPackage.id,
+            name: selectedPackage.nome,
+            description: selectedPackage.descrizione,
+            price: selectedPackage.prezzo,
+            image: selectedPackage.immagine,
+          }}
+          discount={getDiscountForProduct(selectedPackage.id)}
+          onClose={() => setSelectedPackage(null)}
+        />
+      )}
+
+      {showDiscountModal && (
+        <ActiveDiscountModal onClose={() => setShowDiscountModal(false)} />
+      )}
     </div>
   );
 };

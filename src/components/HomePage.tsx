@@ -240,7 +240,7 @@ const HomePage: React.FC = () => (
           <div className="relative fade-in-right">
             <div className="relative rounded-3xl overflow-hidden shadow-[0_0_40px_#FF6A00]">
               <img
-                src="/store-hero.png"
+                src="/activity.png"
                 alt="Business"
                 className="rounded-3xl transform hover:scale-105 transition-transform duration-500"
               />
@@ -261,6 +261,17 @@ const HomePage: React.FC = () => (
 
         <div className="grid lg:grid-cols-2 gap-12 relative">
           <div className="hidden lg:block absolute top-0 bottom-0 left-1/2 w-1 bg-gradient-to-b from-[#FF6A00] via-gray-600 to-[#1EFE86] rounded-full"></div>
+          {/* Immagine */}
+          <div className="relative fade-in-right">
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_0_40px_#FF6A00]">
+              <img
+                src="/police.png"
+                alt="Crime vs Police"
+                className="rounded-3xl transform hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1EFE86]/20 via-transparent to-transparent"></div>
+            </div>
+          </div>
 
           {/* Police */}
           <a href="store?id=21">

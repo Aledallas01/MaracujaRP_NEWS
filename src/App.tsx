@@ -26,6 +26,7 @@ const AppContent: React.FC = () => {
 
   // Mostra la sidebar solo se non siamo sulla home
   const showSidebar = location.pathname !== "/";
+  const showHeader = location.pathname !== "/";
 
   return (
     <div className="bg-gray-100 flex h-screen w-screen">
@@ -33,7 +34,9 @@ const AppContent: React.FC = () => {
 
       {/* Contenuto principale */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+        {showHeader && (
+          <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+        )}
 
         <main className="flex-1 overflow-y-auto p-0">
           <Routes>

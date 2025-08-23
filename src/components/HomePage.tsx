@@ -15,33 +15,6 @@ import {
 
 const HomePage: React.FC = () => (
   <div className="min-h-screen bg-gray-900">
-    {/* NAVBAR */}
-    <nav className="fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 animate-fadeIn">
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center">
-              <img src="/logo.png" alt="Logo MaracujaRP" />
-            </div>
-            <span className="text-2xl font-bold text-white">MaracujaRP</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            {["Home", "Chi Siamo", "Attività", "Community", "Unisciti"].map(
-              (item, i) => (
-                <a
-                  key={i}
-                  href={`#${item.toLowerCase().replace(" ", "")}`}
-                  className="text-gray-300 hover:text-white transition-colors animate-fadeInUp [animation-delay:0.2s] opacity-0"
-                >
-                  {item}
-                </a>
-              )
-            )}
-          </div>
-        </div>
-      </div>
-    </nav>
-
     {/* HERO */}
     <section
       id="home"
@@ -52,11 +25,41 @@ const HomePage: React.FC = () => (
         backgroundPosition: "center",
       }}
     >
+      {/* NAVBAR */}
+      <nav className="fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 animate-fadeIn">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center">
+                <img src="/logo.png" alt="Logo MaracujaRP" />
+              </div>
+              <span className="text-2xl font-bold text-white">MaracujaRP</span>
+            </div>
+            <div className="hidden md:flex items-center gap-8">
+              {["Home", "Chi Siamo", "Attività", "Community", "Unisciti"].map(
+                (item, i) => (
+                  <a
+                    key={i}
+                    href={`#${item.toLowerCase().replace(" ", "")}`}
+                    className="text-gray-300 hover:text-white transition-colors animate-fadeInUp [animation-delay:0.2s] opacity-0"
+                  >
+                    {item}
+                  </a>
+                )
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#FF6A00]/40 to-[#FFB347]/60"></div>
       <div className="relative z-10 max-w-4xl">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-xl animate-fadeInUp">
+        <h1
+          className="text-5xl md:text-6xl font-extrabold text-orange mb-6 drop-shadow-xl animate-fadeInUp 
+  [text-shadow:_-1px_1px_0_#000,_1px_1px_0_#000,_1px_-1px_0_#000,_-1px_-1px_0_#000]"
+        >
           SERVER MINECRAFT <br /> ROLEPLAY ITALIANO
         </h1>
+
         <p className="text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto mb-10 drop-shadow-md animate-fadeInUp [animation-delay:0.3s] opacity-0">
           Vivi una nuova esperienza di gioco con MaracujaRP: esplora, crea e
           interagisci in un mondo ricco di avventure e atmosfere tropicali.

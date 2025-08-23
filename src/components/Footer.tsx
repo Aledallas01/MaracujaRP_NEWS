@@ -2,10 +2,7 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer
-      className="border-t border-gray-800 px-6 py-4 mt-auto"
-      style={{ backgroundColor: "#30334E" }}
-    >
+    <footer className="border-t border-gray-800 px-6 py-4 mt-auto bg-gray-800">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
         {/* Link rapidi */}
         <div className="flex space-x-6 text-gray-300 text-sm">

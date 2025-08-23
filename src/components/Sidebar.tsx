@@ -36,9 +36,8 @@ const Sidebar: React.FC = () => {
       )}
 
       <aside
-        className={`fixed lg:static top-0 left-0 h-full w-64 p-5 flex flex-col transform transition-transform duration-300 z-50
+        className={`fixed lg:static top-0 left-0 h-full w-64 p-5 flex flex-col transform transition-transform duration-300 z-50 bg-gray-900
         ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
-        style={{ backgroundColor: "#262944" }}
       >
         {/* Header sidebar */}
         <div className="flex items-center justify-between mb-6">

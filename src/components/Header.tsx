@@ -1,54 +1,96 @@
-import React, { useState } from "react";
-import { Book, ShoppingCart, Settings } from "lucide-react";
-import LoginModal from "./LoginModal";
+import React, { useState, useEffect } from "react";
 
-interface HeaderProps {
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
+interface DiscordUser {
+  username: string;
+  discriminator: string;
+  avatar: string | null;
+  id: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+const CLIENT_ID = "TUO_CLIENT_ID_DISCORD"; // sostituisci con il tuo client id
+const REDIRECT_URI = "http://localhost:3000"; // sostituisci con l'URL della tua app
+const SCOPE = "identify";
+
+const Header: React.FC = () => {
+  const [user, setUser] = useState<DiscordUser | null>(null);
+
+  // Controlla se c’è token salvato
+  useEffect(() => {
+    const token = localStorage.getItem("discord_token");
+    if (token) {
+      fetchDiscordUser(token);
+    }
+
+    // Controlla se siamo tornati dal redirect con un token
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.replace("#", "?"));
+      const accessToken = params.get("access_token");
+      if (accessToken) {
+        localStorage.setItem("discord_token", accessToken);
+        fetchDiscordUser(accessToken);
+        window.location.hash = ""; // pulisci hash
+      }
+    }
+  }, []);
+
+  const fetchDiscordUser = async (token: string) => {
+    const res = await fetch("https://discord.com/api/users/@me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setUser(data);
+    } else {
+      console.error("Token non valido");
+      localStorage.removeItem("discord_token");
+    }
+  };
+
+  const handleLogin = () => {
+    const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
+      REDIRECT_URI
+    )}&response_type=token&scope=${SCOPE}`;
+    window.location.href = url;
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("discord_token");
+    setUser(null);
+  };
 
   return (
-    <>
-      <header
-        className="border-b border-gray-700 px-4 py-3 flex justify-end space-x-4"
-        style={{
-          background:
-            "linear-gradient(90deg, #2d2f5a 0%, #30334E 50%, #2d2f5a 100%)",
-          boxShadow: "0 2px 8px rgb(0 0 0 / 0.3)",
-          backdropFilter: "saturate(180%) blur(8px)",
-        }}
-      >
-        <a
-          href="https://maracuja-rp.vercel.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-2 rounded-md text-gray-400 hover:text-blue-400 hover:bg-gray-800 transition-colors duration-300 ease-in-out"
-          title="Vai alle regole"
-          aria-label="Vai alle regole"
+    <header className="border-b border-gray-700 px-4 py-3 flex justify-end space-x-4 bg-gray-800">
+      {user ? (
+        <div className="flex items-center space-x-2">
+          {user.avatar ? (
+            <img
+              src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+              alt="Avatar"
+              className="w-8 h-8 rounded-full"
+            />
+          ) : (
+            <div className="w-8 h-8 bg-gray-600 rounded-full"></div>
+          )}
+          <span className="text-white">{user.username}</span>
+          <button
+            className="px-2 py-1 bg-red-600 rounded hover:bg-red-500"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
+      ) : (
+        <button
+          className="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500"
+          onClick={handleLogin}
         >
-          <Book className="h-6 w-6" />
-        </a>
-
-        <a
-          href="https://maracuja-rp.vercel.app/store"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-2 rounded-md text-gray-400 hover:text-blue-400 hover:bg-gray-800 transition-colors duration-300 ease-in-out"
-          title="Vai allo store"
-          aria-label="Vai allo store"
-        >
-          <ShoppingCart className="h-6 w-6" />
-        </a>
-      </header>
-
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-      />
-    </>
+          Login con Discord
+        </button>
+      )}
+    </header>
   );
 };
 

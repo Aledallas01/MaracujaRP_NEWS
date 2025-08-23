@@ -185,10 +185,10 @@ const PublicStoreView: React.FC = () => {
             <path
               d="M0,0L48,32C96,64,192,128,288,149.3C384,171,480,149,576,170.7C672,192,768,256,864,277.3C960,299,1056,277,1152,234.7C1248,192,1344,128,1392,96L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
               fill="url(#wave-gradient)"
-              className="animate-pulse"
             />
           </svg>
         </div>
+
         {/* Hero */}
         <div className="relative bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
           <button
@@ -208,6 +208,8 @@ const PublicStoreView: React.FC = () => {
           </p>
         </div>
 
+        <span></span>
+        <span></span>
         {/* Sezioni */}
         {sections.length > 0 && (
           <div className="mb-8 flex flex-wrap gap-3 justify-center br-trasparent">

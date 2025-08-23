@@ -154,7 +154,7 @@ const HomePage: React.FC = () => (
             className="bg-gray-700/50 p-8 rounded-2xl border border-gray-600 transition-all duration-500 hover:scale-105 hover:border-[#1EFE86] fade-in-up"
             style={{ animationDelay: "0.3s" }}
           >
-            <div className="w-16 h-16 bg-gradient-to-r from-[#1EFE86] to-[#26BE3C] rounded-full flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-gradient-to-r from-[#FF6A00] to-[#FFB347] rounded-full flex items-center justify-center mb-6">
               <Users className="w-8 h-8 text-white animate-pulse" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">
@@ -184,17 +184,14 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* ATTIVITÀ */}
-    <section
-      id="attività"
-      className="relative py-28 bg-gray-950 overflow-hidden"
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-950 to-black"></div>
+    <section id="attività" className="relative py-28 overflow-hidden">
+      <div className="absolute inset-0 bg-gray-800"></div>
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="fade-in-left">
             <h2 className="text-5xl md:text-6xl font-extrabold text-white mb-8 drop-shadow-lg">
               Avvia la Tua{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1EFE86] to-[#26BE3C]">
+              <span className="text-transparent bg-clip-text bg-[#FF6A00]">
                 Attività
               </span>
             </h2>
@@ -241,7 +238,7 @@ const HomePage: React.FC = () => (
 
           {/* Immagine */}
           <div className="relative fade-in-right">
-            <div className="relative rounded-3xl overflow-hidden shadow-[0_0_40px_#1EFE86]">
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_0_40px_#FF6A00]">
               <img
                 src="/store-hero.png"
                 alt="Business"
@@ -255,63 +252,66 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* CRIME VS POLICE */}
-    <section id="crimevspolice" className="relative py-28 bg-gray-900">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#FF6A00]/20 via-gray-900 to-[#1EFE86]/20"></div>
+    <section id="crimevspolice" className="relative py-28 bg-gray-800">
       <div className="relative max-w-7xl mx-auto px-6">
         <h2 className="text-5xl md:text-6xl font-extrabold text-center text-white mb-20 fade-in-up drop-shadow-lg">
-          Crime <span className="text-[#FF6A00]">vs</span>{" "}
-          <span className="text-[#1EFE86]">Police</span>
+          <span className="text-[#FF6A00]">Crime</span> vs
+          <span className="text-[#FF6A00]">Police</span>
         </h2>
 
         <div className="grid lg:grid-cols-2 gap-12 relative">
           <div className="hidden lg:block absolute top-0 bottom-0 left-1/2 w-1 bg-gradient-to-b from-[#FF6A00] via-gray-600 to-[#1EFE86] rounded-full"></div>
 
           {/* Police */}
-          <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#1EFE86]/50 shadow-lg hover:shadow-[#1EFE86]/50 transition-all duration-500 fade-in-left group">
-            <div className="flex items-center gap-4 mb-6">
-              <Shield className="w-10 h-10 text-[#1EFE86] animate-pulse" />
-              <h3 className="text-3xl font-bold text-white drop-shadow-md">
-                Police
-              </h3>
+          <a href="store?id=21">
+            <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#1EFE86]/50 shadow-lg hover:shadow-[#1EFE86]/50 transition-all duration-500 fade-in-left group">
+              <div className="flex items-center gap-4 mb-6">
+                <Shield className="w-10 h-10 text-[#1EFE86] animate-pulse" />
+                <h3 className="text-3xl font-bold text-white drop-shadow-md">
+                  Police
+                </h3>
+              </div>
+              <p className="text-lg text-gray-300 leading-relaxed">
+                Unisciti alle{" "}
+                <span className="text-[#1EFE86] font-semibold">
+                  forze dell’ordine
+                </span>
+                , proteggi la città e difendi i cittadini dal caos.
+              </p>
+              <div className="mt-8 text-[#1EFE86] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
+                Diventa un eroe <ArrowRight className="w-5 h-5" />
+              </div>
             </div>
-            <p className="text-lg text-gray-300 leading-relaxed">
-              Unisciti alle{" "}
-              <span className="text-[#1EFE86] font-semibold">
-                forze dell’ordine
-              </span>
-              , proteggi la città e difendi i cittadini dal caos.
-            </p>
-            <div className="mt-8 text-[#1EFE86] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
-              Diventa un eroe <ArrowRight className="w-5 h-5" />
-            </div>
-          </div>
+          </a>
 
           {/* Crime */}
-          <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#FF6A00]/50 shadow-lg hover:shadow-[#FF6A00]/50 transition-all duration-500 fade-in-right group">
-            <div className="flex items-center gap-4 mb-6">
-              <MessageCircle className="w-10 h-10 text-[#FF6A00] animate-pulse" />
-              <h3 className="text-3xl font-bold text-white drop-shadow-md">
-                Crime
-              </h3>
+          <a href="store?id=17">
+            <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#FF6A00]/50 shadow-lg hover:shadow-[#FF6A00]/50 transition-all duration-500 fade-in-right group">
+              <div className="flex items-center gap-4 mb-6">
+                <MessageCircle className="w-10 h-10 text-[#FF6A00] animate-pulse" />
+                <h3 className="text-3xl font-bold text-white drop-shadow-md">
+                  Crime
+                </h3>
+              </div>
+              <p className="text-lg text-gray-300 leading-relaxed">
+                Scegli la strada del{" "}
+                <span className="text-[#FF6A00] font-semibold">crimine</span>,
+                organizza colpi epici e diventa una leggenda urbana.
+              </p>
+              <div className="mt-8 text-[#FF6A00] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
+                Sali al potere <ArrowRight className="w-5 h-5" />
+              </div>
             </div>
-            <p className="text-lg text-gray-300 leading-relaxed">
-              Scegli la strada del{" "}
-              <span className="text-[#FF6A00] font-semibold">crimine</span>,
-              organizza colpi epici e diventa una leggenda urbana.
-            </p>
-            <div className="mt-8 text-[#FF6A00] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
-              Sali al potere <ArrowRight className="w-5 h-5" />
-            </div>
-          </div>
+          </a>
         </div>
       </div>
     </section>
 
     {/* COMMUNITY */}
-    <section id="community" className="py-20 bg-gray-900">
+    <section id="community" className="py-20 bg-gray-800">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-12 fade-in-up">
-          La nostra <span className="text-[#1EFE86]">Community</span>
+          La nostra <span className="text-[#FF6A00]">Community</span>
         </h2>
         <p
           className="text-xl text-gray-300 mb-10 fade-in-up"
@@ -392,11 +392,6 @@ const HomePage: React.FC = () => (
         ENTRA ORA
       </a>
     </section>
-
-    {/* FOOTER */}
-    <footer className="py-6 bg-gray-900 border-t border-gray-800 text-center text-gray-400 text-sm">
-      © 2025 MaracujaRP - Tutti i diritti riservati
-    </footer>
   </div>
 );
 

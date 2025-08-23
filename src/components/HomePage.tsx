@@ -26,7 +26,7 @@ const HomePage: React.FC = () => (
       }}
     >
       {/* NAVBAR */}
-      <nav className="fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 animate-fadeIn">
+      <nav className="fixed top-0 w-full z-50 backdrop-blur-sm border-b border-gray-800 animate-fadeIn">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

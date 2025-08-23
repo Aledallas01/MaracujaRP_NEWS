@@ -251,69 +251,70 @@ const HomePage: React.FC = () => (
       </div>
     </section>
 
-    {/* CRIME VS POLICE */}
     <section id="crimevspolice" className="relative py-28 bg-gray-800">
       <div className="relative max-w-7xl mx-auto px-6">
         <h2 className="text-5xl md:text-6xl font-extrabold text-center text-white mb-20 fade-in-up drop-shadow-lg">
-          <span className="text-[#FF6A00]">Crime</span> vs
+          <span className="text-[#FF6A00]">Crime</span> vs{" "}
           <span className="text-[#FF6A00]">Police</span>
         </h2>
 
-        <div className="grid lg:grid-cols-2 gap-12 relative">
-          <div className="hidden lg:block absolute top-0 bottom-0 left-1/2 w-1 bg-gradient-to-b from-[#FF6A00] via-gray-600 to-[#1EFE86] rounded-full"></div>
-          {/* Immagine */}
-          <div className="relative fade-in-right">
-            <div className="relative rounded-3xl overflow-hidden shadow-[0_0_40px_#FF6A00]">
+        <div className="grid lg:grid-cols-2 gap-12 items-center relative">
+          {/* Immagine a sinistra */}
+          <div className="fade-in-left flex justify-center lg:justify-start">
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_0_40px_#FF6A00] w-full max-w-md">
               <img
                 src="/police.png"
                 alt="Crime vs Police"
-                className="rounded-3xl transform hover:scale-105 transition-transform duration-500"
+                className="rounded-3xl w-full h-auto object-cover transform hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1EFE86]/20 via-transparent to-transparent"></div>
             </div>
           </div>
 
-          {/* Police */}
-          <a href="store?id=21">
-            <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#1EFE86]/50 shadow-lg hover:shadow-[#1EFE86]/50 transition-all duration-500 fade-in-left group">
-              <div className="flex items-center gap-4 mb-6">
-                <Shield className="w-10 h-10 text-[#1EFE86] animate-pulse" />
-                <h3 className="text-3xl font-bold text-white drop-shadow-md">
-                  Police
-                </h3>
+          {/* Card Police e Crime a destra */}
+          <div className="flex flex-col gap-8 fade-in-right">
+            {/* Police */}
+            <a href="store?id=21">
+              <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#1EFE86]/50 shadow-lg hover:shadow-[#1EFE86]/50 transition-all duration-500 group">
+                <div className="flex items-center gap-4 mb-6">
+                  <Shield className="w-10 h-10 text-[#1EFE86] animate-pulse" />
+                  <h3 className="text-3xl font-bold text-white drop-shadow-md">
+                    Police
+                  </h3>
+                </div>
+                <p className="text-lg text-gray-300 leading-relaxed">
+                  Unisciti alle{" "}
+                  <span className="text-[#1EFE86] font-semibold">
+                    forze dell’ordine
+                  </span>
+                  , proteggi la città e difendi i cittadini dal caos.
+                </p>
+                <div className="mt-8 text-[#1EFE86] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
+                  Diventa un eroe <ArrowRight className="w-5 h-5" />
+                </div>
               </div>
-              <p className="text-lg text-gray-300 leading-relaxed">
-                Unisciti alle{" "}
-                <span className="text-[#1EFE86] font-semibold">
-                  forze dell’ordine
-                </span>
-                , proteggi la città e difendi i cittadini dal caos.
-              </p>
-              <div className="mt-8 text-[#1EFE86] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
-                Diventa un eroe <ArrowRight className="w-5 h-5" />
-              </div>
-            </div>
-          </a>
+            </a>
 
-          {/* Crime */}
-          <a href="store?id=17">
-            <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#FF6A00]/50 shadow-lg hover:shadow-[#FF6A00]/50 transition-all duration-500 fade-in-right group">
-              <div className="flex items-center gap-4 mb-6">
-                <MessageCircle className="w-10 h-10 text-[#FF6A00] animate-pulse" />
-                <h3 className="text-3xl font-bold text-white drop-shadow-md">
-                  Crime
-                </h3>
+            {/* Crime */}
+            <a href="store?id=17">
+              <div className="bg-gray-800/80 p-10 rounded-2xl border border-[#FF6A00]/50 shadow-lg hover:shadow-[#FF6A00]/50 transition-all duration-500 group">
+                <div className="flex items-center gap-4 mb-6">
+                  <MessageCircle className="w-10 h-10 text-[#FF6A00] animate-pulse" />
+                  <h3 className="text-3xl font-bold text-white drop-shadow-md">
+                    Crime
+                  </h3>
+                </div>
+                <p className="text-lg text-gray-300 leading-relaxed">
+                  Scegli la strada del{" "}
+                  <span className="text-[#FF6A00] font-semibold">crimine</span>,
+                  organizza colpi epici e diventa una leggenda urbana.
+                </p>
+                <div className="mt-8 text-[#FF6A00] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
+                  Sali al potere <ArrowRight className="w-5 h-5" />
+                </div>
               </div>
-              <p className="text-lg text-gray-300 leading-relaxed">
-                Scegli la strada del{" "}
-                <span className="text-[#FF6A00] font-semibold">crimine</span>,
-                organizza colpi epici e diventa una leggenda urbana.
-              </p>
-              <div className="mt-8 text-[#FF6A00] font-bold flex items-center gap-2 group-hover:translate-x-2 transition">
-                Sali al potere <ArrowRight className="w-5 h-5" />
-              </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
       </div>
     </section>

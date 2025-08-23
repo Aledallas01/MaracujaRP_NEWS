@@ -54,7 +54,7 @@ const HomePage: React.FC = () => (
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#FF6A00]/40 to-[#FFB347]/60"></div>
       <div className="relative z-10 max-w-4xl">
         <h1
-          className="text-5xl md:text-6xl font-extrabold text-orange mb-6 drop-shadow-xl animate-fadeInUp 
+          className="text-5xl md:text-6xl font-extrabold text-orange-500 mb-6 drop-shadow-xl animate-fadeInUp 
   [text-shadow:_-1px_1px_0_#000,_1px_1px_0_#000,_1px_-1px_0_#000,_-1px_-1px_0_#000]"
         >
           SERVER MINECRAFT <br /> ROLEPLAY ITALIANO

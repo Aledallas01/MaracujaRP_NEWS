@@ -166,7 +166,7 @@ const PublicStoreView: React.FC = () => {
         <div className="absolute top-20 left-0 w-full overflow-hidden">
           <svg
             className="relative block w-full h-48"
-            viewBox="100 500 250 0"
+            viewBox="0 0 1000 240"
             preserveAspectRatio="none"
           >
             <defs>
@@ -208,8 +208,6 @@ const PublicStoreView: React.FC = () => {
           </p>
         </div>
 
-        <br />
-        <br />
         {/* Sezioni */}
         {sections.length > 0 && (
           <div className="mb-8 flex flex-wrap gap-3 justify-center br-trasparent">

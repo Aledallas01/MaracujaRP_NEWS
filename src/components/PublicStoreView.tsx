@@ -166,7 +166,7 @@ const PublicStoreView: React.FC = () => {
         <div className="absolute top-20 left-0 w-full overflow-hidden">
           <svg
             className="relative block w-full h-48"
-            viewBox="0 0 1200 240"
+            viewBox="100 500 250 0"
             preserveAspectRatio="none"
           >
             <defs>

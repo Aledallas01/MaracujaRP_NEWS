@@ -162,6 +162,20 @@ const PublicStoreView: React.FC = () => {
   return (
     <div className="p-4 sm:p-6" style={{ backgroundColor: "#30334E" }}>
       <div className="max-w-6xl mx-auto">
+        {/* Ondina arancione */}
+        <div className="relative">
+          <svg
+            className="absolute top-0 left-0 w-full h-24 md:h-32"
+            viewBox="0 0 1440 320"
+            preserveAspectRatio="none"
+          >
+            <path
+              fill="#FF6A00"
+              fillOpacity="1"
+              d="M0,160L80,170.7C160,181,320,203,480,208C640,213,800,203,960,197.3C1120,192,1280,192,1360,192L1440,192L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
+            ></path>
+          </svg>
+        </div>
         {/* Hero */}
         <div className="relative bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
           <button

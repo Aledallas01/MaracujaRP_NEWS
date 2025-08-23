@@ -76,7 +76,7 @@ const Header: React.FC = () => {
           )}
           <span className="text-white font-medium">{user.username}</span>
           <button
-            className="px-3 py-1 bg-red-600 text-white font-semibold rounded hover:bg-red-500 transition-colors duration-200"
+            className="px-3 py-1 bg-red-600 text-white font-semibold rounded-full hover:bg-red-500 transition-colors duration-200"
             onClick={handleLogout}
           >
             Logout

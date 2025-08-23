@@ -208,8 +208,8 @@ const PublicStoreView: React.FC = () => {
           </p>
         </div>
 
-        <span></span>
-        <span></span>
+        <br />
+        <br />
         {/* Sezioni */}
         {sections.length > 0 && (
           <div className="mb-8 flex flex-wrap gap-3 justify-center br-trasparent">

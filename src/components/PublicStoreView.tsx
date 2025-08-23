@@ -174,7 +174,7 @@ const PublicStoreView: React.FC = () => {
                 id="wave-gradient"
                 x1="0%"
                 y1="0%"
-                x2="80%"
+                x2="120%"
                 y2="0%"
               >
                 <stop offset="0%" stopColor="#FFB088" />

@@ -62,19 +62,21 @@ const Header: React.FC = () => {
   return (
     <header className="border-b border-gray-700 px-4 py-3 flex justify-end space-x-4 bg-gray-800">
       {user ? (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3 bg-gray-700 px-3 py-1 rounded-full shadow-sm">
           {user.avatar ? (
             <img
               src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
               alt="Avatar"
-              className="w-8 h-8 rounded-full"
+              className="w-8 h-8 rounded-full border-2 border-gray-500"
             />
           ) : (
-            <div className="w-8 h-8 bg-gray-600 rounded-full"></div>
+            <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center text-white font-bold">
+              ?
+            </div>
           )}
-          <span className="text-white">{user.username}</span>
+          <span className="text-white font-medium">{user.username}</span>
           <button
-            className="px-2 py-1 bg-red-600 rounded hover:bg-red-500"
+            className="px-3 py-1 bg-red-600 text-white font-semibold rounded hover:bg-red-500 transition-colors duration-200"
             onClick={handleLogout}
           >
             Logout
@@ -82,7 +84,7 @@ const Header: React.FC = () => {
         </div>
       ) : (
         <button
-          className="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500"
+          className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-500 shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
           onClick={handleLogin}
         >
           Login con Discord

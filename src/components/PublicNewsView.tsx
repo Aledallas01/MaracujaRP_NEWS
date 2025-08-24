@@ -61,6 +61,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
     }
   }, [news]);
 
+  // Funzione per filtrare
   const matchesFilter = (item: {
     title?: string;
     content?: string;
@@ -80,6 +81,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
     return matchesSearch && matchesSection;
   };
 
+  // Applica il filtro
   const filteredNews = news.filter(matchesFilter);
 
   const openModal = (item: News) => {
@@ -152,7 +154,7 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
 
       {/* Lista News in griglia responsive */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {news.map((item) => (
+        {filteredNews.map((item) => (
           <article
             key={item.id}
             className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex flex-col md:flex-row"

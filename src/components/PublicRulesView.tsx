@@ -89,7 +89,7 @@ const PublicRulesView: React.FC = () => {
   }
 
   return (
-    <div className="p-6 min-h-full" style={{ backgroundColor: "#30334E" }}>
+    <div className="p-6 min-h-full bg-gray-800">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-100 mb-4">Regole</h2>
 

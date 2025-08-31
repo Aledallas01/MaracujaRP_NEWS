@@ -2,7 +2,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { ShoppingCart, MessageCircle, PackageOpen, Folder } from "lucide-react";
 import { supabaseOther } from "../lib/other";
-import type { Package, StoreSection, Discount } from "../lib/types";
+import type { Package, StoreSection } from "../lib/types";
+import { Discount } from "../lib/types";
 import ProductDetailsModal from "../components/ProductDetailsModal";
 import ActiveDiscountModal from "../components/ActiveDiscountModal";
 

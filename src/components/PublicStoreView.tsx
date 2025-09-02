@@ -1,6 +1,5 @@
-// src/components/PublicStoreView.tsx
 import React, { useEffect, useState, useCallback } from "react";
-import { ShoppingCart, MessageCircle, PackageOpen, Folder } from "lucide-react";
+import { ShoppingCart, MessageCircle, PackageOpen, Folder, Tag, Star } from "lucide-react";
 import { supabaseOther } from "../lib/other";
 import type { Package, StoreSection } from "../lib/types";
 import { Discount } from "../lib/types";
@@ -54,11 +53,9 @@ const PublicStoreView: React.FC = () => {
         const discounts = Array.isArray(discRes.data)
           ? (discRes.data as Discount[])
           : [];
-        console.log("Discounts da Supabase:", discounts); // 👀 debug
         const active = discounts.filter(
           (d) => !d.expiresAt || new Date(d.expiresAt) > new Date()
         );
-        console.log("Discounts attivi:", active); // 👀 debug
         setActiveDiscounts(active);
       }
     } catch (err) {
@@ -121,10 +118,10 @@ const PublicStoreView: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-800 min-h-screen text-center py-16">
-        <div className="animate-pulse">
-          <ShoppingCart className="h-12 w-12 text-[#FE9900] mx-auto mb-4" />
-          <p className="text-white text-lg">Caricamento in corso...</p>
+      <div className="bg-white min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Caricamento store...</p>
         </div>
       </div>
     );
@@ -132,87 +129,119 @@ const PublicStoreView: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-800 min-h-screen text-center py-16">
-        <div className="bg-red-500/10 text-red-300 border border-red-500/30 rounded-xl p-6 inline-block">
-          <p className="text-lg font-semibold mb-2">Errore</p>
-          <p>{error}</p>
+      <div className="bg-white min-h-screen flex items-center justify-center p-6">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <PackageOpen className="h-8 w-8 text-red-500" />
+          </div>
+          <h3 className="text-xl font-semibold text-red-800 mb-2">Errore</h3>
+          <p className="text-red-600">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-800 min-h-screen p-4 sm:p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Hero */}
-        <div className="relative bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
-          <button
-            onClick={() => setShowDiscountModal(true)}
-            title="Vedi gli sconti attivi"
-            className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md"
-          >
-            <span className="font-bold text-lg leading-none">%</span>
-          </button>
-          <div className="flex items-center justify-center space-x-4 mb-4">
-            <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">Store</h1>
-          </div>
-          <p className="text-white text-base sm:text-lg">
-            Esplora i pacchetti disponibili e personalizza la tua esperienza nel
-            server!
-          </p>
-        </div>
-
-        {/* Sezioni */}
-        {sections.length > 0 && (
-          <div className="mb-8 flex flex-wrap gap-3 justify-center">
-            {sections.map((section) => (
+    <div className="bg-white min-h-screen">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                  <ShoppingCart className="h-7 w-7 text-white" />
+                </div>
+                <h1 className="text-4xl font-bold">Store MaracujaRP</h1>
+              </div>
+              <p className="text-orange-100 text-lg max-w-2xl">
+                Scopri i nostri pacchetti esclusivi e migliora la tua esperienza di gioco
+              </p>
+            </div>
+            
+            {activeDiscounts.length > 0 && (
               <button
-                key={section.id}
-                onClick={() =>
-                  setActiveSection((prev) =>
-                    prev === String(section.id) ? null : String(section.id)
-                  )
-                }
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${
-                  String(activeSection) === String(section.id)
-                    ? "bg-[#FE9900] text-white"
-                    : "bg-gray-700 text-white hover:bg-gray-600 border border-gray-600"
+                onClick={() => setShowDiscountModal(true)}
+                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-xl px-6 py-3 transition-all duration-200 flex items-center space-x-2"
+              >
+                <Tag className="h-5 w-5" />
+                <span className="font-semibold">Sconti Attivi</span>
+                <span className="bg-white text-orange-600 text-sm font-bold px-2 py-1 rounded-full">
+                  {activeDiscounts.length}
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Filtri Sezioni */}
+        {sections.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Categorie</h2>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setActiveSection(null)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  !activeSection
+                    ? "bg-orange-500 text-white shadow-lg"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                <Folder className="h-4 w-4" />
-                <span>{section.nome}</span>
+                <Star className="h-4 w-4" />
+                <span>Tutti i prodotti</span>
               </button>
-            ))}
+              {sections.map((section) => (
+                <button
+                  key={section.id}
+                  onClick={() =>
+                    setActiveSection((prev) =>
+                      prev === String(section.id) ? null : String(section.id)
+                    )
+                  }
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                    String(activeSection) === String(section.id)
+                      ? "bg-orange-500 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <Folder className="h-4 w-4" />
+                  <span>{section.nome}</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Empty state */}
+        {/* Prodotti */}
         {filteredPackages.length === 0 ? (
-          <div className="text-center py-16 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
-            <PackageOpen className="h-10 w-10 text-[#FE9900] mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-3">
+          <div className="text-center py-16">
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <PackageOpen className="h-12 w-12 text-gray-400" />
+            </div>
+            <h3 className="text-2xl font-semibold text-gray-800 mb-3">
               {activeSection
-                ? "Nessun prodotto in questa sezione"
-                : "Nessun pacchetto disponibile"}
+                ? "Nessun prodotto in questa categoria"
+                : "Store temporaneamente vuoto"}
             </h3>
-            <p className="text-white text-base mb-4">
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
               {activeSection
-                ? "Prova a selezionare un'altra sezione o visualizza tutti i prodotti."
-                : "Al momento non ci sono pacchetti acquistabili nello store."}
+                ? "Prova a selezionare un'altra categoria o visualizza tutti i prodotti."
+                : "Al momento non ci sono pacchetti disponibili. Torna presto per nuovi prodotti!"}
             </p>
             <a
               href={discordLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block mt-2 bg-[#FE9900]/20 border border-[#FE9900]/30 rounded-xl px-6 py-3 text-[#FE9900] font-medium hover:bg-[#FE9900]/40 transition-all"
+              className="inline-flex items-center space-x-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200"
             >
-              💬 Contattaci su Discord
+              <MessageCircle className="h-5 w-5" />
+              <span>Contattaci su Discord</span>
             </a>
           </div>
         ) : (
-          /* Cards prodotti */
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredPackages.map((pkg) => {
               const section = sections.find(
                 (s) => String(s.id) === String(pkg.section_id)
@@ -226,74 +255,87 @@ const PublicStoreView: React.FC = () => {
                 <div
                   key={pkg.id}
                   onClick={() => setSelectedPackage(pkg)}
-                  className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
+                  className="group cursor-pointer bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  {pkg.immagine && (
-                    <div className="relative mb-4">
-                      <img
-                        src={pkg.immagine || "/logo.png"}
-                        alt={pkg.nome}
-                        className="object-cover w-full h-48 rounded-lg"
-                        onError={(e) => {
-                          e.currentTarget.src = "/logo.png";
-                        }}
-                      />
-                      {section && (
-                        <span className="absolute top-2 left-2 bg-gray-900/80 text-white text-xs font-semibold px-2 py-1 rounded-md border border-gray-700">
-                          {section.nome}
-                        </span>
-                      )}
-                      {discount && (
-                        <span className="absolute top-2 right-2 bg-[#FE9900] text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                          -{discount.percentage ?? discount.valore ?? 0}%
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {pkg.nome}
-                  </h3>
-                  <p className="text-white text-sm mb-4 line-clamp-3">
-                    Clicca per visualizzare i dettagli del prodotto.
-                  </p>
-
-                  <div className="mt-auto flex items-center justify-between mb-4">
-                    {discount ? (
-                      <div className="space-y-0.5">
-                        <p className="text-sm text-[#FE9900] line-through">
-                          €{(pkg.prezzo ?? 0).toFixed(2)}
-                        </p>
-                        <p className="text-xl font-bold text-green-400">
-                          €{(discountedPrice ?? 0).toFixed(2)}
-                        </p>
-                        <p className="text-xs text-green-300">
-                          Risparmi €
-                          {((pkg.prezzo ?? 0) - (discountedPrice ?? 0)).toFixed(
-                            2
-                          )}
-                        </p>
+                  {/* Immagine */}
+                  <div className="relative h-48 bg-gray-50">
+                    <img
+                      src={pkg.immagine || "/logo.png"}
+                      alt={pkg.nome}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.currentTarget.src = "/logo.png";
+                      }}
+                    />
+                    
+                    {/* Badge sezione */}
+                    {section && (
+                      <div className="absolute top-3 left-3 bg-gray-800/90 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">
+                        {section.nome}
                       </div>
-                    ) : (
-                      <p className="text-xl font-bold text-[#FE9900]">
-                        €{(pkg.prezzo ?? 0).toFixed(2)}
-                      </p>
                     )}
-                    <p className="text-xs text-gray-400 italic text-right">
-                      Non rimborsabile
-                    </p>
+                    
+                    {/* Badge sconto */}
+                    {discount && (
+                      <div className="absolute top-3 right-3 bg-orange-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+                        -{discount.percentage ?? discount.valore ?? 0}%
+                      </div>
+                    )}
                   </div>
 
-                  <a
-                    href={discordLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 bg-[#FE9900]/20 hover:bg-[#FE9900]/40 text-[#FE9900] font-medium py-2 px-4 rounded-xl transition-all"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <MessageCircle className="h-5 w-5" />
-                    Supporto Discord
-                  </a>
+                  {/* Contenuto */}
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors">
+                      {pkg.nome}
+                    </h3>
+                    
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      Scopri tutti i vantaggi e le funzionalità incluse in questo pacchetto.
+                    </p>
+
+                    {/* Prezzo */}
+                    <div className="mb-4">
+                      {discount ? (
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg text-gray-400 line-through">
+                              €{(pkg.prezzo ?? 0).toFixed(2)}
+                            </span>
+                            <span className="bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full">
+                              SCONTO
+                            </span>
+                          </div>
+                          <p className="text-2xl font-bold text-orange-600">
+                            €{(discountedPrice ?? 0).toFixed(2)}
+                          </p>
+                          <p className="text-sm text-green-600 font-medium">
+                            Risparmi €{((pkg.prezzo ?? 0) - (discountedPrice ?? 0)).toFixed(2)}
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-2xl font-bold text-gray-800">
+                          €{(pkg.prezzo ?? 0).toFixed(2)}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Nota non rimborsabile */}
+                    <p className="text-xs text-gray-500 italic mb-4">
+                      Acquisto non rimborsabile
+                    </p>
+
+                    {/* Pulsante supporto */}
+                    <a
+                      href={discordLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center space-x-2 bg-gray-100 hover:bg-orange-500 text-gray-700 hover:text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 group/btn"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      <span>Supporto Discord</span>
+                    </a>
+                  </div>
                 </div>
               );
             })}
@@ -301,6 +343,7 @@ const PublicStoreView: React.FC = () => {
         )}
       </div>
 
+      {/* Modal dettagli prodotto */}
       {selectedPackage && (
         <ProductDetailsModal
           product={{
@@ -315,6 +358,7 @@ const PublicStoreView: React.FC = () => {
         />
       )}
 
+      {/* Modal sconti attivi */}
       {showDiscountModal && (
         <ActiveDiscountModal onClose={() => setShowDiscountModal(false)} />
       )}

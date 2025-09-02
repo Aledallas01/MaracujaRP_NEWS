@@ -57,8 +57,8 @@ const AppContent: React.FC<{
               }
             />
             <Route path="/rules" element={<PublicRulesView />} />
-            <Route path="/store" element={<PublicStoreView />} />
-            <Route path="/2store" element={<Store />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/2store" element={<PublicStoreView />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 
 // Pagine
 import HomePage from "./components/HomePage";
+import Store from "./components/Store";
 import PublicNewsView from "./components/PublicNewsView";
 import PublicRulesView from "./components/PublicRulesView";
 import PublicStoreView from "./components/PublicStoreView";
@@ -57,6 +58,7 @@ const AppContent: React.FC<{
             />
             <Route path="/rules" element={<PublicRulesView />} />
             <Route path="/store" element={<PublicStoreView />} />
+            <Route path="/2store" element={<Store />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

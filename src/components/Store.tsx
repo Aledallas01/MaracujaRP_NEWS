@@ -138,44 +138,35 @@ const PublicStoreView: React.FC = () => {
     <div className="bg-gray-800 min-h-screen p-4 sm:p-6">
       <div>
         <div className="max-w-6xl mx-auto">
-          {/* Hero */}
-          <div className="relative bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
-            <button
-              onClick={() => setShowDiscountModal(true)}
-              title="Vedi gli sconti attivi"
-              className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md"
-            >
-              <span className="font-bold text-lg leading-none">%</span>
-            </button>
-            <div className="flex items-center justify-center space-x-4 mb-4">
-              <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
-              <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                Store
+          {/* HERO */}
+          <div className="relative bg-gradient-to-r from-yellow-500 to-yellow-400">
+            {/* Logo e titolo */}
+            <div className="flex flex-col items-center justify-center py-12">
+              <img
+                src="/logo.png" // cambia col tuo logo
+                alt="Logo Store"
+                className="w-40 h-40 object-contain drop-shadow-lg"
+              />
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mt-4">
+                Benvenuto nello Store
               </h1>
             </div>
-            <p className="text-white text-base sm:text-lg">
-              Esplora i pacchetti disponibili e personalizza la tua esperienza
-              nel server!
-            </p>
-          </div>
 
-          {/* Ondina */}
-          <div className="absolute w-full overflow-hidden leading-[0]">
-            <svg
-              className="relative block w-[calc(100%+1.3px)] h-16"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 1200 120"
-              preserveAspectRatio="none"
-            >
-              <path
-                d="M985.66,92.83C906.67,72,823.78,31,743,14.19
-           c-82.26-17.34-168.06-16.9-250.45-.39
-           -57.84,11.64-114,31.21-172,41.55
-           -86,15-172,13-258,1.54V120H1200V97.8
-           C1132.19,118.92,1059.46,112,985.66,92.83Z"
-                className="fill-orange-800"
-              ></path>
-            </svg>
+            {/* Ondina */}
+            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 1440 320"
+                className="w-full h-20"
+                preserveAspectRatio="none"
+              >
+                <path
+                  fill="#1f2937" // grigio scuro sotto
+                  fillOpacity="1"
+                  d="M0,96L80,112C160,128,320,160,480,186.7C640,213,800,235,960,213.3C1120,192,1280,128,1360,96L1440,64L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
+                ></path>
+              </svg>
+            </div>
           </div>
         </div>
 

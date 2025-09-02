@@ -161,13 +161,13 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
           <PackageOpen className="h-10 w-10 text-[#FE9900] mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-white mb-3">
             {selectedSection
-              ? "Nessun prodotto in questa sezione"
-              : "Nessun pacchetto disponibile"}
+              ? "Nessuna news in questa sezione"
+              : "Non è stata pubblicata alcuna News"}
           </h3>
           <p className="text-white text-base mb-4">
             {selectedSection
-              ? "Prova a selezionare un'altra sezione o visualizza tutti i prodotti."
-              : "Al momento non ci sono pacchetti acquistabili nello store."}
+              ? "Prova a selezionare un'altra sezione o visualizza tutte le news."
+              : "Al momento non ci sono news."}
           </p>
           <a
             href={discordLink}

@@ -160,7 +160,7 @@ const PublicStoreView: React.FC = () => {
           </div>
 
           {/* Ondina */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+          <div className="absolute w-full overflow-hidden leading-[0]">
             <svg
               className="relative block w-[calc(100%+1.3px)] h-16"
               xmlns="http://www.w3.org/2000/svg"
@@ -173,7 +173,7 @@ const PublicStoreView: React.FC = () => {
            -57.84,11.64-114,31.21-172,41.55
            -86,15-172,13-258,1.54V120H1200V97.8
            C1132.19,118.92,1059.46,112,985.66,92.83Z"
-                className="fill-gray-800"
+                className="fill-orange-800"
               ></path>
             </svg>
           </div>

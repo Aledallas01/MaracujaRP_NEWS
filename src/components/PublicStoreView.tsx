@@ -65,6 +65,7 @@ const PublicStoreView: React.FC = () => {
     } finally {
       setLoading(false);
     }
+    console.log(discounts);
   }, []);
 
   useEffect(() => {

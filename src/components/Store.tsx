@@ -136,24 +136,47 @@ const PublicStoreView: React.FC = () => {
 
   return (
     <div className="bg-gray-800 min-h-screen p-4 sm:p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Hero */}
-        <div className="relative bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
-          <button
-            onClick={() => setShowDiscountModal(true)}
-            title="Vedi gli sconti attivi"
-            className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md"
-          >
-            <span className="font-bold text-lg leading-none">%</span>
-          </button>
-          <div className="flex items-center justify-center space-x-4 mb-4">
-            <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">Store</h1>
+      <div>
+        <div className="max-w-6xl mx-auto">
+          {/* Hero */}
+          <div className="relative bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
+            <button
+              onClick={() => setShowDiscountModal(true)}
+              title="Vedi gli sconti attivi"
+              className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md"
+            >
+              <span className="font-bold text-lg leading-none">%</span>
+            </button>
+            <div className="flex items-center justify-center space-x-4 mb-4">
+              <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
+              <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                Store
+              </h1>
+            </div>
+            <p className="text-white text-base sm:text-lg">
+              Esplora i pacchetti disponibili e personalizza la tua esperienza
+              nel server!
+            </p>
           </div>
-          <p className="text-white text-base sm:text-lg">
-            Esplora i pacchetti disponibili e personalizza la tua esperienza nel
-            server!
-          </p>
+
+          {/* Ondina */}
+          <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+            <svg
+              className="relative block w-[calc(100%+1.3px)] h-16"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1200 120"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M985.66,92.83C906.67,72,823.78,31,743,14.19
+           c-82.26-17.34-168.06-16.9-250.45-.39
+           -57.84,11.64-114,31.21-172,41.55
+           -86,15-172,13-258,1.54V120H1200V97.8
+           C1132.19,118.92,1059.46,112,985.66,92.83Z"
+                className="fill-gray-800"
+              ></path>
+            </svg>
+          </div>
         </div>
 
         {/* Se non è stata scelta nessuna sezione → mostriamo le sezioni */}

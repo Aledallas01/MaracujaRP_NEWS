@@ -88,7 +88,7 @@ const PublicStoreView: React.FC = () => {
     (productId: string) => {
       if (!productId) return null;
       const d = activeDiscounts.find(
-        (disc) => disc && String(disc.product_id) === String(productId)
+        (disc) => disc && String(disc.productId) === String(productId)
       );
       if (!d) return null;
 

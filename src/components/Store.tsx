@@ -149,6 +149,8 @@ const PublicStoreView: React.FC = () => {
                 <span className="font-bold text-lg leading-none">%</span>
               </button>
 
+              {/*
+
               <div className="flex flex-col items-center justify-center py-12">
                 <img
                   src="/logo.png" // cambia col tuo logo
@@ -156,6 +158,8 @@ const PublicStoreView: React.FC = () => {
                   className="w-40 h-40 object-contain drop-shadow-lg"
                 />
               </div>
+              
+              */}
               <div className="flex items-center justify-center space-x-4 mb-4">
                 <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
                 <h1 className="text-3xl sm:text-4xl font-bold text-white">

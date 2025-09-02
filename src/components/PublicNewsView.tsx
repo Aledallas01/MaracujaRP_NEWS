@@ -157,12 +157,12 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
         <div className="text-center py-16 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
           <PackageOpen className="h-10 w-10 text-[#FE9900] mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-white mb-3">
-            {activeSection
+            {selectedSection
               ? "Nessun prodotto in questa sezione"
               : "Nessun pacchetto disponibile"}
           </h3>
           <p className="text-white text-base mb-4">
-            {activeSection
+            {selectedSection
               ? "Prova a selezionare un'altra sezione o visualizza tutti i prodotti."
               : "Al momento non ci sono pacchetti acquistabili nello store."}
           </p>

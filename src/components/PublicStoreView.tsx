@@ -90,8 +90,8 @@ const PublicStoreView: React.FC = () => {
       );
       if (!d) return null;
 
-      if (d.expires_at) {
-        const exp = new Date(d.expires_at);
+      if (d.expiresAt) {
+        const exp = new Date(d.expiresAt);
         if (!isNaN(exp.getTime()) && exp < new Date()) return null;
       }
       return d;

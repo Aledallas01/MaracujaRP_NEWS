@@ -140,7 +140,7 @@ const PublicStoreView: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* HERO */}
           <div className="relative bg-gradient-to-r from-orange-500 to-orange-400">
-            <div className="relative backdrop-blur-sm border rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
+            <div className="relative backdrop-blur-sm rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
               <button
                 onClick={() => setShowDiscountModal(true)}
                 title="Vedi gli sconti attivi"

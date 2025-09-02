@@ -3,6 +3,9 @@ import { Search, Calendar, User, ArrowRight, PackageOpen } from "lucide-react";
 import { supabase } from "../lib/news";
 import { News, Section } from "../lib/types";
 
+const discordLink =
+  "https://discord.com/channels/1258732999214632982/1333937942141337721";
+
 interface PublicNewsViewProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;

@@ -160,8 +160,8 @@ const PublicStoreView: React.FC = () => {
             ></path>
           </svg>
         </div>
-
-        <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-12 relative z-10">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3 mb-4">
@@ -175,23 +175,23 @@ const PublicStoreView: React.FC = () => {
               </p>
             </div>
             
-            {activeDiscounts.length > 0 && (
-              <button
-                onClick={() => setShowDiscountModal(true)}
-                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-xl px-6 py-3 transition-all duration-200 flex items-center space-x-2"
-              >
-                <Tag className="h-5 w-5" />
-                <span className="font-semibold">Sconti Attivi</span>
-                <span className="bg-white text-orange-600 text-sm font-bold px-2 py-1 rounded-full">
-                  {activeDiscounts.length}
-                </span>
-              </button>
-            )}
-          </div>
-        </div>
+      {/* Wave SVG - positioned below the orange block */}
+      <div className="w-full overflow-hidden leading-none">
+        <svg
+          className="relative block w-full h-12"
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+            className="fill-orange-500"
+          ></path>
+        </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8 relative -mt-6">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Filtri Sezioni */}
         {sections.length > 0 && (
           <div className="mb-8 relative z-10">

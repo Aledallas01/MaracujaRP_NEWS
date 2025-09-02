@@ -25,6 +25,13 @@ const Sidebar: React.FC = () => {
       category: "gestionale",
     },
     {
+      id: "home",
+      label: "Home",
+      icon: "home",
+      path: "/",
+      category: "server",
+    },
+    {
       id: "rules",
       label: "Regole",
       icon: Book,

@@ -3,20 +3,55 @@ import { useLocation, Link } from "react-router-dom";
 import { Home, Menu, X, ShoppingCart, Book } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: React.FC<any>;
+  path: string;
+  category: string;
+}
+
 const Sidebar: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const publicMenuItems = [
-    { id: "home", label: "Home", icon: Home, path: "/" },
-    { id: "news", label: "Notizie", icon: Home, path: "/news" },
-    { id: "rules", label: "Regole", icon: Book, path: "/rules" },
-    { id: "store", label: "Store", icon: ShoppingCart, path: "/store" },
+  const publicMenuItems: MenuItem[] = [
+    {
+      id: "news",
+      label: "Notizie",
+      icon: Home,
+      path: "/news",
+      category: "gestionale",
+    },
+    {
+      id: "rules",
+      label: "Regole",
+      icon: Book,
+      path: "/rules",
+      category: "server",
+    },
+    {
+      id: "store",
+      label: "Store",
+      icon: ShoppingCart,
+      path: "/store",
+      category: "server",
+    },
   ];
 
-  const adminMenuItems: any[] = [];
+  const adminMenuItems: MenuItem[] = []; // esempio, puoi aggiungere admin items
   const menuItems = isAuthenticated ? adminMenuItems : publicMenuItems;
+
+  // Raggruppa gli item per categoria
+  const groupedItems = menuItems.reduce<Record<string, MenuItem[]>>(
+    (acc, item) => {
+      if (!acc[item.category]) acc[item.category] = [];
+      acc[item.category].push(item);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <>
@@ -59,33 +94,34 @@ const Sidebar: React.FC = () => {
           </button>
         </div>
 
-        {/* Menu */}
-        <div className="mb-5">
-          <h3 className="text-gray-400 uppercase text-[12px] font-semibold tracking-wide mb-3">
-            Servizi
-          </h3>
+        {/* Menu raggruppato per categoria */}
+        {Object.entries(groupedItems).map(([category, items]) => (
+          <div key={category} className="mb-5">
+            <h3 className="text-gray-400 uppercase text-[12px] font-semibold tracking-wide mb-3">
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </h3>
+            {items.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
 
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-
-            return (
-              <Link
-                key={item.id}
-                to={item.path}
-                onClick={() => setIsOpen(false)}
-                className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-[#FE9900] text-white"
-                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
+              return (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  onClick={() => setIsOpen(false)}
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-[#FE9900] text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </aside>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Calendar, User, ArrowRight } from "lucide-react";
+import { Search, Calendar, User, ArrowRight, PackageOpen } from "lucide-react";
 import { supabase } from "../lib/news";
 import { News, Section } from "../lib/types";
 

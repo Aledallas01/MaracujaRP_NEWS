@@ -152,72 +152,99 @@ const PublicNewsView: React.FC<PublicNewsViewProps> = ({
         </div>
       </div>
 
-      {/* Lista News in griglia responsive */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredNews.map((item) => (
-          <article
-            key={item.id}
-            className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex flex-col md:flex-row"
+      {/* Empty state */}
+      {filteredNews.length === 0 ? (
+        <div className="text-center py-16 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
+          <PackageOpen className="h-10 w-10 text-[#FE9900] mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-white mb-3">
+            {activeSection
+              ? "Nessun prodotto in questa sezione"
+              : "Nessun pacchetto disponibile"}
+          </h3>
+          <p className="text-white text-base mb-4">
+            {activeSection
+              ? "Prova a selezionare un'altra sezione o visualizza tutti i prodotti."
+              : "Al momento non ci sono pacchetti acquistabili nello store."}
+          </p>
+          <a
+            href={discordLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-2 bg-[#FE9900]/20 border border-[#FE9900]/30 rounded-xl px-6 py-3 text-[#FE9900] font-medium hover:bg-[#FE9900]/40 transition-all"
           >
-            {/* Immagine con sezione */}
-            <div className="relative w-full h-48 md:w-48 md:h-auto flex-shrink-0">
-              {item.section && (
-                <div className="absolute top-1 left-1 z-10 bg-[#FE9900] text-white text-xs font-semibold px-2 py-0.5 rounded-bl-md rounded-tr-md shadow-lg select-none">
-                  {item.section.title}
-                </div>
-              )}
-              {item.image ? (
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="h-full w-full bg-gray-700 flex items-center justify-center text-gray-400">
-                  No Image
-                </div>
-              )}
-            </div>
-
-            {/* Contenuto */}
-            <div className="flex flex-col justify-between p-6 flex-1">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-2">
-                  {item.title}
-                </h3>
-                <p
-                  className="text-gray-300 text-sm mb-4"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      item.content.length > 120
-                        ? item.content.slice(0, 120) + "..."
-                        : item.content,
-                  }}
-                />
+            💬 Contattaci su Discord
+          </a>
+        </div>
+      ) : (
+        /* Lista News in griglia responsive */
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredNews.map((item) => (
+            <article
+              key={item.id}
+              className="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 hover:shadow-lg transition-shadow flex flex-col md:flex-row"
+            >
+              {/* Immagine con sezione */}
+              <div className="relative w-full h-48 md:w-48 md:h-auto flex-shrink-0">
+                {item.section && (
+                  <div className="absolute top-1 left-1 z-10 bg-[#FE9900] text-white text-xs font-semibold px-2 py-0.5 rounded-bl-md rounded-tr-md shadow-lg select-none">
+                    {item.section.title}
+                  </div>
+                )}
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gray-700 flex items-center justify-center text-gray-400">
+                    No Image
+                  </div>
+                )}
               </div>
 
-              {/* Data e autore */}
-              <div className="flex flex-col gap-1 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>{new Date(item.created_at).toLocaleDateString()}</span>
+              {/* Contenuto */}
+              <div className="flex flex-col justify-between p-6 flex-1">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-100 mb-2">
+                    {item.title}
+                  </h3>
+                  <p
+                    className="text-gray-300 text-sm mb-4"
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        item.content.length > 120
+                          ? item.content.slice(0, 120) + "..."
+                          : item.content,
+                    }}
+                  />
                 </div>
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>{item.created_by || "Autore Sconosciuto"}</span>
-                </div>
-              </div>
 
-              <button
-                onClick={() => openModal(item)}
-                className="mt-4 self-start flex items-center gap-1 text-[#FE9900] hover:underline"
-              >
-                Leggi <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
+                {/* Data e autore */}
+                <div className="flex flex-col gap-1 text-sm text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    <span>
+                      {new Date(item.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span>{item.created_by || "Autore Sconosciuto"}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => openModal(item)}
+                  className="mt-4 self-start flex items-center gap-1 text-[#FE9900] hover:underline"
+                >
+                  Leggi <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
 
       {/* Modal */}
       {modalOpen && modalContent && (

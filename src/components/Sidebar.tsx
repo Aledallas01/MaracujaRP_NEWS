@@ -27,7 +27,7 @@ const Sidebar: React.FC = () => {
     {
       id: "home",
       label: "Home",
-      icon: "home",
+      icon: Home,
       path: "/",
       category: "server",
     },

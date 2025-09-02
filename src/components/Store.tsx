@@ -139,7 +139,7 @@ const PublicStoreView: React.FC = () => {
       <div>
         <div className="max-w-6xl mx-auto">
           {/* HERO */}
-          <div className="relative bg-gradient-to-r from-yellow-500 to-yellow-400">
+          <div className="relative bg-gradient-to-r from-orange-500 to-orange-400">
             <div className="relative backdrop-blur-sm border rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8 text-center">
               <button
                 onClick={() => setShowDiscountModal(true)}
@@ -158,7 +158,7 @@ const PublicStoreView: React.FC = () => {
                   className="w-40 h-40 object-contain drop-shadow-lg"
                 />
               </div>
-              
+
               */}
               <div className="flex items-center justify-center space-x-4 mb-4">
                 <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
@@ -192,6 +192,8 @@ const PublicStoreView: React.FC = () => {
                 ></path>
               </svg>
             </div>
+            <br />
+            <br />
           </div>
         </div>
 

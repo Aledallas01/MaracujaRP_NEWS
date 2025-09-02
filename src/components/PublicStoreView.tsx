@@ -54,9 +54,11 @@ const PublicStoreView: React.FC = () => {
         const discounts = Array.isArray(discRes.data)
           ? (discRes.data as Discount[])
           : [];
+        console.log("Discounts da Supabase:", discounts); // 👀 debug
         const active = discounts.filter(
           (d) => !d.expiresAt || new Date(d.expiresAt) > new Date()
         );
+        console.log("Discounts attivi:", active); // 👀 debug
         setActiveDiscounts(active);
       }
     } catch (err) {
@@ -65,7 +67,6 @@ const PublicStoreView: React.FC = () => {
     } finally {
       setLoading(false);
     }
-    console.log(discounts);
   }, []);
 
   useEffect(() => {

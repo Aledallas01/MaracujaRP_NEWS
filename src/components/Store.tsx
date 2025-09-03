@@ -160,11 +160,11 @@ const PublicStoreView: React.FC = () => {
                 <span className="font-bold text-lg leading-none">%</span>
               </button>
 
-              <div className="flex flex-col items-center justify-center relative z-20">
+              <div className="flex flex-col items-center justify-center relative z-30">
                 <img
                   src="/trasparent-logo.png"
                   alt="Logo Store"
-                  className="w-56 h-56 object-contain drop-shadow-lg" // rimosso -mt-50 per non sovrapporre troppo
+                  className="w-80 h-80 object-contain drop-shadow-lg"
                 />
               </div>
 
@@ -203,9 +203,6 @@ const PublicStoreView: React.FC = () => {
                 ></path>
               </svg>
             </div>
-
-            <br />
-            <br />
           </div>
         </div>
 

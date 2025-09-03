@@ -160,8 +160,8 @@ const PublicStoreView: React.FC = () => {
                 <span className="font-bold text-lg leading-none">%</span>
               </button>
 
-              {/* Immagine con meno bordo (meno spazio intorno) */}
-              <div className="relative z-10">
+              {/* Immagine centrata */}
+              <div className="relative z-30 flex justify-center">
                 <img
                   src="/trasparent-logo.png"
                   alt="Logo Store"
@@ -169,8 +169,8 @@ const PublicStoreView: React.FC = () => {
                 />
               </div>
 
-              {/* Rettangolo grigio in primo piano */}
-              <div className="relative z-20 bg-gray-600 rounded-3xl border border-gray-500/50 text-center p-6 sm:p-8 mt-[-60px]">
+              {/* Rettangolo grigio parzialmente sottostante (l'immagine lo sovrappone leggermente) */}
+              <div className="relative z-20 bg-gray-600 rounded-3xl border border-gray-500/50 text-center p-6 sm:p-8 mt-[-20px]">
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
                   <h1 className="text-3xl sm:text-4xl font-bold text-white">

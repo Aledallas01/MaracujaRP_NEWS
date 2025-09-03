@@ -54,7 +54,8 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="text-sm text-gray-400">
-          © {new Date().getFullYear()} MaracujaRP. Tutti i diritti riservati.
+          © {new Date().getFullYear()} MaracujaRP. Tutti i diritti riservati.{" "}
+          Non siamo affiliati a Mojang AB.
         </div>
       </div>
     </footer>

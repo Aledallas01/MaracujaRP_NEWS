@@ -97,6 +97,7 @@ function App() {
           discordToken={discordToken}
           setDiscordToken={setDiscordToken}
         />
+        <Analytics />
       </Router>
     </AuthProvider>
   );

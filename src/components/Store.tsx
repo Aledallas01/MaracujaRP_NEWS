@@ -1,4 +1,4 @@
-// src/components/PublicStoreView.tsx
+// src/components/Store.tsx
 import React, { useEffect, useState, useCallback } from "react";
 import {
   ShoppingCart,
@@ -147,186 +147,187 @@ const PublicStoreView: React.FC = () => {
 
   return (
     <div className="bg-[#3C3C3C] min-h-screen p-4 sm:p-6">
-      <div>
-        <div className="max-w-6xl mx-auto">
-          {/* HERO */}
-          <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl mb-8">
-            {/* Contenitore principale con ondina */}
-            <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl pt-6 sm:pt-8 lg:pt-10 pb-16 text-center">
-              <button
-                onClick={() => setShowDiscountModal(true)}
-                title="Vedi gli sconti attivi"
-                className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md"
-              >
-                <span className="font-bold text-lg leading-none">%</span>
-              </button>
+      <div className="max-w-6xl mx-auto">
+        {/* HERO SECTION - Replica dell'immagine */}
+        <div className="relative mb-8">
+          {/* Sfondo arancione con gradiente */}
+          <div className="relative bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-400 h-80 rounded-t-3xl overflow-hidden">
+            {/* Bottone sconti in alto a destra */}
+            <button
+              onClick={() => setShowDiscountModal(true)}
+              title="Vedi gli sconti attivi"
+              className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md z-50"
+            >
+              <span className="font-bold text-lg leading-none">%</span>
+            </button>
 
-              {/* Logo centrato e in primo piano - sporge sopra il rettangolo */}
-              <div className="relative z-40 flex justify-center mb-[-40px]">
-                <img
-                  src="/trasparent-logo.png"
-                  alt="Logo Store"
-                  className="w-60 h-60 sm:w-80 sm:h-80 object-contain drop-shadow-2xl"
-                />
-              </div>
-
-              {/* Ondina */}
-              <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1440 320"
-                  className="w-full h-24"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    fill="#3C3C3C"
-                    fillOpacity="1"
-                    d="M0,160 
-             C120,200,240,120,360,160 
-             C480,200,600,280,720,240 
-             C840,200,960,120,1080,160 
-             C1200,200,1320,280,1440,240 
-             L1440,320L0,320Z"
-                  ></path>
-                </svg>
-              </div>
+            {/* Logo centrato che sporge */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+              <img
+                src="/trasparent-logo.png"
+                alt="Logo Store"
+                className="w-48 h-48 sm:w-64 sm:h-64 object-contain drop-shadow-2xl"
+              />
             </div>
 
-            {/* Rettangolo grigio che si sovrappone all'ondina */}
-            <div className="relative z-30 bg-gray-600 rounded-3xl border border-gray-500/50 text-center p-6 sm:p-8 mx-4 sm:mx-8 mt-[-60px] shadow-2xl">
-              <div className="flex items-center justify-center space-x-4 mb-4 pt-8">
-                  <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
-                  <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                    Store
-                  </h1>
-                </div>
-                <p className="text-white text-base sm:text-lg">
-                  Esplora i pacchetti disponibili e personalizza la tua
-                  esperienza nel server!
-                </p>
-              </div>
+            {/* Ondina SVG */}
+            <div className="absolute bottom-0 left-0 w-full z-20">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 1440 320"
+                className="w-full h-20"
+                preserveAspectRatio="none"
+              >
+                <path
+                  fill="#4A4A4A"
+                  fillOpacity="1"
+                  d="M0,160 
+                   C120,200,240,120,360,160 
+                   C480,200,600,280,720,240 
+                   C840,200,960,120,1080,160 
+                   C1200,200,1320,280,1440,240 
+                   L1440,320L0,320Z"
+                ></path>
+              </svg>
+            </div>
           </div>
 
-          {/* Se non è stata scelta nessuna sezione → mostriamo le sezioni */}
-          {!activeSection ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {sections.map((section) => (
-                <div
-                  key={section.id}
-                  onClick={() => setActiveSection(String(section.id))}
-                  className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
-                >
-                  <Folder className="h-12 w-12 text-[#FE9900] mb-4" />
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {section.nome}
-                  </h3>
-                  {section.descrizione && (
-                    <p className="text-sm text-gray-300 text-center">
-                      {section.descrizione}
-                    </p>
-                  )}
-                </div>
-              ))}
+          {/* Rettangolo grigio sovrapposto */}
+          <div className="relative -mt-10 mx-4 sm:mx-8 z-40 bg-gray-700 rounded-2xl border border-gray-600 shadow-2xl p-6 sm:p-8">
+            <div className="text-center pt-16">
+              <div className="flex items-center justify-center space-x-4 mb-4">
+                <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
+                <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                  Store
+                </h1>
+              </div>
+              <p className="text-white text-base sm:text-lg">
+                Esplora i pacchetti disponibili e personalizza la tua
+                esperienza nel server!
+              </p>
             </div>
-          ) : (
-            <>
-              {/* Bottone torna alle sezioni */}
-              <button
-                onClick={() => setActiveSection(null)}
-                className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition"
+          </div>
+        </div>
+
+        {/* Se non è stata scelta nessuna sezione → mostriamo le sezioni */}
+        {!activeSection ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {sections.map((section) => (
+              <div
+                key={section.id}
+                onClick={() => setActiveSection(String(section.id))}
+                className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
               >
-                <ArrowLeft className="h-4 w-4" />
-                Torna alle sezioni
-              </button>
-
-              {/* Prodotti della sezione */}
-              {filteredPackages.length === 0 ? (
-                <div className="text-center py-16 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
-                  <PackageOpen className="h-10 w-10 text-[#FE9900] mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-white mb-3">
-                    Nessun prodotto
-                  </h3>
-                  <p className="text-white text-base mb-4">
-                    Al momento non ci sono pacchetti in questa sezione.
+                <Folder className="h-12 w-12 text-[#FE9900] mb-4" />
+                <h3 className="text-xl font-bold text-white mb-2">
+                  {section.nome}
+                </h3>
+                {section.descrizione && (
+                  <p className="text-sm text-gray-300 text-center">
+                    {section.descrizione}
                   </p>
-                </div>
-              ) : (
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredPackages.map((pkg) => {
-                    const discount = getDiscountForProduct(pkg.id);
-                    const discountedPrice = discount
-                      ? calculateDiscountedPrice(pkg.prezzo, discount)
-                      : pkg.prezzo;
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            {/* Bottone torna alle sezioni */}
+            <button
+              onClick={() => setActiveSection(null)}
+              className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Torna alle sezioni
+            </button>
 
-                    return (
-                      <div
-                        key={pkg.id}
-                        onClick={() => setSelectedPackage(pkg)}
-                        className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
-                      >
-                        {pkg.immagine && (
-                          <div className="relative mb-4">
-                            <img
-                              src={pkg.immagine || "/logo.png"}
-                              alt={pkg.nome}
-                              className="object-cover w-full h-48 rounded-lg"
-                              onError={(e) => {
-                                e.currentTarget.src = "/logo.png";
-                              }}
-                            />
-                            {discount && (
-                              <span className="absolute top-2 right-2 bg-[#FE9900] text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                                -{discount.percentage ?? discount.valore ?? 0}%
-                              </span>
-                            )}
-                          </div>
-                        )}
+            {/* Prodotti della sezione */}
+            {filteredPackages.length === 0 ? (
+              <div className="text-center py-16 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
+                <PackageOpen className="h-10 w-10 text-[#FE9900] mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  Nessun prodotto
+                </h3>
+                <p className="text-white text-base mb-4">
+                  Al momento non ci sono pacchetti in questa sezione.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filteredPackages.map((pkg) => {
+                  const discount = getDiscountForProduct(pkg.id);
+                  const discountedPrice = discount
+                    ? calculateDiscountedPrice(pkg.prezzo, discount)
+                    : pkg.prezzo;
 
-                        <h3 className="text-xl font-bold text-white mb-2">
-                          {pkg.nome}
-                        </h3>
-                        <p className="text-white text-sm mb-4 line-clamp-3">
-                          Clicca per visualizzare i dettagli del prodotto.
-                        </p>
+                  return (
+                    <div
+                      key={pkg.id}
+                      onClick={() => setSelectedPackage(pkg)}
+                      className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
+                    >
+                      {pkg.immagine && (
+                        <div className="relative mb-4">
+                          <img
+                            src={pkg.immagine || "/logo.png"}
+                            alt={pkg.nome}
+                            className="object-cover w-full h-48 rounded-lg"
+                            onError={(e) => {
+                              e.currentTarget.src = "/logo.png";
+                            }}
+                          />
+                          {discount && (
+                            <span className="absolute top-2 right-2 bg-[#FE9900] text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                              -{discount.percentage ?? discount.valore ?? 0}%
+                            </span>
+                          )}
+                        </div>
+                      )}
 
-                        <div className="mt-auto flex items-center justify-between mb-4">
-                          {discount ? (
-                            <div className="space-y-0.5">
-                              <p className="text-sm text-[#FE9900] line-through">
-                                €{(pkg.prezzo ?? 0).toFixed(2)}
-                              </p>
-                              <p className="text-xl font-bold text-green-400">
-                                €{(discountedPrice ?? 0).toFixed(2)}
-                              </p>
-                            </div>
-                          ) : (
-                            <p className="text-xl font-bold text-[#FE9900]">
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        {pkg.nome}
+                      </h3>
+                      <p className="text-white text-sm mb-4 line-clamp-3">
+                        Clicca per visualizzare i dettagli del prodotto.
+                      </p>
+
+                      <div className="mt-auto flex items-center justify-between mb-4">
+                        {discount ? (
+                          <div className="space-y-0.5">
+                            <p className="text-sm text-[#FE9900] line-through">
                               €{(pkg.prezzo ?? 0).toFixed(2)}
                             </p>
-                          )}
-                          <p className="text-xs text-gray-400 italic text-right">
-                            Non rimborsabile
+                            <p className="text-xl font-bold text-green-400">
+                              €{(discountedPrice ?? 0).toFixed(2)}
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-xl font-bold text-[#FE9900]">
+                            €{(pkg.prezzo ?? 0).toFixed(2)}
                           </p>
-                        </div>
-
-                        <a
-                          href={discordLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full flex items-center justify-center gap-2 bg-[#FE9900]/20 hover:bg-[#FE9900]/40 text-[#FE9900] font-medium py-2 px-4 rounded-xl transition-all"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <MessageCircle className="h-5 w-5" />
-                          Supporto Discord
-                        </a>
+                        )}
+                        <p className="text-xs text-gray-400 italic text-right">
+                          Non rimborsabile
+                        </p>
                       </div>
-                    );
-                  })}
-                </div>
-              )}
-            </>
-          )}
-        </div>
+
+                      <a
+                        href={discordLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full flex items-center justify-center gap-2 bg-[#FE9900]/20 hover:bg-[#FE9900]/40 text-[#FE9900] font-medium py-2 px-4 rounded-xl transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                        Supporto Discord
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {selectedPackage && (

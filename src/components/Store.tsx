@@ -164,12 +164,12 @@ const PublicStoreView: React.FC = () => {
                 <img
                   src="/trasparent-logo.png"
                   alt="Logo Store"
-                  className="w-56 h-56 object-contain drop-shadow-lg -mt-50" // logo più grande + sovrapposizione
+                  className="w-56 h-56 object-contain drop-shadow-lg" // rimosso -mt-50 per non sovrapporre troppo
                 />
               </div>
 
               {/* Rettangolo grigio */}
-              <div className="relative z-10 bg-gray-600 rounded-3xl border-4 border-gray-500/50 text-center p-6 sm:p-8">
+              <div className="relative z-10 bg-gray-600 rounded-3xl border-4 border-gray-500/50 text-center p-6 sm:p-8 mt-[-40px]">
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
                   <h1 className="text-3xl sm:text-4xl font-bold text-white">

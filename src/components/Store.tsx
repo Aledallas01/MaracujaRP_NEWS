@@ -151,7 +151,7 @@ const PublicStoreView: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* HERO */}
           <div className="relative bg-gradient-to-r from-orange-500 to-orange-400">
-            <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-10 mb-8 text-center">
+            <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl p-0 sm:p-8 lg:p-10 mb-8 text-center">
               <button
                 onClick={() => setShowDiscountModal(true)}
                 title="Vedi gli sconti attivi"
@@ -170,7 +170,7 @@ const PublicStoreView: React.FC = () => {
               </div>
 
               {/* Rettangolo grigio ispirato al layout AtlantisRP, parzialmente sotto l'immagine */}
-              <div className="relative z-20 bg-gray-600 rounded-3xl border border-gray-500/50 text-center p-6 sm:p-8 mt-[-20px]">
+              <div className="relative z-20 bg-gray-600 rounded-3xl border border-gray-500/50 text-center p-6 sm:p-8 mt-[-105px]">
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
                   <h1 className="text-3xl sm:text-4xl font-bold text-white">
@@ -183,7 +183,6 @@ const PublicStoreView: React.FC = () => {
                 </p>
               </div>
 
-              {/* Ondina in basso, ispirata dal layout dell'HTML */}
               <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

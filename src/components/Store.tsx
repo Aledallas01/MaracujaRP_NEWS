@@ -218,27 +218,6 @@ const PublicStoreView: React.FC = () => {
                 </svg>
               </div>
             </div>
-
-            {/* Ondina */}
-            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 1440 320"
-                className="w-full h-24"
-                preserveAspectRatio="none"
-              >
-                <path
-                  fill="#3C3C3C"
-                  fillOpacity="1"
-                  d="M0,160 
-        C120,200,240,120,360,160 
-        C480,200,600,280,720,240 
-        C840,200,960,120,1080,160 
-        C1200,200,1320,280,1440,240 
-        L1440,320L0,320Z"
-                ></path>
-              </svg>
-            </div>
           </div>
         </div>
 

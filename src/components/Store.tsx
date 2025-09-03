@@ -158,7 +158,7 @@ const PublicStoreView: React.FC = () => {
               backgroundPosition: "center",
             }}
           >
-            <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl sm:p-8 lg:p-10 mb-8 text-center">
+            <div className="relative overflow-hidden rounded-3xl sm:p-8 lg:p-10 mb-8 text-center">
               <button
                 onClick={() => setShowDiscountModal(true)}
                 title="Vedi gli sconti attivi"

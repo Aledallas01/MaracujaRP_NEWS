@@ -1,4 +1,4 @@
-// src/components/Store.tsx
+// src/components/PublicStoreView.tsx
 import React, { useEffect, useState, useCallback } from "react";
 import {
   ShoppingCart,
@@ -147,64 +147,83 @@ const PublicStoreView: React.FC = () => {
 
   return (
     <div className="bg-[#3C3C3C] min-h-screen p-4 sm:p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* HERO SECTION - Replica dell'immagine */}
-        <div className="relative mb-8">
-          {/* Sfondo arancione con gradiente */}
-          <div className="relative bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-400 h-80 rounded-t-3xl overflow-hidden">
-            {/* Bottone sconti in alto a destra */}
-            <button
-              onClick={() => setShowDiscountModal(true)}
-              title="Vedi gli sconti attivi"
-              className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md z-50"
-            >
-              <span className="font-bold text-lg leading-none">%</span>
-            </button>
+      <div>
+        <div className="max-w-6xl mx-auto">
+          {/* HERO */}
+          <div className="relative bg-gradient-to-r from-orange-500 to-orange-400">
+            <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-10 mb-8 text-center">
+              <button
+                onClick={() => setShowDiscountModal(true)}
+                title="Vedi gli sconti attivi"
+                className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md"
+              >
+                <span className="font-bold text-lg leading-none">%</span>
+              </button>
 
-            {/* Logo centrato che sporge */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-              <img
-                src="/trasparent-logo.png"
-                alt="Logo Store"
-                className="w-48 h-48 sm:w-64 sm:h-64 object-contain drop-shadow-2xl"
-              />
+              {/* Immagine centrata e in primo piano */}
+              <div className="relative z-30 flex justify-center">
+                <img
+                  src="/trasparent-logo.png"
+                  alt="Logo Store"
+                  className="w-80 h-80 object-contain drop-shadow-lg"
+                />
+              </div>
+
+              {/* Rettangolo grigio ispirato al layout AtlantisRP, parzialmente sotto l'immagine */}
+              <div className="relative z-20 bg-gray-600 rounded-3xl border border-gray-500/50 text-center p-6 sm:p-8 mt-[-20px]">
+                <div className="flex items-center justify-center space-x-4 mb-4">
+                  <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
+                  <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                    Store
+                  </h1>
+                </div>
+                <p className="text-white text-base sm:text-lg">
+                  Esplora i pacchetti disponibili e personalizza la tua
+                  esperienza nel server!
+                </p>
+              </div>
+
+              {/* Ondina in basso, ispirata dal layout dell'HTML */}
+              <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 1440 320"
+                  className="w-full h-24"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    fill="#3C3C3C"
+                    fillOpacity="1"
+                    d="M0,160 
+           C120,200,240,120,360,160 
+           C480,200,600,280,720,240 
+           C840,200,960,120,1080,160 
+           C1200,200,1320,280,1440,240 
+           L1440,320L0,320Z"
+                  ></path>
+                </svg>
+              </div>
             </div>
 
-            {/* Ondina SVG */}
-            <div className="absolute bottom-0 left-0 w-full z-20">
+            {/* Ondina */}
+            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1440 320"
-                className="w-full h-20"
+                className="w-full h-24"
                 preserveAspectRatio="none"
               >
                 <path
-                  fill="#4A4A4A"
+                  fill="#3C3C3C"
                   fillOpacity="1"
                   d="M0,160 
-                   C120,200,240,120,360,160 
-                   C480,200,600,280,720,240 
-                   C840,200,960,120,1080,160 
-                   C1200,200,1320,280,1440,240 
-                   L1440,320L0,320Z"
+        C120,200,240,120,360,160 
+        C480,200,600,280,720,240 
+        C840,200,960,120,1080,160 
+        C1200,200,1320,280,1440,240 
+        L1440,320L0,320Z"
                 ></path>
               </svg>
-            </div>
-          </div>
-
-          {/* Rettangolo grigio sovrapposto */}
-          <div className="relative -mt-10 mx-4 sm:mx-8 z-40 bg-gray-700 rounded-2xl border border-gray-600 shadow-2xl p-6 sm:p-8">
-            <div className="text-center pt-16">
-              <div className="flex items-center justify-center space-x-4 mb-4">
-                <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
-                <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                  Store
-                </h1>
-              </div>
-              <p className="text-white text-base sm:text-lg">
-                Esplora i pacchetti disponibili e personalizza la tua
-                esperienza nel server!
-              </p>
             </div>
           </div>
         </div>

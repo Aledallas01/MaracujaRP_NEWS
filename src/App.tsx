@@ -6,6 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/next";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // Componenti

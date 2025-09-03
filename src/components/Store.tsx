@@ -150,7 +150,14 @@ const PublicStoreView: React.FC = () => {
       <div>
         <div className="max-w-6xl mx-auto">
           {/* HERO */}
-          <div className="relative bg-gradient-to-r from-orange-500 to-orange-400">
+          <div
+            className="relative overflow-hidden rounded-3xl sm:p-8 lg:p-10 mb-8 text-center"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
             <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl sm:p-8 lg:p-10 mb-8 text-center">
               <button
                 onClick={() => setShowDiscountModal(true)}

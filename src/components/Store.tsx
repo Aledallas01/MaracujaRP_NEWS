@@ -146,93 +146,74 @@ const PublicStoreView: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#3C3C3C] min-h-screen p-4 sm:p-6">
-      <div>
-        <div className="max-w-6xl mx-auto">
-          {/* HERO */}
-          <div
-            className="relative"
-            style={{
-              backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+    <div className="bg-[#3C3C3C] min-h-screen">
+      {/* HERO SECTION - Full width senza bordi */}
+      <div
+        className="relative w-full"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="relative overflow-hidden py-8 sm:py-12 lg:py-16 text-center">
+          <button
+            onClick={() => setShowDiscountModal(true)}
+            title="Vedi gli sconti attivi"
+            className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md z-40"
           >
-            <div className="relative overflow-hidden rounded-3xl sm:p-8 lg:p-10 mb-8 text-center">
-              <button
-                onClick={() => setShowDiscountModal(true)}
-                title="Vedi gli sconti attivi"
-                className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md"
-              >
-                <span className="font-bold text-lg leading-none">%</span>
-              </button>
+            <span className="font-bold text-lg leading-none">%</span>
+          </button>
 
-              {/* Immagine centrata e in primo piano */}
-              <div className="relative z-30 flex justify-center">
-                <img
-                  src="/trasparent-logo.png"
-                  alt="Logo Store"
-                  className="w-80 h-80 object-contain drop-shadow-lg"
-                />
-              </div>
+          {/* Immagine centrata e responsive */}
+          <div className="relative z-30 flex justify-center px-4">
+            <img
+              src="/trasparent-logo.png"
+              alt="Logo Store"
+              className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-contain drop-shadow-lg"
+            />
+          </div>
 
-              {/* Rettangolo grigio ispirato al layout AtlantisRP, parzialmente sotto l'immagine */}
-              <div className="relative z-20 bg-gray-600 rounded-3xl border border-gray-500/50 text-center p-6 sm:p-8 mt-[-105px]">
-                <div className="flex items-center justify-center space-x-4 mb-4">
-                  <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
-                  <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                    Store
-                  </h1>
-                </div>
-                <p className="text-white text-base sm:text-lg">
-                  Esplora i pacchetti disponibili e personalizza la tua
-                  esperienza nel server!
-                </p>
-              </div>
-
-              <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1440 320"
-                  className="w-full h-24"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    fill="#3C3C3C"
-                    fillOpacity="1"
-                    d="M0,160 
-           C120,200,240,120,360,160 
-           C480,200,600,280,720,240 
-           C840,200,960,120,1080,160 
-           C1200,200,1320,280,1440,240 
-           L1440,320L0,320Z"
-                  ></path>
-                </svg>
-              </div>
+          {/* Rettangolo grigio responsive */}
+          <div className="relative z-20 bg-gray-600 mx-4 sm:mx-8 lg:mx-16 rounded-3xl border border-gray-500/50 text-center p-4 sm:p-6 lg:p-8 mt-[-60px] sm:mt-[-80px] lg:mt-[-105px]">
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+              <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#FE9900]" />
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+                Store
+              </h1>
             </div>
+            <p className="text-white text-sm sm:text-base lg:text-lg px-2">
+              Esplora i pacchetti disponibili e personalizza la tua esperienza
+              nel server!
+            </p>
+          </div>
+        </div>
 
-            {/* Ondina */}
-            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 1440 320"
-                className="w-full h-24"
-                preserveAspectRatio="none"
-              >
-                <path
-                  fill="#3C3C3C"
-                  fillOpacity="1"
-                  d="M0,160 
+        {/* Ondina responsive */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1440 320"
+            className="w-full h-16 sm:h-20 lg:h-24"
+            preserveAspectRatio="none"
+          >
+            <path
+              fill="#3C3C3C"
+              fillOpacity="1"
+              d="M0,160 
         C120,200,240,120,360,160 
         C480,200,600,280,720,240 
         C840,200,960,120,1080,160 
         C1200,200,1320,280,1440,240 
         L1440,320L0,320Z"
-                ></path>
-              </svg>
-            </div>
-          </div>
+            ></path>
+          </svg>
         </div>
+      </div>
+
+      {/* CONTENUTO PRINCIPALE */}
+      <div className="p-4 sm:p-6">
+        <div className="max-w-6xl mx-auto">
 
         {/* Se non è stata scelta nessuna sezione → mostriamo le sezioni */}
         {!activeSection ? (

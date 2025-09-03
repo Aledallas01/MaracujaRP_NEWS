@@ -146,12 +146,12 @@ const PublicStoreView: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#3C3C3C] min-h-screen sm:p-6">
+    <div className="bg-[#3C3C3C] min-h-screen p-4 sm:p-6">
       <div>
         <div className="max-w-6xl mx-auto">
           {/* HERO */}
           <div className="relative bg-gradient-to-r from-orange-500 to-orange-400">
-            <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl sm:p-8 lg:p-10 mb-8 text-center">
+            <div className="relative bg-gradient-to-r from-orange-500 to-orange-400 overflow-hidden rounded-3xl sm:p-8 mb-8 text-center">
               <button
                 onClick={() => setShowDiscountModal(true)}
                 title="Vedi gli sconti attivi"
@@ -165,7 +165,7 @@ const PublicStoreView: React.FC = () => {
                 <img
                   src="/trasparent-logo.png"
                   alt="Logo Store"
-                  className="w-90 h-90 object-contain drop-shadow-lg"
+                  className="w-83 h-83 object-contain drop-shadow-lg"
                 />
               </div>
 

@@ -151,7 +151,7 @@ const PublicStoreView: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* HERO */}
           <div
-            className="relative bg-gradient-to-r from-orange-500 to-orange-400"
+            className="relative"
             style={{
               backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')`,
               backgroundSize: "cover",

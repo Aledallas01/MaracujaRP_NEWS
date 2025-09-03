@@ -7,6 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // Componenti
@@ -98,6 +99,7 @@ function App() {
           setDiscordToken={setDiscordToken}
         />
         <Analytics />
+        <SpeedInsights />
       </Router>
     </AuthProvider>
   );

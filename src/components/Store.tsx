@@ -334,6 +334,7 @@ const PublicStoreView: React.FC = () => {
             )}
           </>
         )}
+        </div>
       </div>
 
       {selectedPackage && (

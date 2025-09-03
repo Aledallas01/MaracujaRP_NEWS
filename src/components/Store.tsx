@@ -160,14 +160,16 @@ const PublicStoreView: React.FC = () => {
                 <span className="font-bold text-lg leading-none">%</span>
               </button>
 
-              <div className="flex flex-col items-center justify-center py-12">
+              <div className="flex flex-col items-center justify-center relative z-20">
                 <img
                   src="/trasparent-logo.png"
                   alt="Logo Store"
-                  className="w-40 h-40 object-contain drop-shadow-lg"
+                  className="w-56 h-56 object-contain drop-shadow-lg -mt-10" // logo più grande + sovrapposizione
                 />
               </div>
-              <div className="bg-gray-600 rounded-3xl text-center">
+
+              {/* Rettangolo grigio */}
+              <div className="relative z-10 bg-gray-600 rounded-3xl border-4 border-gray-500/50 text-center p-6 sm:p-8">
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
                   <h1 className="text-3xl sm:text-4xl font-bold text-white">
@@ -182,7 +184,7 @@ const PublicStoreView: React.FC = () => {
             </div>
 
             {/* Ondina */}
-            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1440 320"
@@ -193,14 +195,15 @@ const PublicStoreView: React.FC = () => {
                   fill="#3C3C3C"
                   fillOpacity="1"
                   d="M0,160 
-         C120,200,240,120,360,160 
-         C480,200,600,280,720,240 
-         C840,200,960,120,1080,160 
-         C1200,200,1320,280,1440,240 
-         L1440,320L0,320Z"
+        C120,200,240,120,360,160 
+        C480,200,600,280,720,240 
+        C840,200,960,120,1080,160 
+        C1200,200,1320,280,1440,240 
+        L1440,320L0,320Z"
                 ></path>
               </svg>
             </div>
+
             <br />
             <br />
           </div>

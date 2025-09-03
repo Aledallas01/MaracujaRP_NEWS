@@ -167,17 +167,18 @@ const PublicStoreView: React.FC = () => {
                   className="w-40 h-40 object-contain drop-shadow-lg"
                 />
               </div>
-
-              {/* <div className="flex items-center justify-center space-x-4 mb-4">
-                <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
-                <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                  Store
-                </h1>
-              </div> */}
-              <p className="text-white text-base sm:text-lg">
-                Esplora i pacchetti disponibili e personalizza la tua esperienza
-                nel server!
-              </p>
+              <div className="bg-gray-600 rounded-3xl text-center">
+                <div className="flex items-center justify-center space-x-4 mb-4">
+                  <ShoppingCart className="h-7 w-7 sm:h-8 sm:w-8 text-[#FE9900]" />
+                  <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                    Store
+                  </h1>
+                </div>
+                <p className="text-white text-base sm:text-lg">
+                  Esplora i pacchetti disponibili e personalizza la tua
+                  esperienza nel server!
+                </p>
+              </div>
             </div>
 
             {/* Ondina */}
@@ -189,7 +190,7 @@ const PublicStoreView: React.FC = () => {
                 preserveAspectRatio="none"
               >
                 <path
-                  fill="#1f2937" // grigio scuro sotto
+                  fill="#3C3C3C"
                   fillOpacity="1"
                   d="M0,160 
          C120,200,240,120,360,160 

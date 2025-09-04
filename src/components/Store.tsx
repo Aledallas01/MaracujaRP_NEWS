@@ -170,14 +170,31 @@ const PublicStoreView: React.FC = () => {
             <img
               src="/trasparent-logo.png"
               alt="Logo Store"
-              className="absolute -top-10 sm:-top-24 md:-top-28 lg:-top-32 
-               w-32 h-32 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-80 xl:h-80 
-               object-contain drop-shadow-2xl"
+              style={{
+                display: "block",
+                filter: "drop-shadow(rgba(0, 0, 0, 0.15) 0px 25px 25px)",
+                height: "248px",
+                objectFit: "contain",
+                position: "absolute",
+                top: "11px",
+                width: "291px",
+                left: "481px",
+              }}
             />
           </div>
 
           {/* Rettangolo grigio responsive */}
-          <div className="relative z-20 bg-gray-600/90 backdrop-blur-sm mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20 rounded-2xl sm:rounded-3xl border border-gray-500/50 text-center p-4 sm:p-6 lg:p-8 shadow-xl">
+          <div
+            className="relative z-20 bg-gray-600/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-gray-500/50 text-center shadow-xl"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "200px 48px 0",
+              padding: "24px",
+            }}
+          >
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-3 sm:mb-4">
               <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#FE9900]" />
               <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">

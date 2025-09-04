@@ -153,7 +153,7 @@ const PublicRulesView: React.FC = () => {
             }}
           >
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-3 sm:mb-4">
-              <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#FE9900]" />
+              <BookOpen className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#FE9900]" />
               <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
                 Regolamento
               </h1>

@@ -166,7 +166,7 @@ const PublicStoreView: React.FC = () => {
           </button>
 
           {/* Logo responsive */}
-          <div className="relative z-30 flex justify-center mb-[-200px] sm:mb-12">
+          <div className="relative z-30 flex justify-center mb-12 sm:mb-16 lg:mb-20">
             <img
               src="/trasparent-logo.png"
               alt="Logo Store"

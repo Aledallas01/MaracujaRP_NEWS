@@ -238,13 +238,43 @@ const PublicStoreView: React.FC = () => {
                 <div
                   key={section.id}
                   onClick={() => setActiveSection(String(section.id))}
-                  className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300 min-h-[200px]"
+                  style={{
+                    cursor: "pointer",
+                    background: "rgba(31, 41, 55, 0.8)", // bg-gray-800/80
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid #374151", // border-gray-700
+                    borderRadius: "1rem", // rounded-2xl
+                    padding: "1.5rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                    minHeight: "200px",
+                    transition: "all 0.3s",
+                  }}
                 >
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 text-center">
+                  <h3
+                    style={{
+                      fontFamily: "'Archivo Black', sans-serif",
+                      fontSize: "1.125rem", // text-lg
+                      color: "white",
+                      fontWeight: 700,
+                      marginBottom: "0.5rem",
+                      textAlign: "center",
+                    }}
+                  >
                     {section.nome}
                   </h3>
                   {section.descrizione && (
-                    <p className="text-sm text-gray-300 text-center leading-relaxed">
+                    <p
+                      style={{
+                        fontSize: "0.875rem", // text-sm
+                        color: "#D1D5DB", // text-gray-300
+                        textAlign: "center",
+                        lineHeight: 1.5,
+                      }}
+                    >
                       {section.descrizione}
                     </p>
                   )}

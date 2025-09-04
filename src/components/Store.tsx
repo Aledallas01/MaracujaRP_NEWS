@@ -176,9 +176,9 @@ const PublicStoreView: React.FC = () => {
                 height: "248px",
                 objectFit: "contain",
                 position: "absolute",
-                top: "-25px",
+                top: "11px",
                 width: "291px",
-                left: "325px"
+                left: "481px"
               }}
             />
           </div>
@@ -191,7 +191,7 @@ const PublicStoreView: React.FC = () => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              margin: "164px 48px 0",
+              margin: "200px 48px 0",
               padding: "24px"
             }}
           >

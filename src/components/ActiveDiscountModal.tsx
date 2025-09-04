@@ -72,7 +72,7 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
         className="flex items-center justify-center h-64"
         style={{ backgroundColor: "#30334E" }}
       >
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-400"></div>
       </div>
     );
   }
@@ -87,7 +87,7 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
           <p className="text-red-400">{error}</p>
           <button
             onClick={onClose}
-            className="mt-6 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
+            className="mt-6 px-4 py-2 bg-orange-600 hover:bg-orange-700 rounded text-white"
           >
             Chiudi
           </button>
@@ -131,7 +131,7 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <Tag className="h-6 w-6 text-blue-400" aria-hidden="true" />
+          <Tag className="h-6 w-6 text-orange-400" aria-hidden="true" />
           <h3 className="text-xl font-semibold text-gray-100">
             Sconti Attivi ({activeDiscounts.length})
           </h3>
@@ -156,7 +156,7 @@ const ActiveDiscountModal: React.FC<ActiveDiscountModalProps> = ({
                       Scade tra {countdown}
                     </span>
                   )}
-                  <span className="bg-blue-600 text-white px-3 py-1 rounded-md font-semibold text-sm">
+                  <span className="bg-orange-600 text-white px-3 py-1 rounded-md font-semibold text-sm">
                     -{discountValue}%
                   </span>
                 </div>

@@ -70,8 +70,11 @@ const PublicRulesView: React.FC = () => {
       title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       content.toLowerCase().includes(searchQuery.toLowerCase());
 
+    // 🔥 Se c'è una ricerca, ignora la sezione
     const matchesSection =
-      !activeSection || String(rule.section_id) === String(activeSection);
+      searchQuery !== ""
+        ? true
+        : !activeSection || String(rule.section_id) === String(activeSection);
 
     return matchesSearch && matchesSection;
   });
@@ -120,6 +123,27 @@ const PublicRulesView: React.FC = () => {
             Consulta tutte le regole e mantieni l&apos;ordine nella community!
           </p>
         </div>
+
+        {/* Ondina responsive */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1440 320"
+            className="w-full h-12 sm:h-16 md:h-20 lg:h-24"
+            preserveAspectRatio="none"
+          >
+            <path
+              fill="#3C3C3C"
+              fillOpacity="1"
+              d="M0,160 
+                C120,200,240,120,360,160 
+                C480,200,600,280,720,240 
+                C840,200,960,120,1080,160 
+                C1200,200,1320,280,1440,240 
+                L1440,320L0,320Z"
+            ></path>
+          </svg>
+        </div>
       </div>
 
       {/* CONTENUTO */}
@@ -138,8 +162,8 @@ const PublicRulesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Se non è stata scelta nessuna sezione → mostriamo le sezioni */}
-        {!activeSection ? (
+        {/* Se non è stata scelta nessuna sezione e non c'è ricerca → mostriamo le sezioni */}
+        {!activeSection && searchQuery === "" ? (
           <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {sections.map((section) => (
               <div
@@ -160,14 +184,16 @@ const PublicRulesView: React.FC = () => {
           </div>
         ) : (
           <>
-            {/* Bottone torna alle sezioni */}
-            <button
-              onClick={() => setActiveSection(null)}
-              className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Torna alle sezioni
-            </button>
+            {/* Bottone torna alle sezioni (solo se non stai cercando) */}
+            {activeSection && searchQuery === "" && (
+              <button
+                onClick={() => setActiveSection(null)}
+                className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Torna alle sezioni
+              </button>
+            )}
 
             {filteredRules.length === 0 ? (
               <div className="text-center py-16 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
@@ -176,7 +202,7 @@ const PublicRulesView: React.FC = () => {
                   Nessuna regola trovata
                 </h3>
                 <p className="text-white text-base mb-4">
-                  Non ci sono regole in questa sezione.
+                  Non ci sono regole che corrispondono alla ricerca.
                 </p>
               </div>
             ) : (

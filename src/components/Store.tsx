@@ -42,19 +42,28 @@ const PublicStoreView: React.FC = () => {
         supabaseOther.from("discounts").select("*"),
       ]);
 
-      setPackages(Array.isArray(pkgRes.data) ? (pkgRes.data as Package[]) : []);
-      setSections(
-        Array.isArray(secRes.data) ? (secRes.data as StoreSection[]) : []
-      );
+      if (pkgRes.error) setPackages([]);
+      else
+        setPackages(
+          Array.isArray(pkgRes.data) ? (pkgRes.data as Package[]) : []
+        );
 
-      const discounts = Array.isArray(discRes.data)
-        ? (discRes.data as Discount[])
-        : [];
-      setActiveDiscounts(
-        discounts.filter(
+      if (secRes.error) setSections([]);
+      else
+        setSections(
+          Array.isArray(secRes.data) ? (secRes.data as StoreSection[]) : []
+        );
+
+      if (discRes.error) setActiveDiscounts([]);
+      else {
+        const discounts = Array.isArray(discRes.data)
+          ? (discRes.data as Discount[])
+          : [];
+        const active = discounts.filter(
           (d) => !d.expiresAt || new Date(d.expiresAt) > new Date()
-        )
-      );
+        );
+        setActiveDiscounts(active);
+      }
     } catch (err) {
       console.error("Errore caricamento dati store:", err);
       setError("Errore caricamento dati store. Riprova più tardi.");
@@ -115,26 +124,10 @@ const PublicStoreView: React.FC = () => {
 
   if (loading) {
     return (
-      <div
-        style={{
-          background: "#1F2937",
-          minHeight: "100vh",
-          textAlign: "center",
-          padding: "4rem 0",
-        }}
-      >
-        <div style={{ animation: "pulse 1.5s infinite" }}>
-          <ShoppingCart
-            style={{
-              height: "3rem",
-              width: "3rem",
-              color: "#FE9900",
-              margin: "0 auto 1rem",
-            }}
-          />
-          <p style={{ color: "white", fontSize: "1.125rem" }}>
-            Caricamento in corso...
-          </p>
+      <div className="bg-gray-800 min-h-screen text-center py-16">
+        <div className="animate-pulse">
+          <ShoppingCart className="h-12 w-12 text-[#FE9900] mx-auto mb-4" />
+          <p className="text-white text-lg">Caricamento in corso...</p>
         </div>
       </div>
     );
@@ -142,33 +135,9 @@ const PublicStoreView: React.FC = () => {
 
   if (error) {
     return (
-      <div
-        style={{
-          background: "#1F2937",
-          minHeight: "100vh",
-          textAlign: "center",
-          padding: "4rem 1rem",
-        }}
-      >
-        <div
-          style={{
-            background: "rgba(248, 113, 113, 0.1)",
-            color: "#FCA5A5",
-            border: "1px solid rgba(248, 113, 113, 0.3)",
-            borderRadius: "1rem",
-            padding: "1.5rem",
-            display: "inline-block",
-          }}
-        >
-          <p
-            style={{
-              fontSize: "1.125rem",
-              fontWeight: "600",
-              marginBottom: "0.5rem",
-            }}
-          >
-            Errore
-          </p>
+      <div className="bg-gray-800 min-h-screen text-center py-16">
+        <div className="bg-red-500/10 text-red-300 border border-red-500/30 rounded-xl p-6 inline-block">
+          <p className="text-lg font-semibold mb-2">Errore</p>
           <p>{error}</p>
         </div>
       </div>
@@ -176,62 +145,27 @@ const PublicStoreView: React.FC = () => {
   }
 
   return (
-    <div style={{ background: "#3C3C3C", minHeight: "100vh" }}>
-      {/* HERO */}
+    <div className="bg-[#3C3C3C] min-h-screen">
+      {/* HERO SECTION - Full width responsive */}
       <div
+        className="relative w-full min-h-[60vh] sm:min-h-[50vh] lg:min-h-[60vh]"
         style={{
-          position: "relative",
-          width: "100%",
-          minHeight: "60vh",
-          backgroundImage:
-            "linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')",
+          backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div
-          style={{
-            position: "relative",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            padding: "2rem",
-          }}
-        >
+        <div className="relative overflow-hidden h-full flex flex-col justify-center text-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
           <button
             onClick={() => setShowDiscountModal(true)}
             title="Vedi gli sconti attivi"
-            style={{
-              position: "absolute",
-              top: "1rem",
-              right: "1rem",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "rgba(59, 130, 246, 0.2)",
-              color: "#BFDBFE",
-              border: "1px solid rgba(147,197,253,0.3)",
-              borderRadius: "9999px",
-              padding: "0.5rem",
-              cursor: "pointer",
-              transition: "all 0.3s",
-            }}
+            className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md z-40"
           >
-            <span
-              style={{
-                fontWeight: "bold",
-                fontSize: "1.125rem",
-                lineHeight: 1,
-              }}
-            >
-              %
-            </span>
+            <span className="font-bold text-lg leading-none">%</span>
           </button>
 
-          <div style={{ position: "relative", zIndex: 30 }}>
+          {/* Wrapper relativo */}
+          <div className="relative z-30 flex justify-center">
             <img
               src="/trasparent-logo.png"
               alt="Logo Store"
@@ -247,67 +181,59 @@ const PublicStoreView: React.FC = () => {
             />
           </div>
 
+          {/* Rettangolo grigio responsive */}
           <div
+            className="relative z-20 bg-gray-600/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-gray-500/50 text-center shadow-xl"
             style={{
-              position: "relative",
-              zIndex: 20,
-              background: "rgba(107, 114, 128, 0.9)",
-              backdropFilter: "blur(10px)",
-              borderRadius: "1.5rem",
-              border: "1px solid rgba(107, 114, 128,0.5)",
-              textAlign: "center",
-              padding: "1.5rem 2rem",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              marginTop: "200px",
+              margin: "200px 48px 0",
+              padding: "24px",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: "1rem",
-                marginBottom: "1rem",
-              }}
-            >
-              <ShoppingCart
-                style={{ height: "1.5rem", width: "1.5rem", color: "#FE9900" }}
-              />
-              <h1
-                style={{ fontSize: "2rem", fontWeight: "700", color: "white" }}
-              >
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-3 sm:mb-4">
+              <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#FE9900]" />
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
                 Store
               </h1>
             </div>
-            <p
-              style={{
-                color: "white",
-                fontSize: "1rem",
-                maxWidth: "48rem",
-                lineHeight: 1.6,
-              }}
-            >
+            <p className="text-white text-sm sm:text-base lg:text-lg leading-relaxed max-w-3xl mx-auto">
               Esplora i pacchetti disponibili e personalizza la tua esperienza
               nel server!
             </p>
           </div>
         </div>
+
+        {/* Ondina responsive */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1440 320"
+            className="w-full h-12 sm:h-16 md:h-20 lg:h-24"
+            preserveAspectRatio="none"
+          >
+            <path
+              fill="#3C3C3C"
+              fillOpacity="1"
+              d="M0,160 
+        C120,200,240,120,360,160 
+        C480,200,600,280,720,240 
+        C840,200,960,120,1080,160 
+        C1200,200,1320,280,1440,240 
+        L1440,320L0,320Z"
+            ></path>
+          </svg>
+        </div>
       </div>
 
-      {/* SECTIONS / PACKAGES */}
-      <div style={{ padding: "1.5rem 1rem" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+      {/* CONTENUTO PRINCIPALE */}
+      <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Se non è stata scelta nessuna sezione → mostriamo le sezioni */}
           {!activeSection ? (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: "1rem",
-              }}
-            >
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
               {sections.map((section) => (
                 <div
                   key={section.id}
@@ -316,15 +242,15 @@ const PublicStoreView: React.FC = () => {
                     cursor: "pointer",
                     background: "rgba(31, 41, 55, 0.8)",
                     backdropFilter: "blur(10px)",
-                    border: "2px solid #374151",
+                    border: "1px solid #374151",
                     borderRadius: "1rem",
                     padding: "1.5rem",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    minHeight: "200px",
                     boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                    minHeight: "200px",
                     transition: "all 0.3s",
                   }}
                   onMouseEnter={(e) => {
@@ -334,14 +260,14 @@ const PublicStoreView: React.FC = () => {
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget;
-                    el.style.border = "2px solid #374151";
+                    el.style.border = "1px solid #374151";
                     el.style.transform = "scale(1)";
                   }}
                 >
                   <h3
                     style={{
                       fontFamily: "'Archivo Black', sans-serif",
-                      fontSize: "1.125rem",
+                      fontSize: "1.125rem", // text-lg
                       color: "white",
                       fontWeight: 700,
                       marginBottom: "0.5rem",
@@ -353,8 +279,8 @@ const PublicStoreView: React.FC = () => {
                   {section.descrizione && (
                     <p
                       style={{
-                        fontSize: "0.875rem",
-                        color: "#D1D5DB",
+                        fontSize: "0.875rem", // text-sm
+                        color: "#D1D5DB", // text-gray-300
                         textAlign: "center",
                         lineHeight: 1.5,
                       }}
@@ -367,73 +293,28 @@ const PublicStoreView: React.FC = () => {
             </div>
           ) : (
             <>
+              {/* Bottone torna alle sezioni */}
               <button
                 onClick={() => setActiveSection(null)}
-                style={{
-                  marginBottom: "1.5rem",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  padding: "0.5rem 1rem",
-                  background: "#374151",
-                  color: "white",
-                  borderRadius: "1rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#4B5563";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "#374151";
-                }}
+                className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition"
               >
-                <ArrowLeft style={{ height: "1rem", width: "1rem" }} /> Torna
-                alle sezioni
+                <ArrowLeft className="h-4 w-4" />
+                Torna alle sezioni
               </button>
 
+              {/* Prodotti della sezione */}
               {filteredPackages.length === 0 ? (
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "4rem",
-                    background: "rgba(31,41,55,0.8)",
-                    backdropFilter: "blur(10px)",
-                    border: "1px solid #374151",
-                    borderRadius: "1.5rem",
-                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                  }}
-                >
-                  <PackageOpen
-                    style={{
-                      height: "2.5rem",
-                      width: "2.5rem",
-                      color: "#FE9900",
-                      margin: "0 auto 1rem",
-                    }}
-                  />
-                  <h3
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "700",
-                      color: "white",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
+                <div className="text-center py-16 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-3xl shadow-lg">
+                  <PackageOpen className="h-10 w-10 text-[#FE9900] mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-white mb-3">
                     Nessun prodotto
                   </h3>
-                  <p style={{ color: "white", fontSize: "1rem" }}>
+                  <p className="text-white text-base mb-4">
                     Al momento non ci sono pacchetti in questa sezione.
                   </p>
                 </div>
               ) : (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                    gap: "1rem",
-                  }}
-                >
+                <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {filteredPackages.map((pkg) => {
                     const discount = getDiscountForProduct(pkg.id);
                     const discountedPrice = discount
@@ -444,180 +325,61 @@ const PublicStoreView: React.FC = () => {
                       <div
                         key={pkg.id}
                         onClick={() => setSelectedPackage(pkg)}
-                        style={{
-                          cursor: "pointer",
-                          background: "rgba(31, 41, 55, 0.8)",
-                          backdropFilter: "blur(10px)",
-                          border: "1px solid #374151",
-                          borderRadius: "1rem",
-                          padding: "1.5rem",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                          transition: "all 0.3s",
-                        }}
-                        onMouseEnter={(e) => {
-                          const el = e.currentTarget;
-                          el.style.border = "2px solid #FE9900";
-                          el.style.transform = "scale(1.02)";
-                        }}
-                        onMouseLeave={(e) => {
-                          const el = e.currentTarget;
-                          el.style.border = "1px solid #374151";
-                          el.style.transform = "scale(1)";
-                        }}
+                        className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
                       >
                         {pkg.immagine && (
-                          <div
-                            style={{
-                              position: "relative",
-                              marginBottom: "1rem",
-                            }}
-                          >
+                          <div className="relative mb-4">
                             <img
                               src={pkg.immagine || "/logo.png"}
                               alt={pkg.nome}
-                              style={{
-                                width: "100%",
-                                height: "12rem",
-                                objectFit: "cover",
-                                borderRadius: "0.75rem",
-                              }}
+                              className="object-cover w-full h-48 rounded-lg"
                               onError={(e) => {
                                 e.currentTarget.src = "/logo.png";
                               }}
                             />
                             {discount && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  top: "0.5rem",
-                                  right: "0.5rem",
-                                  background: "#FE9900",
-                                  color: "white",
-                                  fontSize: "0.75rem",
-                                  fontWeight: "700",
-                                  padding: "0.25rem 0.5rem",
-                                  borderRadius: "0.5rem",
-                                }}
-                              >
+                              <span className="absolute top-2 right-2 bg-[#FE9900] text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
                                 -{discount.percentage ?? discount.valore ?? 0}%
                               </span>
                             )}
                           </div>
                         )}
 
-                        <h3
-                          style={{
-                            fontSize: "1.25rem",
-                            fontWeight: "700",
-                            color: "white",
-                            marginBottom: "0.5rem",
-                          }}
-                        >
+                        <h3 className="text-xl font-bold text-white mb-2">
                           {pkg.nome}
                         </h3>
-                        <p
-                          style={{
-                            color: "white",
-                            fontSize: "0.875rem",
-                            marginBottom: "1rem",
-                          }}
-                        >
+                        <p className="text-white text-sm mb-4 line-clamp-3">
                           Clicca per visualizzare i dettagli del prodotto.
                         </p>
 
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginBottom: "1rem",
-                          }}
-                        >
+                        <div className="mt-auto flex items-center justify-between mb-4">
                           {discount ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "0.25rem",
-                              }}
-                            >
-                              <span
-                                style={{
-                                  fontSize: "0.875rem",
-                                  color: "#FE9900",
-                                  textDecoration: "line-through",
-                                }}
-                              >
+                            <div className="space-y-0.5">
+                              <p className="text-sm text-[#FE9900] line-through">
                                 €{(pkg.prezzo ?? 0).toFixed(2)}
-                              </span>
-                              <span
-                                style={{
-                                  fontSize: "1.25rem",
-                                  fontWeight: "700",
-                                  color: "#22C55E",
-                                }}
-                              >
+                              </p>
+                              <p className="text-xl font-bold text-green-400">
                                 €{(discountedPrice ?? 0).toFixed(2)}
-                              </span>
+                              </p>
                             </div>
                           ) : (
-                            <span
-                              style={{
-                                fontSize: "1.25rem",
-                                fontWeight: "700",
-                                color: "#FE9900",
-                              }}
-                            >
+                            <p className="text-xl font-bold text-[#FE9900]">
                               €{(pkg.prezzo ?? 0).toFixed(2)}
-                            </span>
+                            </p>
                           )}
-                          <span
-                            style={{
-                              fontSize: "0.75rem",
-                              color: "#9CA3AF",
-                              fontStyle: "italic",
-                              textAlign: "right",
-                            }}
-                          >
+                          <p className="text-xs text-gray-400 italic text-right">
                             Non rimborsabile
-                          </span>
+                          </p>
                         </div>
 
                         <a
                           href={discordLink}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center gap-2 bg-[#FE9900]/20 hover:bg-[#FE9900]/40 text-[#FE9900] font-medium py-2 px-4 rounded-xl transition-all"
                           onClick={(e) => e.stopPropagation()}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "0.5rem",
-                            background: "rgba(254,153,0,0.2)",
-                            color: "#FE9900",
-                            fontWeight: "500",
-                            padding: "0.5rem",
-                            borderRadius: "1rem",
-                            textDecoration: "none",
-                            transition: "all 0.3s",
-                          }}
-                          onMouseEnter={(e) => {
-                            (
-                              e.currentTarget as HTMLAnchorElement
-                            ).style.background = "rgba(254,153,0,0.4)";
-                          }}
-                          onMouseLeave={(e) => {
-                            (
-                              e.currentTarget as HTMLAnchorElement
-                            ).style.background = "rgba(254,153,0,0.2)";
-                          }}
                         >
-                          <MessageCircle
-                            style={{ width: "1.25rem", height: "1.25rem" }}
-                          />
+                          <MessageCircle className="h-5 w-5" />
                           Supporto Discord
                         </a>
                       </div>

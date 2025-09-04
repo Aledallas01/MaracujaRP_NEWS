@@ -178,7 +178,6 @@ const PublicStoreView: React.FC = () => {
                 position: "absolute",
                 top: "11px",
                 width: "291px",
-                left: "481px",
               }}
             />
           </div>

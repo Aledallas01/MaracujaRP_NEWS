@@ -159,7 +159,7 @@ const PublicStoreView: React.FC = () => {
           <button
             onClick={() => setShowDiscountModal(true)}
             title="Vedi gli sconti attivi"
-            className="absolute top-4 right-4 inline-flex items-center justify-center bg-blue-500/20 text-blue-200 border border-blue-400/30 rounded-full p-2 hover:bg-blue-500/40 transition-all shadow-md z-40"
+            className="absolute top-4 right-4 inline-flex items-center justify-center bg-white-500/20 text-black-200 border border-orange-400/30 rounded-full p-2 hover:bg-white-500/40 transition-all shadow-md z-40"
           >
             <span className="font-bold text-lg leading-none">%</span>
           </button>

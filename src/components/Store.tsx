@@ -4,7 +4,6 @@ import {
   ShoppingCart,
   MessageCircle,
   PackageOpen,
-  Folder,
   ArrowLeft,
 } from "lucide-react";
 import { supabaseOther } from "../lib/other";
@@ -234,14 +233,13 @@ const PublicStoreView: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Se non è stata scelta nessuna sezione → mostriamo le sezioni */}
           {!activeSection ? (
-            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
               {sections.map((section) => (
                 <div
                   key={section.id}
                   onClick={() => setActiveSection(String(section.id))}
                   className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300 min-h-[200px]"
                 >
-                  <Folder className="h-12 w-12 text-[#FE9900] mb-4" />
                   <h3 className="text-lg sm:text-xl font-bold text-white mb-2 text-center">
                     {section.nome}
                   </h3>

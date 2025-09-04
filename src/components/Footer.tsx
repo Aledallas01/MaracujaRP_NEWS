@@ -1,8 +1,11 @@
 import React from "react";
 
-const TIKTOK = process.env.VITE_LINK_TIKTOK;
-const DISCORD = process.env.VITE_LINK_DISCORD;
-const TELEGRAM = process.env.VITE_LINK_TELEGRAM;
+const TIKTOK =
+  process.env.VITE_LINK_TIKTOK ||
+  "https://www.tiktok.com/@maracujaroleplaymc?_t=ZN-8woEGIK5hdW&_r=1";
+const DISCORD =
+  process.env.VITE_LINK_DISCORD || "https://discord.gg/maracujarpg";
+const TELEGRAM = process.env.VITE_LINK_TELEGRAM || "https://t.me/MaracujaRp";
 
 const Footer: React.FC = () => {
   return (

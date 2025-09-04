@@ -115,23 +115,56 @@ const PublicRulesView: React.FC = () => {
     <div className="bg-[#3C3C3C] min-h-screen">
       {/* HERO */}
       <div
-        className="relative w-full min-h-[40vh]"
+        className="relative w-full min-h-[60vh] sm:min-h-[50vh] lg:min-h-[60vh]"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/rules-bg.png')`,
+          backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="relative h-full flex flex-col justify-center text-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-3 mb-3">
-            <BookOpen className="h-7 w-7 text-[#FE9900]" />
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
-              Regolamento
-            </h1>
+        <div className="relative overflow-hidden h-full flex flex-col justify-center text-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+          {/* Wrapper relativo */}
+          <div className="relative z-30 flex justify-center">
+            <img
+              src="/trasparent-logo.png"
+              alt="Logo Store"
+              style={{
+                display: "block",
+                filter: "drop-shadow(rgba(0, 0, 0, 0.15) 0px 25px 25px)",
+                height: "248px",
+                objectFit: "contain",
+                position: "absolute",
+                top: "11px",
+                width: "291px",
+              }}
+            />
           </div>
-          <p className="text-white text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
-            Consulta tutte le regole e mantieni l&apos;ordine nella community!
-          </p>
+
+          {/* Rettangolo grigio responsive */}
+          <div
+            className="relative z-20 bg-gray-600/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-gray-500/50 text-center shadow-xl"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "200px 48px 0",
+              padding: "24px",
+            }}
+          >
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-3 sm:mb-4">
+              <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#FE9900]" />
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
+                Regolamento
+              </h1>
+            </div>
+            <p className="text-white text-sm sm:text-base lg:text-lg leading-relaxed max-w-3xl mx-auto">
+              Esplora il regolamento prima di entrare nel nostro server! Qui
+              troverai tutte le regole suddivise in sezioni per una facile
+              consultazione. Assicurati di leggerle attentamente per
+              un'esperienza di gioco ottimale.
+            </p>
+          </div>
         </div>
 
         {/* Ondine */}
@@ -179,13 +212,53 @@ const PublicRulesView: React.FC = () => {
               <div
                 key={section.id}
                 onClick={() => setActiveSection(String(section.id))}
-                className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
+                style={{
+                  cursor: "pointer",
+                  background: "rgba(31, 41, 55, 0.8)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid #374151",
+                  borderRadius: "1rem",
+                  padding: "1.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                  minHeight: "200px",
+                  transition: "all 0.3s",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget;
+                  el.style.border = "3px solid #FE9900";
+                  el.style.transform = "scale(1.03)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.style.border = "1px solid #374151";
+                  el.style.transform = "scale(1)";
+                }}
               >
-                <h3 className="text-lg font-bold text-white mb-2">
+                <h3
+                  style={{
+                    fontFamily: "'Archivo Black', sans-serif",
+                    fontSize: "1.125rem", // text-lg
+                    color: "white",
+                    fontWeight: 700,
+                    marginBottom: "0.5rem",
+                    textAlign: "center",
+                  }}
+                >
                   {section.title}
                 </h3>
                 {section.description && (
-                  <p className="text-gray-300 text-sm line-clamp-3">
+                  <p
+                    style={{
+                      fontSize: "0.875rem", // text-sm
+                      color: "#D1D5DB", // text-gray-300
+                      textAlign: "center",
+                      lineHeight: 1.5,
+                    }}
+                  >
                     {section.description}
                   </p>
                 )}

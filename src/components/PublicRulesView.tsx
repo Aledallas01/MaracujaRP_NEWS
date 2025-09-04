@@ -4,6 +4,17 @@ import { Search, BookOpen, ArrowLeft, Calendar, User } from "lucide-react";
 import { Rule, RuleSection } from "../lib/types";
 import { supabaseOther } from "../lib/other";
 
+// 🔎 Funzione per evidenziare testo
+const highlightText = (text: string, query: string) => {
+  if (!query) return text;
+  const regex = new RegExp(`(${query})`, "gi");
+  return text.replace(
+    regex,
+    (match) =>
+      `<span class="bg-[#FE9900]/30 text-[#FE9900] font-semibold">${match}</span>`
+  );
+};
+
 const PublicRulesView: React.FC = () => {
   const [rules, setRules] = useState<Rule[]>([]);
   const [sections, setSections] = useState<RuleSection[]>([]);
@@ -70,7 +81,6 @@ const PublicRulesView: React.FC = () => {
       title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       content.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // 🔥 Se c'è una ricerca, ignora la sezione
     const matchesSection =
       searchQuery !== ""
         ? true
@@ -124,7 +134,7 @@ const PublicRulesView: React.FC = () => {
           </p>
         </div>
 
-        {/* Ondina responsive */}
+        {/* Ondine */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -162,20 +172,20 @@ const PublicRulesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Se non è stata scelta nessuna sezione e non c'è ricerca → mostriamo le sezioni */}
+        {/* Sezioni o regole */}
         {!activeSection && searchQuery === "" ? (
-          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {sections.map((section) => (
               <div
                 key={section.id}
                 onClick={() => setActiveSection(String(section.id))}
-                className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
+                className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
               >
                 <h3 className="text-lg font-bold text-white mb-2">
                   {section.title}
                 </h3>
                 {section.description && (
-                  <p className="text-sm text-gray-300 text-center">
+                  <p className="text-gray-300 text-sm line-clamp-3">
                     {section.description}
                   </p>
                 )}
@@ -184,7 +194,6 @@ const PublicRulesView: React.FC = () => {
           </div>
         ) : (
           <>
-            {/* Bottone torna alle sezioni (solo se non stai cercando) */}
             {activeSection && searchQuery === "" && (
               <button
                 onClick={() => setActiveSection(null)}
@@ -213,13 +222,22 @@ const PublicRulesView: React.FC = () => {
                     onClick={() => setSelectedRule(rule)}
                     className="cursor-pointer bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:bg-gray-700/80 transition-all duration-300"
                   >
-                    <h3 className="text-lg font-bold text-white mb-2">
-                      {rule.title}
-                    </h3>
-                    <p className="text-gray-300 text-sm mb-4 line-clamp-3">
-                      {rule.content.replace(/<[^>]+>/g, "").slice(0, 150)}...
-                    </p>
-
+                    <h3
+                      className="text-lg font-bold text-white mb-2"
+                      dangerouslySetInnerHTML={{
+                        __html: highlightText(rule.title, searchQuery),
+                      }}
+                    />
+                    <p
+                      className="text-gray-300 text-sm mb-4 line-clamp-3"
+                      dangerouslySetInnerHTML={{
+                        __html: highlightText(
+                          rule.content.replace(/<[^>]+>/g, "").slice(0, 150) +
+                            "...",
+                          searchQuery
+                        ),
+                      }}
+                    />
                     <div className="flex flex-col gap-1 text-xs text-gray-400">
                       {rule.created_at && (
                         <div className="flex items-center gap-1">
@@ -244,7 +262,7 @@ const PublicRulesView: React.FC = () => {
         )}
       </div>
 
-      {/* MODAL DETTAGLI REGOLA */}
+      {/* MODAL */}
       {selectedRule && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
           <div className="bg-gray-800 rounded-2xl max-w-2xl w-full p-6 overflow-y-auto max-h-[80vh]">

@@ -151,14 +151,14 @@ const PublicStoreView: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* HERO */}
           <div
-            className="relative"
+            className="relative w-full min-h-[60vh] sm:min-h-[50vh] lg:min-h-[60vh]"
             style={{
               backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.9), rgba(251,146,60,0.9)), url('/store-bg.png')`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           >
-            <div className="relative overflow-hidden rounded-3xl sm:p-8 lg:p-10 mb-8 text-center">
+            <div className="relative overflow-hidden h-full flex flex-col justify-center text-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
               <button
                 onClick={() => setShowDiscountModal(true)}
                 title="Vedi gli sconti attivi"

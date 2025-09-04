@@ -170,7 +170,7 @@ const PublicStoreView: React.FC = () => {
             <img
               src="/trasparent-logo.png"
               alt="Logo Store"
-              className="absolute -top-20 sm:-top-24 md:-top-28 lg:-top-32 
+              className="absolute -top-32 sm:-top-24 md:-top-28 lg:-top-32 
                w-32 h-32 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-80 xl:h-80 
                object-contain drop-shadow-2xl"
             />

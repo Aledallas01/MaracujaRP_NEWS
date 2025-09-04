@@ -1,5 +1,9 @@
 import React from "react";
 
+const TIKTOK = process.env.VITE_LINK_TIKTOK;
+const DISCORD = process.env.VITE_LINK_DISCORD;
+const TELEGRAM = process.env.VITE_LINK_TELEGRAM;
+
 const Footer: React.FC = () => {
   return (
     <footer className="border-t border-gray-800 px-6 py-4 mt-auto bg-gray-800">
@@ -23,7 +27,7 @@ const Footer: React.FC = () => {
         {/* Icone social */}
         <div className="flex space-x-4">
           <a
-            href="https://tiktok.com"
+            href={TIKTOK}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
@@ -31,7 +35,7 @@ const Footer: React.FC = () => {
             <img src="/Social/tiktok.svg" alt="TikTok" className="h-5 w-5" />
           </a>
           <a
-            href="https://discord.com"
+            href={DISCORD}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
@@ -39,7 +43,7 @@ const Footer: React.FC = () => {
             <img src="/Social/discord.svg" alt="Discord" className="h-5 w-5" />
           </a>
           <a
-            href="https://telegram.org"
+            href={TELEGRAM}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"

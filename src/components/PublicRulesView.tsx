@@ -1,6 +1,13 @@
 // src/components/PublicRulesView.tsx
 import React, { useEffect, useState, useCallback } from "react";
-import { Search, BookOpen, ArrowLeft, Calendar, User } from "lucide-react";
+import {
+  Search,
+  BookOpen,
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  User,
+} from "lucide-react";
 import { Rule, RuleSection } from "../lib/types";
 import { supabaseOther } from "../lib/other";
 

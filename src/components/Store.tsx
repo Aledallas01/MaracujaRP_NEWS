@@ -200,8 +200,9 @@ const PublicStoreView: React.FC = () => {
               </h1>
             </div>
             <p className="text-white text-sm sm:text-base lg:text-lg leading-relaxed max-w-3xl mx-auto">
-              Esplora i pacchetti disponibili e personalizza la tua esperienza
-              nel server!
+              Benvenuto nel nostro store! Esplora le sezioni per scoprire
+              pacchetti esclusivi e offerte imperdibili. Trova ciò che fa per te
+              e approfitta degli sconti attivi!
             </p>
           </div>
         </div>

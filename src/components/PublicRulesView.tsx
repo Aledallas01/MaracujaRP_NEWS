@@ -351,18 +351,23 @@ const PublicRulesView: React.FC = () => {
 
       {/* MODAL */}
       {selectedRule && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
-          <div className="bg-gray-800 rounded-2xl max-w-2xl w-full p-6 overflow-y-auto max-h-[80vh]">
-            <h2 className="text-2xl font-bold text-white mb-4">
+        <div className="fixed inset-0 bg-gradient-to-b from-black/80 to-black/90 flex items-center justify-center z-50 px-4">
+          <div className="bg-gray-900 border border-orange-500/40 shadow-[0_0_25px_rgba(254,153,0,0.3)] rounded-2xl max-w-2xl w-full p-6 overflow-y-auto max-h-[80vh] scrollbar-thin scrollbar-thumb-[#FE9900]/60 scrollbar-track-gray-800/50">
+            {/* Titolo */}
+            <h2 className="text-3xl font-extrabold mb-4 bg-gradient-to-r from-[#FE9900] to-yellow-400 bg-clip-text text-transparent">
               {selectedRule.title}
             </h2>
+
+            {/* Contenuto */}
             <p
-              className="text-gray-200 whitespace-pre-wrap"
+              className="text-gray-200 whitespace-pre-wrap leading-relaxed"
               dangerouslySetInnerHTML={{ __html: selectedRule.content }}
             />
+
+            {/* Bottone Chiudi */}
             <button
               onClick={() => setSelectedRule(null)}
-              className="mt-6 px-4 py-2 bg-[#FE9900] hover:bg-orange-600 rounded text-white"
+              className="mt-6 px-5 py-2.5 bg-[#FE9900] hover:bg-orange-500 transition-all duration-300 rounded-lg text-white font-medium shadow-[0_0_15px_rgba(254,153,0,0.5)] hover:shadow-[0_0_25px_rgba(254,153,0,0.8)]"
             >
               Chiudi
             </button>
